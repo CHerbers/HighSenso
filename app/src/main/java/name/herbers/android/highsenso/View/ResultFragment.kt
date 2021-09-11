@@ -10,4 +10,6 @@ class ResultFragment: Fragment() {
 
     //TODO: Calculate and show result
 
+    //TODO: Possibility to save result? In order to redo the test or let others do the test
+
 }

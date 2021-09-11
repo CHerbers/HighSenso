@@ -6,7 +6,7 @@ package name.herbers.android.highsenso.model
  * @param explanation further information on how to interpret/understand the question
  * @param valuation is how the question was rated by the user, default value is "0" which means "unrated"
  * */
-class Question(
+data class Question(
     private val name: String,
     private val question: String,
     private val explanation: String,

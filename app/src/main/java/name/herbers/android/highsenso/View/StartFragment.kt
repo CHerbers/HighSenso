@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import name.herbers.android.highsenso.R
 
+
 class StartFragment: Fragment() {
-    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?,
+    fun onCreate(inflater: LayoutInflater, container: ViewGroup?,
                           savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
+
+
 
 }
