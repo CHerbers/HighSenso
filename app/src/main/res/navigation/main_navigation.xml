@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation.xml"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="name.herbers.android.highsenso.start.StartFragment"
+        android:label="StartFragment" />
+    <fragment
+        android:id="@+id/questioningFragment"
+        android:name="name.herbers.android.highsenso.questioning.QuestioningFragment"
+        android:label="QuestioningFragment" />
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="name.herbers.android.highsenso.result.ResultFragment"
+        android:label="ResultFragment" />
+</navigation>
