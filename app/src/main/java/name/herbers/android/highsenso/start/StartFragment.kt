@@ -1,12 +1,13 @@
 package name.herbers.android.highsenso.start
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.StartFragmentBinding
 import timber.log.Timber
@@ -22,21 +23,39 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        Timber.i("StartFragment created")
+        Timber.i("StartFragment created!")
 
+        //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
-
         viewModel = ViewModelProvider(this).get(StartViewModel::class.java)
-
         binding.startViewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.startButton.setOnClickListener {
-            Timber.i("Listen!")
-            println("Bitte!")
+        //activate menu in this fragment
+        setHasOptionsMenu(true)
+
+        binding.startButton.setOnClickListener { view: View ->
+            Timber.i("startButton was clicked!")
+            Navigation.findNavController(view).navigate(R.id.action_startFragment_to_questioningFragment)
         }
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+
+
+    //inflate overflow_menu
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Timber.i("Overflow menu created!")
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.overflow_menu, menu)
+    }
+
+    //handle navigation on item selection
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.i("menu item \"${item.title}\" is selected")
+        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
+                || super.onOptionsItemSelected(item)
     }
 }

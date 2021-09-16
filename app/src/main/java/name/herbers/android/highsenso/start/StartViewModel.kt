@@ -19,7 +19,7 @@ class StartViewModel : ViewModel() {
     //TODO delete
     //just to test click listener
     fun doStuff() {
-        Timber.i("doStuff was called!")
+        Timber.d("doStuff was called!")
     }
 
     override fun onCleared() {

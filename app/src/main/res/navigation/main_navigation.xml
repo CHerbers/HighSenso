@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation.xml"
     app:startDestination="@id/startFragment">
 
     <fragment
         android:id="@+id/startFragment"
         android:name="name.herbers.android.highsenso.start.StartFragment"
-        android:label="StartFragment" />
+        android:label="start_fragment"
+        tools:layout="@layout/start_fragment">
+        <action
+            android:id="@+id/action_startFragment_to_questioningFragment"
+            app:destination="@id/questioningFragment" />
+    </fragment>
     <fragment
         android:id="@+id/questioningFragment"
         android:name="name.herbers.android.highsenso.questioning.QuestioningFragment"
-        android:label="QuestioningFragment" />
+        android:label="questioning_fragment"
+        tools:layout="@layout/questioning_fragment">
+        <action
+            android:id="@+id/action_questioningFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
     <fragment
         android:id="@+id/resultFragment"
         android:name="name.herbers.android.highsenso.result.ResultFragment"
-        android:label="ResultFragment" />
+        android:label="result_fragment"
+        tools:layout="@layout/result_fragment">
+        <action
+            android:id="@+id/action_resultFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="name.herbers.android.highsenso.menu.AboutFragment"
+        android:label="about_fragment"
+        tools:layout="@layout/about_fragment"/>
 </navigation>
