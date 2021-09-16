@@ -10,9 +10,15 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.StartFragmentBinding
+import name.herbers.android.highsenso.menu.AboutFragment
 import timber.log.Timber
 
-
+/**The [StartFragment] is the starting [Fragment] of the HighSenso app.
+ * This Fragment introduces the user to this App and provides useful information on how to use this
+ * App and what this App can do and can't do
+ * From this Fragment the user can navigate via the menu to the [AboutFragment] and can start the
+ * questioning.
+ * */
 class StartFragment : Fragment() {
 
     private lateinit var viewModel: StartViewModel
@@ -34,6 +40,7 @@ class StartFragment : Fragment() {
         //activate menu in this fragment
         setHasOptionsMenu(true)
 
+        //listener for startButton which starts the questioning
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             Navigation.findNavController(view).navigate(R.id.action_startFragment_to_questioningFragment)

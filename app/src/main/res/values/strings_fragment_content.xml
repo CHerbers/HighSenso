@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_text">Everything you need to know about this app including copyright and stuff</string>
+    <string name="question_title">This is a question title</string>
+    <string name="question_content">This is a question! Pls rate</string>
+    <string name="resultText">This is the result of your test.</string>
 </resources>

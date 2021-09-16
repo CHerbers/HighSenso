@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.QuestioningFragmentBinding
 import timber.log.Timber
@@ -22,12 +23,17 @@ class QuestioningFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.questioning_fragment, container, false)
-
         viewModel = ViewModelProvider(this).get(QuestioningViewModel::class.java)
-
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
+
+        // listener for nextButton, which progresses to next question or to result
+        binding.nextButton.setOnClickListener {view: View ->
+            Timber.i("nextButton was clicked!")
+            Navigation.findNavController(view).navigate(R.id.action_questioningFragment_to_resultFragment)
+        }
 
         Timber.i("QuestionFragment created!")
         return binding.root

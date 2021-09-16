@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.ResultFragmentBinding
+import timber.log.Timber
 
 /** Fragment that shows the results depending on the users question ratings.
  * Further advises on how to interpret the result and what can be done next are given.
@@ -22,16 +23,16 @@ class ResultFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.questioning_fragment, container, false)
-
+        //init the DataBinding and ViewModel
+        binding = DataBindingUtil.inflate(inflater, R.layout.result_fragment, container, false)
         viewModel = ViewModelProvider(this).get(ResultViewModel::class.java)
-
         binding.resultViewModel = viewModel
         binding.lifecycleOwner = this
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        Timber.i("ResultFragment created!")
+        return binding.root
     }
 
 //TODO: Show disclaimer that this is not a diagnosis

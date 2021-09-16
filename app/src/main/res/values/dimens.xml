@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_textSize">32sp</dimen>
+    <dimen name="standard_textSize">16sp</dimen>
+    <dimen name="standard_textView_layout_margin">16sp</dimen>
+    <dimen name="button_textSize">20sp</dimen>
+</resources>

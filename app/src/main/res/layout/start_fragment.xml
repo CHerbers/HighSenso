@@ -18,36 +18,41 @@
         tools:context=".start.StartFragment">
 
 
-        <Button
-            android:id="@+id/startButton"
-            android:layout_width="299dp"
-            android:layout_height="98dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="583dp"
-            android:layout_marginEnd="56dp"
-            android:layout_marginBottom="50dp"
-            android:background="@android:drawable/btn_default"
-            android:text="@{startViewModel.someText}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/little_button"
+        <TextView
+            android:id="@+id/startTitle_textView"
+            style="@style/standard_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="158dp"
-            android:layout_marginEnd="159dp"
-            android:layout_marginBottom="396dp"
-            android:text="Button"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/startFragment_title"
+            android:textSize="@dimen/title_textSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.341" />
+            app:layout_constraintVertical_bias="0.185" />
+
+        <Button
+            android:id="@+id/startButton"
+            style="@style/standard_text"
+            android:layout_width="299dp"
+            android:layout_height="98dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/btn_default"
+            android:text="@string/start_button"
+            android:textColor="@color/black"
+            android:textSize="@dimen/button_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.933" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
