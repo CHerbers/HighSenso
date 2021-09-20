@@ -4,4 +4,9 @@
     <string name="question_title">This is a question title</string>
     <string name="question_content">This is a question! Pls rate</string>
     <string name="resultText">This is the result of your test.</string>
+    <string name="sb_legend_0">-2</string>
+    <string name="sb_legend_1">-1</string>
+    <string name="sb_legend_2">0</string>
+    <string name="sb_legend_3">1</string>
+    <string name="sb_legend_4">2</string>
 </resources>

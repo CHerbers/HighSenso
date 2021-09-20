@@ -3,38 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation.xml"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/start_destination">
 
     <fragment
-        android:id="@+id/startFragment"
+        android:id="@+id/start_destination"
         android:name="name.herbers.android.highsenso.start.StartFragment"
         android:label="start_fragment"
         tools:layout="@layout/start_fragment">
         <action
             android:id="@+id/action_startFragment_to_questioningFragment"
-            app:destination="@id/questioningFragment" />
+            app:destination="@id/questioning_destination" />
     </fragment>
     <fragment
-        android:id="@+id/questioningFragment"
+        android:id="@+id/questioning_destination"
         android:name="name.herbers.android.highsenso.questioning.QuestioningFragment"
-        android:label="questioning_fragment"
-        tools:layout="@layout/questioning_fragment">
+        android:label="questioning_fragment">
         <action
             android:id="@+id/action_questioningFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
+            app:destination="@id/result_destination" />
+        <action
+            android:id="@+id/action_questioning_destination_to_start_destination"
+            app:destination="@id/start_destination" />
     </fragment>
     <fragment
-        android:id="@+id/resultFragment"
+        android:id="@+id/result_destination"
         android:name="name.herbers.android.highsenso.result.ResultFragment"
         android:label="result_fragment"
         tools:layout="@layout/result_fragment">
         <action
             android:id="@+id/action_resultFragment_to_startFragment"
-            app:destination="@id/startFragment" />
+            app:destination="@id/start_destination" />
     </fragment>
     <fragment
-        android:id="@+id/aboutFragment"
+        android:id="@+id/about_destination"
         android:name="name.herbers.android.highsenso.menu.AboutFragment"
-        android:label="about_fragment"
-        tools:layout="@layout/about_fragment"/>
+        android:label="about_fragment" />
 </navigation>

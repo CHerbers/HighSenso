@@ -11,16 +11,6 @@ class StartViewModel : ViewModel() {
     val someText: LiveData<String>
         get() = _someText
 
-    init {
-        _someText.value = "some text"
-        Timber.i("StartViewModel created! With ${someText.value}")
-    }
-
-    //TODO delete
-    //just to test click listener
-    fun doStuff() {
-        Timber.d("doStuff was called!")
-    }
 
     override fun onCleared() {
         super.onCleared()
