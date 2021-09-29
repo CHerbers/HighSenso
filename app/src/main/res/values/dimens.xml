@@ -8,5 +8,6 @@
     <dimen name="seek_bar_dashWidth">5dp</dimen>
     <dimen name="seek_bar_thumb_size">26dp</dimen>
     <dimen name="seek_bar_tick_mark_size">13dp</dimen>
-    <dimen name="sb_legend_textSize">18sp</dimen>
+    <dimen name="sb_legend_standard_textSize">18sp</dimen>
+    <dimen name="sb_legend_selected_textSize">24sp</dimen>
 </resources>

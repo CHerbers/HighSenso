@@ -35,10 +35,12 @@ class ResultFragment: Fragment() {
         return binding.root
     }
 
-//TODO: Show disclaimer that this is not a diagnosis
+    //TODO: Show disclaimer that this is not a diagnosis
 
     //TODO: Calculate and show result
 
     //TODO: Possibility to save result? In order to redo the test or let others do the test
+
+    //TODO: Possibility to anonymously send result -> overlay and asking for gender and age (and country?)
 
 }
