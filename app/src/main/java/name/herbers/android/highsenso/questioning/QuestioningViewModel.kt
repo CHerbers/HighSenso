@@ -31,10 +31,12 @@ class QuestioningViewModel(
     val currentQuestionExplanation: LiveData<String>
         get() = _currentQuestionExplanation
 
-//    private val _currentValue = MutableLiveData<Int>()
-    val currentValue: LiveData<Int>
+    val currentRating: LiveData<Int>
         get() = getProgress()
 
+    private val _changeSeekBar = MutableLiveData<Boolean>()
+    val changeSeekBar: LiveData<Boolean>
+        get() = _changeSeekBar
 
     private val _isFirstQuestion = MutableLiveData<Boolean>()
     val isFirstQuestion: LiveData<Boolean>
@@ -49,12 +51,10 @@ class QuestioningViewModel(
     init {
         //create questions
         questionList = createQuestionList()
-        initQuestions()
+//        initQuestions()
         initQuestionsList()
-        currentQuestion = Question(-1,"Title", "Question", "Explanation")
-//        currentQuestion = questions[0]
-//        updateLiveData()
-        _isFirstQuestion.value = true
+        currentQuestion = Question(-1, "Title", "Question", "Explanation")
+        _isFirstQuestion.value = false
         _isFinished.value = false
         Timber.i("QuestioningViewModel created!")
     }
@@ -66,7 +66,7 @@ class QuestioningViewModel(
     }
 
     private suspend fun insert(question: Question) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             database.insert(question)
         }
     }
@@ -80,19 +80,13 @@ class QuestioningViewModel(
     private fun initQuestionsList() {
         uiScope.launch {
             questions = getQuestionsFromDatabase()
-            currentQuestion = questions[0]
-            updateLiveData()
+            updateLiveData(0)
         }
-
-
-        //TODO read (?!) questions from XML (or similar) and create Question Objects and save them
-        // in the questions List
-
         Timber.i("questions initialized")
     }
 
     private suspend fun getQuestionsFromDatabase(): List<Question> {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             val questionsList: List<Question> = database.getAllQuestions()
             questionsList
         }
@@ -100,40 +94,58 @@ class QuestioningViewModel(
 
     private fun getProgress(): MutableLiveData<Int> {
         val progress = MutableLiveData<Int>()
-        if (currentQuestion.valuation < 0){
+        if (currentQuestion.rating < 0) {
             progress.value = 2
-        }else{
-            progress.value = currentQuestion.valuation
+        } else {
+            progress.value = currentQuestion.rating
         }
+        Timber.i("Returned progress: ${progress.value}")
         return progress
     }
 
-    fun handleBackButtonClick() {
-        //check if this is the first question
-        _isFirstQuestion.value = currentQuestion.number == 0
-
-
-        //TODO load last question (if yes)
+    fun getRatingToSetProgress(): Int{
+        if (currentQuestion.rating < 0) return 2
+        return currentQuestion.rating
     }
 
-    fun handleNextButtonClick() {
-        if (currentQuestion.number == questions.size - 1) {
-            _isFinished.value = true
-            return
+    fun handleBackButtonClick(newRating: Int) {
+        updateRatingFromSeekBar(newRating)
+        //check if this is the first question
+        if (currentQuestion.id == 1) {
+            //initiate change to start fragment
+            _isFirstQuestion.value = true
         } else {
-            currentQuestion = questions[currentQuestion.number + 1]
-            updateLiveData()
+            //load previous question
+            updateLiveData(currentQuestion.id - 2)
         }
     }
 
-    private fun updateLiveData() {
+    fun handleNextButtonClick(newRating: Int) {
+        updateRatingFromSeekBar(newRating)
+        _isFirstQuestion.value = false
+        //check if this is the last question
+        if (currentQuestion.id == questions.size) {
+            //initiate change to result fragment
+            _isFinished.value = true
+            return
+        } else {
+            //load next question
+            updateLiveData(currentQuestion.id)
+        }
+    }
+
+    private fun updateLiveData(nextQuestionIndex: Int) {
+        currentQuestion = questions[nextQuestionIndex]
         _currentQuestionTitle.value = currentQuestion.title
         _currentQuestionContent.value = currentQuestion.question
         _currentQuestionExplanation.value = currentQuestion.explanation
+        _changeSeekBar.value = true
+        _changeSeekBar.value = false
+        Timber.i("New Question: id: '${currentQuestion.id}'; title: '${currentQuestionTitle.value}'; question: '${currentQuestionContent.value}'; explanation: '${currentQuestionExplanation.value}'; rating: '${currentQuestion.rating}'")
     }
 
-    fun handleSeekBarChanged(progress: Int) {
-        currentQuestion.valuation = progress
+    fun updateRatingFromSeekBar(progress: Int) {
+        currentQuestion.rating = progress
         updateDatabase(currentQuestion)
     }
 
@@ -144,12 +156,13 @@ class QuestioningViewModel(
     }
 
     private suspend fun update(question: Question) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             database.update(question)
+            Timber.i("Updated Question: id: '${question.id}'; title: '${question.title}'; question: '${question.question}'; explanation: '${question.explanation}'; rating: '${question.rating}'")
         }
     }
 
-    private fun createQuestionList(): List<Question>{
+    private fun createQuestionList(): List<Question> {
         val question0 = Question(
             0,
             "question01",
@@ -170,7 +183,4 @@ class QuestioningViewModel(
         )
         return listOf(question0, question1, question2)
     }
-    //TODO: Calculate what question should be shown and save question order
-
-    //TODO: Save rating if next is pressed
 }

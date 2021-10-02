@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.databinding.QuestioningFragmentBinding
 import name.herbers.android.highsenso.result.ResultFragment
@@ -21,7 +22,8 @@ import name.herbers.android.highsenso.result.ResultViewModel
 import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
 
-/**In the [QuestioningFragment] the user is asked to rate questions. The result if the user is an
+/**
+ * In the [QuestioningFragment] the user is asked to rate questions. The result if the user is an
  * HSP will be calculated later on in the [ResultViewModel] depending on the users rating.
  * After rating a question there will be asked another question until the questioning is completed.
  * */
@@ -58,7 +60,7 @@ class QuestioningFragment : Fragment() {
          * to [StartFragment]
          * */
         viewModel.isFirstQuestion.observe(viewLifecycleOwner, Observer { isFirstQuestion ->
-            if (!isFirstQuestion) {
+            if (isFirstQuestion) {
                 findNavController(this)
                     .navigate(R.id.action_questioning_destination_to_start_destination)
             }
@@ -76,16 +78,34 @@ class QuestioningFragment : Fragment() {
             }
         })
 
-        // listener for nextButton, which progresses to next question or to result
+        /**
+         * Observed changeSeekBar becomes true if the current [Question] is changed.
+         * The [SeekBar] is set to the saved rating for the currently shown [Question] (in default
+         * position if no rating is saved at this moment)
+         * */
+        viewModel.changeSeekBar.observe(viewLifecycleOwner, Observer { change ->
+            if (change) {
+                binding.seekBar.setProgress(viewModel.getRatingToSetProgress(), false)
+            }
+        })
+
+
+        /**
+         * listener for nextButton, which progresses to next [Question] or
+         * to [ResultFragment]
+         * */
         binding.nextButton.setOnClickListener {
             Timber.i("nextButton was clicked!")
-            viewModel.handleNextButtonClick()
+            viewModel.handleNextButtonClick(binding.seekBar.progress)
         }
 
-        // listener for backButton, which navigates back to the previous question or to the title fragment
+        /**
+         * listener for backButton, which navigates back to the previous [Question] or
+         * to [StartFragment]
+         * */
         binding.backButton.setOnClickListener {
             Timber.i("backButton was clicked!")
-            viewModel.handleBackButtonClick()
+            viewModel.handleBackButtonClick(binding.seekBar.progress)
         }
 
         /**
@@ -122,7 +142,7 @@ class QuestioningFragment : Fragment() {
                 )
                 progressedTextView.typeface = Typeface.DEFAULT_BOLD
 
-                viewModel.handleSeekBarChanged(progress)
+//                viewModel.handleSeekBarChanged(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {

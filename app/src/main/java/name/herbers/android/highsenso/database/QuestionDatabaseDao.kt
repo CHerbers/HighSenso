@@ -12,7 +12,7 @@ interface QuestionDatabaseDao {
     fun update(question: Question)
 
     //returns all questions, with question with lowest number on list index 0
-    @Query("SELECT * FROM questions_table ORDER BY number ASC")
+    @Query("SELECT * FROM questions_table ORDER BY id ASC")
     fun getAllQuestions(): List<Question>
 
 //    @Query("SELECT * FROM questions_table ORDER BY number ASC")

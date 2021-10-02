@@ -102,7 +102,7 @@
             android:paddingTop="10dip"
             android:paddingRight="10dip"
             android:paddingBottom="9dip"
-            android:progress="@{questioningViewModel.currentValue}"
+            android:progress="@{questioningViewModel.ratingToSetProgress}"
             android:progressDrawable="@drawable/seek_bar"
             android:thumb="@drawable/seek_bar_thumb"
             android:tickMark="@drawable/seek_bar_tick_mark"
