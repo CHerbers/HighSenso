@@ -15,23 +15,38 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/questionCount_textView"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{questioningViewModel.questionCount}"
+            android:textColor="@color/questionCount_text_color"
+            android:textSize="@dimen/questionCount_textSize"
+            app:layout_constraintBottom_toTopOf="@+id/questionTitle_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/questionTitle_textView"
             style="@style/standard_text"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:text="@{questioningViewModel.currentQuestionTitle}"
             android:textSize="@dimen/title_textSize"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/questionContent_textView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.158" />
+            app:layout_constraintVertical_bias="0.526" />
 
         <TextView
-            android:id="@+id/question_content"
+            android:id="@+id/questionContent_textView"
             style="@style/standard_text"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -41,10 +56,10 @@
             android:textSize="@dimen/standard_textSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.436"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.342" />
+            app:layout_constraintVertical_bias="0.344" />
 
         <Button
             android:id="@+id/next_button"
@@ -63,7 +78,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/question_content"
+            app:layout_constraintTop_toBottomOf="@+id/questionContent_textView"
             app:layout_constraintVertical_bias="0.8" />
 
         <Button
@@ -83,7 +98,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.11"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/question_content"
+            app:layout_constraintTop_toBottomOf="@+id/questionContent_textView"
             app:layout_constraintVertical_bias="0.8" />
 
         <SeekBar

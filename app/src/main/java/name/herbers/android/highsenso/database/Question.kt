@@ -24,16 +24,7 @@ data class Question(
     @ColumnInfo
     var rating: Int = -1
 ) {
-
-    /** Sets the rating the user rated this question with. If given value is illegal,
-     * the rating is set to "0" which means "unrated"
-     * @param value is the users rating, it should be between 1 and 10 (legal input)
-     * */
-    fun rate(value: Int) {
-        rating = when {
-            value > 4 -> 0
-            value < 1 -> 0
-            else -> value
-        }
+    override fun toString(): String {
+        return "id: '${id}', title: '${title}', question: '${question}', explanation: '${explanation}', rating: '${rating}'"
     }
 }

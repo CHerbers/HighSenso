@@ -9,13 +9,15 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.databinding.StartFragmentBinding
 import name.herbers.android.highsenso.menu.AboutFragment
 import timber.log.Timber
 
 /**The [StartFragment] is the starting [Fragment] of the HighSenso app.
  * This Fragment introduces the user to this App and provides useful information on how to use this
- * App and what this App can do and can't do
+ * App and what this App can and can't do.
+ * <p>
  * From this Fragment the user can navigate via the menu to the [AboutFragment] and can start the
  * questioning.
  * */
@@ -33,23 +35,26 @@ class StartFragment : Fragment() {
 
         //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
-        viewModel = ViewModelProvider(this).get(StartViewModel::class.java)
+        val application = requireNotNull(this.activity).application
+        val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
+        val viewModelFactory = StartViewModelFactory(dataSource, application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(StartViewModel::class.java)
         binding.startViewModel = viewModel
         binding.lifecycleOwner = this
 
-        //activate menu in this fragment
+        //activate menu in this Fragment
         setHasOptionsMenu(true)
 
-        //listener for startButton which starts the questioning
+        //Listener for startButton which starts the questioning
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
-            Navigation.findNavController(view).navigate(R.id.action_startFragment_to_questioningFragment)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_startFragment_to_questioningFragment)
         }
 
-        // Inflate the layout for this fragment
+        // inflate the layout for this Fragment
         return binding.root
     }
-
 
 
     //inflate overflow_menu
@@ -61,8 +66,19 @@ class StartFragment : Fragment() {
 
     //handle navigation on item selection
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Timber.i("menu item \"${item.title}\" is selected")
-        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
-                || super.onOptionsItemSelected(item)
+        Timber.i("Menu Item \"${item.title}\" was selected!")
+        return when (item.itemId) {
+            //question rating gets reset
+            R.id.reset_rating_destination -> viewModel.handleResetQuestions() //TODO maybe show some pop up ('success' or something)
+            //navigate to AboutFragment
+            R.id.about_destination -> NavigationUI.onNavDestinationSelected(
+                item,
+                requireView().findNavController()
+            )
+            //default
+            else -> super.onOptionsItemSelected(item)
+        }
+//        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
+//                || super.onOptionsItemSelected(item)
     }
 }

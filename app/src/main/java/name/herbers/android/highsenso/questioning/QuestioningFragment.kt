@@ -23,8 +23,8 @@ import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
 
 /**
- * In the [QuestioningFragment] the user is asked to rate questions. The result if the user is an
- * HSP will be calculated later on in the [ResultViewModel] depending on the users rating.
+ * In the [QuestioningFragment] the user is asked to rate questions. The result whether the user is an
+ * HSP or not will be calculated later on in the [ResultViewModel] depending on the users rating.
  * After rating a question there will be asked another question until the questioning is completed.
  * */
 class QuestioningFragment : Fragment() {
@@ -38,18 +38,16 @@ class QuestioningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        //init the DataBinding and ViewModel
+        //init the DataBinding and QuestioningViewModel
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.questioning_fragment,
             container,
             false
         )
-
         val application = requireNotNull(this.activity).application
         val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
         val viewModelFactory = QuestioningViewModelFactory(dataSource, application)
-
         viewModel = ViewModelProvider(this, viewModelFactory).get(QuestioningViewModel::class.java)
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
@@ -59,7 +57,7 @@ class QuestioningFragment : Fragment() {
          * If isFirstQuestion is false after backButton is clicked, the Fragment changes
          * to [StartFragment]
          * */
-        viewModel.isFirstQuestion.observe(viewLifecycleOwner, Observer { isFirstQuestion ->
+        viewModel.navBackToStartFrag.observe(viewLifecycleOwner, Observer { isFirstQuestion ->
             if (isFirstQuestion) {
                 findNavController(this)
                     .navigate(R.id.action_questioning_destination_to_start_destination)
@@ -89,9 +87,8 @@ class QuestioningFragment : Fragment() {
             }
         })
 
-
         /**
-         * listener for nextButton, which progresses to next [Question] or
+         * Listener for nextButton, which progresses to next [Question] or
          * to [ResultFragment]
          * */
         binding.nextButton.setOnClickListener {
@@ -100,7 +97,7 @@ class QuestioningFragment : Fragment() {
         }
 
         /**
-         * listener for backButton, which navigates back to the previous [Question] or
+         * Listener for backButton, which navigates back to the previous [Question] or
          * to [StartFragment]
          * */
         binding.backButton.setOnClickListener {
@@ -109,11 +106,10 @@ class QuestioningFragment : Fragment() {
         }
 
         /**
-         * If SeekBar is progressed the current value is highlighted (bold and bigger size).
+         * If [SeekBar] is progressed the current value is highlighted (bold and bigger size).
          * Every other value is set to standard size and default typeface
          */
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
             //list of the TextViews that represent the SeekBar values
             val progressTextViews: MutableList<TextView> = mutableListOf(
                 binding.sbLegend0,
@@ -123,7 +119,7 @@ class QuestioningFragment : Fragment() {
                 binding.sbLegend4
             )
 
-            //on change the progressed value is set to "bold" and a higher size
+            //on change the progressed value is set to 'bold' and a bigger size
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 Timber.i("SeekBar changed to $progress!")
 
@@ -141,22 +137,19 @@ class QuestioningFragment : Fragment() {
                     resources.getDimension(R.dimen.sb_legend_selected_textSize)
                 )
                 progressedTextView.typeface = Typeface.DEFAULT_BOLD
-
-//                viewModel.handleSeekBarChanged(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
+                //this override method is not needed
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                //this override method is not needed
             }
         })
-
 
         Timber.i("QuestionFragment created!")
         return binding.root
     }
-    //TODO: Show question, rating bar
 }
 

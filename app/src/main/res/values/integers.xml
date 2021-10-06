@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="rating_max">4</integer>
-    <integer name="rating_progress">2</integer>
+    <integer name="default_rating_progress">2</integer>
 </resources>

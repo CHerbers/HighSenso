@@ -1,10 +1,12 @@
 package name.herbers.android.highsenso.database
 
 import android.content.Context
+import android.os.Environment
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import timber.log.Timber
+import java.io.File
 
 @Database(entities = [Question::class], version = 1, exportSchema = false)
 abstract class QuestionDatabase : RoomDatabase() {
@@ -12,7 +14,13 @@ abstract class QuestionDatabase : RoomDatabase() {
     abstract val questionDatabaseDao: QuestionDatabaseDao
 
     companion object {
+        //path of the pre-populated database (questions_database.db) in assets
         private const val DB_PATH = "database/questions_database.db"
+
+        //create a File from an existing question_database
+        private val roomDbPath =
+            Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/databases/questions_database"
+        private val roomDb = File(roomDbPath)
 
         @Volatile
         private var INSTANCE: QuestionDatabase? = null
@@ -20,17 +28,45 @@ abstract class QuestionDatabase : RoomDatabase() {
             synchronized(this) {
                 var instance = INSTANCE
 
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        QuestionDatabase::class.java,
-                        "questions_database"
+                /**
+                 * Checks if the db already exists on this device - if so, the app was started before and
+                 * the database was already initialized. In this case the existing db will be used
+                 * and no new db will be initialized from the questions_database.db file from assets.
+                 * This is needed to provide the user their past question ratings.
+                 * */
+                if (roomDb.exists()) {
+                    Timber.i(
+                        "questions_database already exists on this device! " +
+                                "Therefore no new database will be initiated!"
                     )
-                        .createFromAsset(DB_PATH)
-                        .fallbackToDestructiveMigration()
-                        .build()
+                    if (instance == null) {
+                        instance = Room.databaseBuilder(
+                            context.applicationContext,
+                            QuestionDatabase::class.java,
+                            "questions_database"
+                        )
+                            .fallbackToDestructiveMigration()
+                            .build()
 
-                    INSTANCE = instance
+                        INSTANCE = instance
+                    }
+                } else {
+                    Timber.i(
+                        "questions_database did not already exist on this device! " +
+                                "A new one will be initiated based on the questions_database.db from assets!"
+                    )
+                    if (instance == null) {
+                        instance = Room.databaseBuilder(
+                            context.applicationContext,
+                            QuestionDatabase::class.java,
+                            "questions_database"
+                        )
+                            .createFromAsset(DB_PATH)
+                            .fallbackToDestructiveMigration()
+                            .build()
+
+                        INSTANCE = instance
+                    }
                 }
                 Timber.i("Database initialized!")
                 return instance

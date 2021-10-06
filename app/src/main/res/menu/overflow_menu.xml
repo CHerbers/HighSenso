@@ -4,4 +4,7 @@
     <item
         android:id="@+id/about_destination"
         android:title="@string/about_title" />
+    <item
+        android:id="@+id/reset_rating_destination"
+        android:title="@string/reset_title"/>
 </menu>

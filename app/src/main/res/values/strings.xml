@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HighSenso</string>
     <string name="about_title">About</string>
+    <string name="reset_title">Reset Rating</string>
     <string name="next_button">Next</string>
     <string name="start_button">Start</string>
     <string name="startFragment_title">Welcome to HighSenso</string>

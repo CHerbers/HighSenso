@@ -8,10 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.databinding.ResultFragmentBinding
 import timber.log.Timber
 
-/** Fragment that shows the results depending on the users question ratings.
+/** [Fragment] that shows the results depending on the users question ratings.
  * Further advises on how to interpret the result and what can be done next are given.
  * */
 class ResultFragment: Fragment() {
@@ -27,7 +28,10 @@ class ResultFragment: Fragment() {
 
         //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.result_fragment, container, false)
-        viewModel = ViewModelProvider(this).get(ResultViewModel::class.java)
+        val application = requireNotNull(this.activity).application
+        val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
+        val viewModelFactory = ResultViewModelFactory(dataSource, application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ResultViewModel::class.java)
         binding.resultViewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -38,8 +42,6 @@ class ResultFragment: Fragment() {
     //TODO: Show disclaimer that this is not a diagnosis
 
     //TODO: Calculate and show result
-
-    //TODO: Possibility to save result? In order to redo the test or let others do the test
 
     //TODO: Possibility to anonymously send result -> overlay and asking for gender and age (and country?)
 
