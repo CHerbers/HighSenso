@@ -24,14 +24,12 @@ class StartViewModel(
     }
 
     fun handleResetQuestions(): Boolean {
-        try {
+        if (this::questions.isInitialized) {
             questions.forEach { question ->
                 question.rating = -1
                 updateDatabase(question)
             }
-        }catch (e: UninitializedPropertyAccessException){
         }
-        //TODO implement the reset of all questions
         return true
     }
 

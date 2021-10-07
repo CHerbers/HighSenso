@@ -38,4 +38,8 @@
         android:id="@+id/about_destination"
         android:name="name.herbers.android.highsenso.menu.AboutFragment"
         android:label="about_fragment" />
+<!--    <dialog-->
+<!--        android:id="@+id/reset_dialog_fragment"-->
+<!--        android:name="name.herbers.android.highsenso.dialogs.ResetDialogFragment">-->
+<!--    </dialog>-->
 </navigation>

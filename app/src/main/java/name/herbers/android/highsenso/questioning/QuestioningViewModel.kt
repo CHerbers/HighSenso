@@ -15,7 +15,7 @@ class QuestioningViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    //needed for coroutines
+    //coroutines
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -45,30 +45,27 @@ class QuestioningViewModel(
         get() = _currentQuestionExplanation
 
     /* observed by QuestioningFragment, if true: SeekBar is changed to current rating */
-    private val _changeSeekBar = MutableLiveData<Boolean>()
+    private val _changeSeekBar = MutableLiveData(false)
     val changeSeekBar: LiveData<Boolean>
         get() = _changeSeekBar
 
     /* observed by QuestioningFragment, if true: navigation to StartFragment */
-    private val _navBackToStartFrag = MutableLiveData<Boolean>()
+    private val _navBackToStartFrag = MutableLiveData(false)
     val navBackToStartFrag: LiveData<Boolean>
         get() = _navBackToStartFrag
 
     /* observed by QuestioningFragment, if true: navigation to ResultFragment */
-    private val _isFinished = MutableLiveData<Boolean>()
+    private val _isFinished = MutableLiveData(false)
     val isFinished: LiveData<Boolean>
         get() = _isFinished
 
     init {
         //load questions from database
         initQuestions()
-        //create dummy question
-//        currentQuestion = Question(-1, "Title", "Question", "Explanation")
-        _navBackToStartFrag.value = false
-        _isFinished.value = false
         Timber.i("QuestioningViewModel created!")
     }
 
+    //TODO doc comment
     private fun initQuestions() {
         uiScope.launch {
             questions = getQuestionsFromDatabase()
@@ -77,6 +74,7 @@ class QuestioningViewModel(
         Timber.i("questions initialized")
     }
 
+    //TODO doc comment
     private suspend fun getQuestionsFromDatabase(): List<Question> {
         return withContext(Dispatchers.IO) {
             val questionsList: List<Question> = database.getAllQuestions()
@@ -84,16 +82,17 @@ class QuestioningViewModel(
         }
     }
 
+    //TODO doc comment
     fun getRatingToSetProgress(): Int {
-        //TODO fix this
-        try {
-            if (currentQuestion.rating >= 0) return currentQuestion.rating
-        } catch (e: UninitializedPropertyAccessException) {
-            Timber.w("Expected error occurred: $e")
+        if (this::currentQuestion.isInitialized){
+            if (currentQuestion.rating >= 0){
+                return currentQuestion.rating
+            }
         }
         return defaultRating
     }
 
+    //TODO doc comment
     fun handleBackButtonClick(newRating: Int) {
         updateRatingFromSeekBar(newRating)
         //check if this is the first question

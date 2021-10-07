@@ -5,13 +5,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import name.herbers.android.highsenso.dialogs.SharedDialogViewModel
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
+    //ViewModel shared with ResetDialogFragment and StartFragment
+    private lateinit var sharedViewModel: SharedDialogViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        sharedViewModel = ViewModelProvider(this).get(SharedDialogViewModel::class.java)
+
         Timber.i("onCreate called!")
     }
 
