@@ -6,18 +6,18 @@ import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.QuestionDatabaseDao
 
 /**
- * This is the [ViewModelProvider.Factory] for [StartViewModel]
- * @param dataSource the [QuestionDatabaseDao] used for the database in [StartViewModel]
+ * This is the [ViewModelProvider.Factory] for [SharedDatabaseViewModel]
+ * @param dataSource the [QuestionDatabaseDao] used for the database in [SharedDatabaseViewModel]
  * @param application the current [Application]
  * */
-class StartViewModelFactory(
+class SharedDatabaseViewModelFactory(
 private val dataSource: QuestionDatabaseDao,
 private val application: Application
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(StartViewModel::class.java)) {
-            return StartViewModel(dataSource, application) as T
+        if (modelClass.isAssignableFrom(SharedDatabaseViewModel::class.java)) {
+            return SharedDatabaseViewModel(dataSource, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

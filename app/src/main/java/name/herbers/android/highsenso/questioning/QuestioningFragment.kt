@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -88,6 +89,13 @@ class QuestioningFragment : Fragment() {
         })
 
         /**
+         * If questionCount changes, the ActionBars title will be changed
+         * */
+        viewModel.questionCount.observe(viewLifecycleOwner, Observer { count ->
+            (activity as AppCompatActivity).supportActionBar?.title = "Question $count"
+        })
+
+        /**
          * Listener for nextButton, which progresses to next [Question] or
          * to [ResultFragment]
          * */
@@ -147,7 +155,6 @@ class QuestioningFragment : Fragment() {
                 //this override method is not needed
             }
         })
-
         Timber.i("QuestionFragment created!")
         return binding.root
     }

@@ -4,4 +4,5 @@
     <string name="negative_button">No</string>
     <string name="reset_dialog_title">Reset Questions</string>
     <string name="reset_dialog_message">Do you really want to reset all of your question ratings?</string>
+    <string name="reset_dialog_toast_message">Questions have been reset!</string>
 </resources>

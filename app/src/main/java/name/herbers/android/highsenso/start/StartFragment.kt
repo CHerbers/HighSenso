@@ -2,18 +2,16 @@ package name.herbers.android.highsenso.start
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
-import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.databinding.StartFragmentBinding
 import name.herbers.android.highsenso.dialogs.ResetDialogFragment
-import name.herbers.android.highsenso.dialogs.SharedDialogViewModel
 import name.herbers.android.highsenso.menu.AboutFragment
 import timber.log.Timber
 
@@ -26,30 +24,23 @@ import timber.log.Timber
  * */
 class StartFragment : Fragment() {
 
-    private lateinit var viewModel: StartViewModel
+    private val sharedDatabaseViewModel: SharedDatabaseViewModel by activityViewModels()
     private lateinit var binding: StartFragmentBinding
-
-    //ViewModel shared with ResetDialogFragment
-    private lateinit var sharedViewModel: SharedDialogViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         Timber.i("StartFragment created!")
 
         //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
-        val application = requireNotNull(this.activity).application
-        val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
-        val viewModelFactory = StartViewModelFactory(dataSource, application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(StartViewModel::class.java)
-        binding.startViewModel = viewModel
+        binding.startViewModel = sharedDatabaseViewModel
         binding.lifecycleOwner = this
 
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedDialogViewModel::class.java)
-        Timber.i("ViewModel: $sharedViewModel")
+        //set title
+        (activity as AppCompatActivity).supportActionBar?.title =
+            resources.getString(R.string.app_name)
 
         //activate menu in this Fragment
         setHasOptionsMenu(true)
@@ -60,15 +51,6 @@ class StartFragment : Fragment() {
             Navigation.findNavController(view)
                 .navigate(R.id.action_startFragment_to_questioningFragment)
         }
-
-        /* Observer for a positive answer from ResetDialogFragment */
-        sharedViewModel.positiveAnswer.observe(viewLifecycleOwner, Observer { positiveAnswer ->
-            Timber.i("Observer")
-            if (positiveAnswer){
-                Timber.i("Answer observed to be positive!")
-                viewModel.handleResetQuestions()
-            }
-        })
 
         // inflate the layout for this Fragment
         return binding.root
@@ -97,7 +79,7 @@ class StartFragment : Fragment() {
         }
     }
 
-    private fun handleResetQuestions(): Boolean{
+    private fun handleResetQuestions(): Boolean {
         ResetDialogFragment().show(childFragmentManager, ResetDialogFragment.TAG)
         return true
     }

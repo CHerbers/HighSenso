@@ -21,7 +21,7 @@ class QuestioningViewModel(
 
     private lateinit var questions: List<Question>
     private lateinit var currentQuestion: Question
-    private val defaultRating =
+    private val defaultRatingProgress =
         application.applicationContext.resources.getInteger(R.integer.default_rating_progress)
 
     /* current question number / total questions, observed by associated TextView */
@@ -89,7 +89,7 @@ class QuestioningViewModel(
                 return currentQuestion.rating
             }
         }
-        return defaultRating
+        return defaultRatingProgress
     }
 
     //TODO doc comment

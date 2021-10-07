@@ -1,13 +1,15 @@
 package name.herbers.android.highsenso.start
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.*
+import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.database.QuestionDatabaseDao
 import timber.log.Timber
 
-class StartViewModel(
+class SharedDatabaseViewModel(
     val database: QuestionDatabaseDao,
     application: Application
 ) : AndroidViewModel(application) {
@@ -24,12 +26,20 @@ class StartViewModel(
     }
 
     fun handleResetQuestions(): Boolean {
+        //set questions rating to default value (-1)
         if (this::questions.isInitialized) {
             questions.forEach { question ->
-                question.rating = -1
+                question.rating =
+                    getApplication<Application>().applicationContext.resources.getInteger(R.integer.default_unrated_rating)
                 updateDatabase(question)
             }
         }
+        //Toast message that reset is done
+        Toast.makeText(
+            getApplication<Application>().applicationContext,
+            R.string.reset_dialog_toast_message,
+            Toast.LENGTH_SHORT
+        ).show()
         return true
     }
 

@@ -4,26 +4,21 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.start.SharedDatabaseViewModel
 import timber.log.Timber
 
 class ResetDialogFragment() : DialogFragment() {
-    //    private lateinit var navBackStackEntry:
-    private lateinit var sharedDialogViewModel: SharedDialogViewModel
+    private val sharedDatabaseViewModel: SharedDatabaseViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        sharedDialogViewModel =
-            ViewModelProvider(requireActivity()).get(SharedDialogViewModel::class.java)
-
-        Timber.i("ViewModel: $sharedDialogViewModel")
-
         return activity.let {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.reset_dialog_title)
             builder.setMessage(R.string.reset_dialog_message)
             builder.setPositiveButton(R.string.positive_button) { _, _ ->
-                sharedDialogViewModel.answeredPositive()
+                sharedDatabaseViewModel.handleResetQuestions()
                 Timber.i("Reset Dialog was answered positive!")
                 dismiss()
             }
@@ -37,12 +32,6 @@ class ResetDialogFragment() : DialogFragment() {
     }
 
     companion object {
-//        fun newInstance(listener: DialogListener) {
-//            ResetDialogFragment().apply {
-//                this.listener = listener
-//            }
-//        }
-
         const val TAG = "ResetDialog"
     }
 }

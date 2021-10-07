@@ -2,4 +2,5 @@
 <resources>
     <integer name="rating_max">4</integer>
     <integer name="default_rating_progress">2</integer>
+    <integer name="default_unrated_rating">-1</integer>
 </resources>
