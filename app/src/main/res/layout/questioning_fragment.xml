@@ -25,13 +25,13 @@
             android:text="@{questioningViewModel.questionCount}"
             android:textColor="@color/questionCount_text_color"
             android:textSize="@dimen/questionCount_textSize"
-            app:layout_constraintBottom_toTopOf="@+id/questionTitle_textView"
+            app:layout_constraintBottom_toTopOf="@+id/result_content_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/questionTitle_textView"
+            android:id="@+id/result_content_textView"
             style="@style/standard_text"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"

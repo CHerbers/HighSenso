@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    menu content-->
     <string name="about_text">Everything you need to know about this app including copyright and stuff</string>
+
+<!--    questioning fragment content-->
     <string name="question_title">This is a question title</string>
     <string name="question_content">This is a question! Pls rate</string>
-    <string name="resultText">This is the result of your test.</string>
     <string name="sb_legend_0">-2</string>
     <string name="sb_legend_1">-1</string>
     <string name="sb_legend_2">0</string>
     <string name="sb_legend_3">1</string>
     <string name="sb_legend_4">2</string>
+
+    <!--    result fragment content-->
+    <string name="result_disclaimer">This is not a medical diagnosis!</string>
+    <string name="resultText">This is the result of your test.</string>
 </resources>

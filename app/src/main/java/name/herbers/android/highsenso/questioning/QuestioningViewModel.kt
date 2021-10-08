@@ -4,22 +4,19 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.Question
-import name.herbers.android.highsenso.database.QuestionDatabaseDao
 import timber.log.Timber
 
 class QuestioningViewModel(
-    val database: QuestionDatabaseDao,
+//    val database: QuestionDatabaseDao,
+//    var questions: List<Question>,
+    private val databaseHandler: DatabaseHandler,
     application: Application
 ) : AndroidViewModel(application) {
 
-    //coroutines
-    private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    private lateinit var questions: List<Question>
+    private var questions: List<Question> = databaseHandler.questions
     private lateinit var currentQuestion: Question
     private val defaultRatingProgress =
         application.applicationContext.resources.getInteger(R.integer.default_rating_progress)
@@ -61,25 +58,8 @@ class QuestioningViewModel(
 
     init {
         //load questions from database
-        initQuestions()
+        updateLiveData(0)
         Timber.i("QuestioningViewModel created!")
-    }
-
-    //TODO doc comment
-    private fun initQuestions() {
-        uiScope.launch {
-            questions = getQuestionsFromDatabase()
-            updateLiveData(0)
-        }
-        Timber.i("questions initialized")
-    }
-
-    //TODO doc comment
-    private suspend fun getQuestionsFromDatabase(): List<Question> {
-        return withContext(Dispatchers.IO) {
-            val questionsList: List<Question> = database.getAllQuestions()
-            questionsList
-        }
     }
 
     //TODO doc comment
@@ -139,32 +119,15 @@ class QuestioningViewModel(
     //TODO doc comment
     private fun updateRatingFromSeekBar(progress: Int) {
         currentQuestion.rating = progress
-        updateDatabase(currentQuestion)
-    }
-
-    //TODO doc comment
-    private fun updateDatabase(question: Question) {
-        uiScope.launch {
-            update(question)
-        }
-    }
-
-    //TODO doc comment
-    private suspend fun update(question: Question) {
-        withContext(Dispatchers.IO) {
-            database.update(question)
-            Timber.i("Updated Question: $question")
-        }
+        databaseHandler.updateDatabase(currentQuestion)
     }
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
         Timber.i("QuestioningViewModel destroyed!")
     }
 
     //TODO delete methods following this comment
-
     private fun createQuestionList(): List<Question> {
         val question0 = Question(
             0,

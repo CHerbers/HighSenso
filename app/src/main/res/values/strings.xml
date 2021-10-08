@@ -1,9 +1,15 @@
 <resources>
+    <!--    general-->
     <string name="app_name">HighSenso</string>
+    <!--    start-->
+    <string name="startFragment_title">Welcome to HighSenso</string>
+    <string name="start_button">Start</string>
+    <!--    menu-->
     <string name="about_title">About</string>
     <string name="reset_title">Reset Rating</string>
+    <!--    questioning-->
     <string name="next_button">Next</string>
-    <string name="start_button">Start</string>
-    <string name="startFragment_title">Welcome to HighSenso</string>
     <string name="back_button">Back</string>
+    <!--    result-->
+    <string name="send_result_button">Send result \n anonymously</string>
 </resources>

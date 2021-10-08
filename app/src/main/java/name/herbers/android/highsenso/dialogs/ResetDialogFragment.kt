@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import name.herbers.android.highsenso.R
-import name.herbers.android.highsenso.start.SharedDatabaseViewModel
+import name.herbers.android.highsenso.start.SharedViewModel
 import timber.log.Timber
 
 class ResetDialogFragment() : DialogFragment() {
-    private val sharedDatabaseViewModel: SharedDatabaseViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
@@ -18,7 +18,7 @@ class ResetDialogFragment() : DialogFragment() {
             builder.setTitle(R.string.reset_dialog_title)
             builder.setMessage(R.string.reset_dialog_message)
             builder.setPositiveButton(R.string.positive_button) { _, _ ->
-                sharedDatabaseViewModel.handleResetQuestions()
+                sharedViewModel.handleResetQuestions()
                 Timber.i("Reset Dialog was answered positive!")
                 dismiss()
             }

@@ -8,7 +8,7 @@
     <data>
         <variable
             name="startViewModel"
-            type="name.herbers.android.highsenso.start.SharedDatabaseViewModel" />
+            type="name.herbers.android.highsenso.start.SharedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

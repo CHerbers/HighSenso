@@ -11,15 +11,16 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.database.Question
-import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.databinding.QuestioningFragmentBinding
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.result.ResultViewModel
+import name.herbers.android.highsenso.start.SharedViewModel
 import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
 
@@ -47,8 +48,10 @@ class QuestioningFragment : Fragment() {
             false
         )
         val application = requireNotNull(this.activity).application
-        val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
-        val viewModelFactory = QuestioningViewModelFactory(dataSource, application)
+        val sharedViewModel: SharedViewModel by activityViewModels()
+        val databaseHandler = sharedViewModel.databaseHandler
+        val viewModelFactory =
+            QuestioningViewModelFactory(databaseHandler, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(QuestioningViewModel::class.java)
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this

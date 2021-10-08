@@ -24,7 +24,7 @@ import timber.log.Timber
  * */
 class StartFragment : Fragment() {
 
-    private val sharedDatabaseViewModel: SharedDatabaseViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var binding: StartFragmentBinding
 
     override fun onCreateView(
@@ -35,7 +35,7 @@ class StartFragment : Fragment() {
 
         //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
-        binding.startViewModel = sharedDatabaseViewModel
+        binding.startViewModel = sharedViewModel
         binding.lifecycleOwner = this
 
         //set title

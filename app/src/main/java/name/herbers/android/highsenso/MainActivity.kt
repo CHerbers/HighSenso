@@ -6,15 +6,16 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.QuestionDatabase
-import name.herbers.android.highsenso.start.SharedDatabaseViewModel
-import name.herbers.android.highsenso.start.SharedDatabaseViewModelFactory
+import name.herbers.android.highsenso.start.SharedViewModel
+import name.herbers.android.highsenso.start.SharedViewModelFactory
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
     //ViewModel shared with ResetDialogFragment and StartFragment
-    private lateinit var sharedDatabaseViewModel: SharedDatabaseViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +23,13 @@ class MainActivity : AppCompatActivity() {
 
         val application = requireNotNull(this).application
         val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
-        val sharedDatabaseViewModelFactory = SharedDatabaseViewModelFactory(dataSource, application)
-        sharedDatabaseViewModel = ViewModelProvider(this, sharedDatabaseViewModelFactory).get(SharedDatabaseViewModel::class.java)
+        val databaseHandler = DatabaseHandler(dataSource)
+        val sharedViewModelFactory =
+            SharedViewModelFactory(databaseHandler, application)
+        sharedViewModel = ViewModelProvider(
+            this,
+            sharedViewModelFactory
+        ).get(SharedViewModel::class.java)
 
         Timber.i("onCreate called!")
     }
