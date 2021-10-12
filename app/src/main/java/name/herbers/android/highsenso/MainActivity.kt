@@ -5,8 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.PersistableBundle
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.DatabaseHandler
@@ -36,13 +34,6 @@ class MainActivity : AppCompatActivity() {
             this,
             sharedViewModelFactory
         ).get(SharedViewModel::class.java)
-
-        val listView: ListView? = findViewById(R.id.gender_listView)
-        val genderListViewList = resources.getStringArray(R.array.gender)
-        val adapter = ArrayAdapter(this, R.layout.dialog_send, genderListViewList)
-        if (listView != null) {
-            listView.adapter = adapter
-        }
 
         Timber.i("onCreate called!")
     }

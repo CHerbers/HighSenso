@@ -17,5 +17,7 @@
     <dimen name="sb_legend_standard_textSize">18sp</dimen>
     <dimen name="sb_legend_selected_textSize">24sp</dimen>
 <!--    send dialog-->
-    <dimen name="list_view_divider_height">5dp</dimen>
+    <dimen name="send_dialog_items_margin_sides">12dp</dimen>
+    <dimen name="send_dialog_message_margin_top">8dp</dimen>
+    <dimen name="send_dialog_items_padding_top_bot">6dp</dimen>
 </resources>

@@ -1,36 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/message_textView"
-        android:layout_width="match_parent"
+    <data>
+        <variable
+            name="resultViewModel"
+            type="name.herbers.android.highsenso.result.ResultViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send_dialog_message" />
+        android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/age_editText_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/age_editText"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/message_textView"
+            style="@style/standard_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/send_dialog_age_edit_text_hint"
-            android:inputType="number"
-            android:maxLength="3"
-            android:textColorHighlight="@color/edit_text_color_highlight" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
+            android:layout_marginTop="@dimen/send_dialog_message_margin_top"
+            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot"
+            android:text="@string/send_dialog_message" />
 
-    <ListView
-        android:id="@+id/gender_listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/list_view_divider"
-        android:dividerHeight="@dimen/list_view_divider_height"/>
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/age_editText_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
+            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot">
+
+            <EditText
+                android:id="@+id/age_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/send_dialog_age_edit_text_hint"
+                android:ems="10"
+                android:hint="@string/send_dialog_age_edit_text_hint"
+                android:inputType="number"
+                android:maxLength="3"
+                android:textColorHighlight="@color/edit_text_color_highlight" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/gender_label_textView"
+            style="@style/standard_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
+            android:layout_marginTop="@dimen/send_dialog_message_margin_top"
+            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot"
+            android:text="@string/send_dialog_gender_label_text" />
+
+        <RadioGroup
+            android:id="@+id/gender_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
+            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot">
+
+            <RadioButton
+                android:id="@+id/gender_female_radioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gender_female_radioButton_text" />
+
+            <RadioButton
+                android:id="@+id/gender_male_radioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gender_male_radioButton_text" />
+
+            <RadioButton
+                android:id="@+id/gender_nonBinary_radioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gender_nonBinary_radioButton_text" />
+        </RadioGroup>
+
+        <!--    <ListView-->
+        <!--        android:id="@+id/gender_listView"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:divider="@color/list_view_divider"-->
+        <!--        android:dividerHeight="@dimen/list_view_divider_height"/>-->
+    </LinearLayout>
+</layout>

@@ -13,4 +13,9 @@
     <string name="send_dialog_message">Send Result</string>
     <string name="send_dialog_age_edit_text_hint">Age</string>
     <string name="send_dialog_toast_message">Results have been sent!</string>
+    <!--    RadioButtons-->
+    <string name="gender_female_radioButton_text">female</string>
+    <string name="gender_male_radioButton_text">male</string>
+    <string name="gender_nonBinary_radioButton_text">non-binary</string>
+    <string name="send_dialog_gender_label_text">Gender</string>
 </resources>

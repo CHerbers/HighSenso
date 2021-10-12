@@ -49,7 +49,6 @@ class ResultFragment : Fragment() {
         binding.sendResultButton.setOnClickListener { view ->
             Timber.i("sendResetButton clicked!")
             SendDialogFragment(viewModel).show(childFragmentManager, SendDialogFragment.TAG)
-            Toast.makeText(context, "sent", Toast.LENGTH_SHORT).show()
             //TODO new fragment or overlay and asking for gender and age (and country?)
 
             //TODO hide button/ make is not clickable to prevent multiple sending

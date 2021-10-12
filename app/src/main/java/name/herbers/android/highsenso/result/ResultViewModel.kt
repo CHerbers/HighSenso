@@ -27,13 +27,24 @@ class ResultViewModel(
         //_resultContent = ...
     }
 
-    fun handleSendResult() {
+    fun handleSendResult(age: String, gender: String) {
         //TODO send the stuff
     }
 
     override fun onCleared() {
         super.onCleared()
         Timber.i("ResultViewModel destroyed!")
+    }
+
+    fun checkSendResultInput(age: String): Boolean {
+
+        val regex = "[0-9]".toRegex()
+        if (regex.containsMatchIn(age) && age.toInt() < 150 && age.toInt() > 14) {
+            Timber.i("$age is a valid age!")
+            return true
+        }
+        Timber.i("$age is an invalid age!")
+        return false
     }
 
 }
