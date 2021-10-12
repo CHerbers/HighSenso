@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="questioningViewModel"
+            type="name.herbers.android.highsenso.questioning.QuestioningViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/questionCount_textView"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{questioningViewModel.questionCount}"
+            android:textColor="@color/questionCount_text_color"
+            android:textSize="@dimen/questionCount_textSize"
+            app:layout_constraintBottom_toTopOf="@+id/result_content_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Question Count (42/42)" />
+
+        <TextView
+            android:id="@+id/result_content_textView"
+            style="@style/standard_text"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{questioningViewModel.currentQuestionTitle}"
+            android:textSize="@dimen/title_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.167"
+            tools:text="Question Title" />
+
+        <TextView
+            android:id="@+id/questionContent_textView"
+            style="@style/standard_text"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="@dimen/question_textView_layout_padding"
+            android:text="@{questioningViewModel.currentQuestionContent}"
+            android:textSize="@dimen/standard_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.344"
+            tools:text="this is a reaaaaaaaaaaaaaaaaaaaaaaaally long question just to test the question layout with a reaaaaaaaally long quesiton! How does it look like? Does it look good? I really hope so! And there is the 5th (?) line! Nice!" />
+
+
+        <Button
+            android:id="@+id/next_button"
+            style="@style/general_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/btn_default_small"
+            android:text="@string/next_button"
+            android:textSize="@dimen/button_textSize"
+            app:backgroundTint="@color/teal_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/questionContent_textView"
+            app:layout_constraintVertical_bias="0.8" />
+
+        <Button
+            android:id="@+id/back_button"
+            style="@style/general_button"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/btn_default_small"
+            android:text="@string/back_button"
+            android:textSize="@dimen/button_textSize"
+            app:backgroundTint="@color/teal_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/questionContent_textView"
+            app:layout_constraintVertical_bias="0.8" />
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="333dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:max="@integer/rating_max"
+            android:maxHeight="10dip"
+            android:minHeight="10dip"
+            android:paddingLeft="10dip"
+            android:paddingTop="10dip"
+            android:paddingRight="10dip"
+            android:paddingBottom="9dip"
+            android:progress="@{questioningViewModel.ratingToSetProgress}"
+            android:progressDrawable="@drawable/seek_bar"
+            android:thumb="@drawable/seek_bar_thumb"
+            android:tickMark="@drawable/seek_bar_tick_mark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.54" />
+
+        <TextView
+            android:id="@+id/sb_legend_0"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sb_legend_0"
+            android:textAlignment="center"
+            android:textSize="@dimen/sb_legend_standard_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sb_legend_1"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/sb_legend_1"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sb_legend_1"
+            android:textAlignment="center"
+            android:textSize="@dimen/sb_legend_standard_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sb_legend_2"
+            app:layout_constraintHorizontal_bias="0.656"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/sb_legend_2"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sb_legend_2"
+            android:textAlignment="center"
+            android:textSize="@dimen/sb_legend_selected_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/sb_legend_3"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="101dp"
+            android:text="@string/sb_legend_3"
+            android:textAlignment="center"
+            android:textSize="@dimen/sb_legend_standard_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toEndOf="@+id/sb_legend_2"
+            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/sb_legend_4"
+            style="@style/standard_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sb_legend_4"
+            android:textAlignment="center"
+            android:textSize="@dimen/sb_legend_standard_textSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.547"
+            app:layout_constraintStart_toEndOf="@+id/sb_legend_3"
+            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

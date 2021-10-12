@@ -3,15 +3,20 @@ package name.herbers.android.highsenso
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.PersistableBundle
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.QuestionDatabase
-import name.herbers.android.highsenso.start.SharedViewModel
-import name.herbers.android.highsenso.start.SharedViewModelFactory
 import timber.log.Timber
+import java.io.File
 
+/**
+ * This is the main (and only) activity of the HighSenso App.
+ * */
 class MainActivity : AppCompatActivity() {
 
     //ViewModel shared with ResetDialogFragment and StartFragment
@@ -22,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val application = requireNotNull(this).application
+//        deleteDatabaseInAppData()
         val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
         val databaseHandler = DatabaseHandler(dataSource)
         val sharedViewModelFactory =
@@ -30,6 +36,13 @@ class MainActivity : AppCompatActivity() {
             this,
             sharedViewModelFactory
         ).get(SharedViewModel::class.java)
+
+        val listView: ListView? = findViewById(R.id.gender_listView)
+        val genderListViewList = resources.getStringArray(R.array.gender)
+        val adapter = ArrayAdapter(this, R.layout.dialog_send, genderListViewList)
+        if (listView != null) {
+            listView.adapter = adapter
+        }
 
         Timber.i("onCreate called!")
     }
@@ -44,6 +57,30 @@ class MainActivity : AppCompatActivity() {
     fun openChatBot() {
         val chatBotIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
         startActivity(chatBotIntent)
+    }
+
+    /**
+     * Deletes the database files in the data folder on the device
+     * */
+    private fun deleteDatabaseInAppData() {
+        //create a Files from an existing question_database (-shm, -wal)
+        val roomDbPath =
+            Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/databases/questions_database"
+        val roomDb = File(roomDbPath)
+        val roomDbShm = File("$roomDbPath-shm")
+        val roomDbWal = File("$roomDbPath-wal")
+
+        //delete Files if existing
+        if (roomDb.exists()) {
+            Timber.i("Db does exist and will be deleted!")
+            roomDb.delete()
+        }
+        if (roomDbShm.exists())
+            Timber.i("Db-smh does exist and will be deleted!")
+        roomDbShm.delete()
+        if (roomDbWal.exists())
+            Timber.i("Db-wal does exist and will be deleted!")
+        roomDbWal.delete()
     }
 
 

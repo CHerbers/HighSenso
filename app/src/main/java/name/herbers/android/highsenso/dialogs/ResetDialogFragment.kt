@@ -4,13 +4,11 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import name.herbers.android.highsenso.R
-import name.herbers.android.highsenso.start.SharedViewModel
+import name.herbers.android.highsenso.start.StartViewModel
 import timber.log.Timber
 
-class ResetDialogFragment() : DialogFragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+class ResetDialogFragment(private val startViewModel: StartViewModel) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
@@ -18,7 +16,7 @@ class ResetDialogFragment() : DialogFragment() {
             builder.setTitle(R.string.reset_dialog_title)
             builder.setMessage(R.string.reset_dialog_message)
             builder.setPositiveButton(R.string.positive_button) { _, _ ->
-                sharedViewModel.handleResetQuestions()
+                startViewModel.handleResetQuestions()
                 Timber.i("Reset Dialog was answered positive!")
                 dismiss()
             }

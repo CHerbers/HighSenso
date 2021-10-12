@@ -7,9 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+<!--    questioning fragment-->
     <color name="questionCount_text_color">#808080</color>
+    <!--    seek bar-->
     <color name="seek_bar_background">#2891E6</color>
     <color name="seek_bar_secondary_progress">#0C5FA2</color>
     <color name="seek_bar_progress">#3F51B5</color>
     <color name="seek_bar_tick_mark">#808080</color>
+<!--    send dialog-->
+    <color name="edit_text_color_highlight">#FF03DAC5</color>
+    <color name="list_view_divider">#FF000000</color>
 </resources>

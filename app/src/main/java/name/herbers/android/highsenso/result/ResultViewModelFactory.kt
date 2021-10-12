@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.DatabaseHandler
 
+/**
+ * [ViewModelProvider.Factory] for [ResultViewModel].
+ * Creates a ResultViewModel.
+ * */
 class ResultViewModelFactory(
     private val databaseHandler: DatabaseHandler,
     private val application: Application

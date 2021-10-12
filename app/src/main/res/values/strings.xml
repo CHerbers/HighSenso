@@ -5,11 +5,15 @@
     <string name="startFragment_title">Welcome to HighSenso</string>
     <string name="start_button">Start</string>
     <!--    menu-->
+    <string name="about_actionBar_title">About</string>
     <string name="about_title">About</string>
     <string name="reset_title">Reset Rating</string>
     <!--    questioning-->
+    <string name="questioning_actionBar_title">Question</string>
     <string name="next_button">Next</string>
     <string name="back_button">Back</string>
     <!--    result-->
+    <string name="result_actionBar_title">Result</string>
     <string name="send_result_button">Send result \n anonymously</string>
+    <string name="back_to_start_button">Back to start</string>
 </resources>

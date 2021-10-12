@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
-import name.herbers.android.highsenso.databinding.StartFragmentBinding
+import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.databinding.FragmentStartBinding
 import name.herbers.android.highsenso.dialogs.ResetDialogFragment
 import name.herbers.android.highsenso.menu.AboutFragment
 import timber.log.Timber
@@ -24,8 +26,9 @@ import timber.log.Timber
  * */
 class StartFragment : Fragment() {
 
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-    private lateinit var binding: StartFragmentBinding
+    //    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private lateinit var startViewModel: StartViewModel
+    private lateinit var binding: FragmentStartBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +37,16 @@ class StartFragment : Fragment() {
         Timber.i("StartFragment created!")
 
         //init the DataBinding and ViewModel
-        binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
-        binding.startViewModel = sharedViewModel
-        binding.lifecycleOwner = this
+        val application = requireNotNull(this.activity).application
+        val sharedViewModel: SharedViewModel by activityViewModels()
+        val databaseHandler = sharedViewModel.databaseHandler
+        val startViewModelFactory = StartViewModelFactory(databaseHandler, application)
+        startViewModel =
+            ViewModelProvider(this, startViewModelFactory).get(StartViewModel::class.java)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_start, container, false)
+        binding.startViewModel = startViewModel
+            binding.lifecycleOwner = this
 
         //set title
         (activity as AppCompatActivity).supportActionBar?.title =
@@ -45,7 +55,7 @@ class StartFragment : Fragment() {
         //activate menu in this Fragment
         setHasOptionsMenu(true)
 
-        /* Listener for startButton which starts the questioning */
+        /* Listener for startButton. Navigation to QuestioningFragment */
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             Navigation.findNavController(view)
@@ -68,7 +78,7 @@ class StartFragment : Fragment() {
         Timber.i("Menu Item \"${item.title}\" was selected!")
         return when (item.itemId) {
             //reset question ratings
-            R.id.reset_rating_destination -> handleResetQuestions() //TODO maybe show some pop up ('success' or something)
+            R.id.reset_rating_destination -> handleResetQuestions()
             //navigate to AboutFragment
             R.id.about_destination -> NavigationUI.onNavDestinationSelected(
                 item,
@@ -79,8 +89,11 @@ class StartFragment : Fragment() {
         }
     }
 
+    /**
+     * [ResetDialogFragment] is called to check if the user really wants to reset all ratings.
+     * */
     private fun handleResetQuestions(): Boolean {
-        ResetDialogFragment().show(childFragmentManager, ResetDialogFragment.TAG)
+        ResetDialogFragment(startViewModel).show(childFragmentManager, ResetDialogFragment.TAG)
         return true
     }
 }

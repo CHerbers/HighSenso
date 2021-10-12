@@ -16,11 +16,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.Question
-import name.herbers.android.highsenso.databinding.QuestioningFragmentBinding
+import name.herbers.android.highsenso.databinding.FragmentQuestioningBinding
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.result.ResultViewModel
-import name.herbers.android.highsenso.start.SharedViewModel
 import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
 
@@ -31,7 +31,7 @@ import timber.log.Timber
  * */
 class QuestioningFragment : Fragment() {
 
-    private lateinit var binding: QuestioningFragmentBinding
+    private lateinit var binding: FragmentQuestioningBinding
     private lateinit var viewModel: QuestioningViewModel
 
     override fun onCreateView(
@@ -43,7 +43,7 @@ class QuestioningFragment : Fragment() {
         //init the DataBinding and QuestioningViewModel
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.questioning_fragment,
+            R.layout.fragment_questioning,
             container,
             false
         )
@@ -95,7 +95,8 @@ class QuestioningFragment : Fragment() {
          * If questionCount changes, the ActionBars title will be changed
          * */
         viewModel.questionCount.observe(viewLifecycleOwner, Observer { count ->
-            (activity as AppCompatActivity).supportActionBar?.title = "Question $count"
+            (activity as AppCompatActivity).supportActionBar?.title =
+                resources.getString(R.string.questioning_actionBar_title) + " $count"
         })
 
         /**

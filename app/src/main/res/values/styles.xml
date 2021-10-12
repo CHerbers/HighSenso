@@ -19,4 +19,15 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="general_button">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/purple_500</item>
+        <item name="android:textAlignment">center</item>
+        <item name="fontFamily">@font/asap</item>#
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">24dp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
 </resources>

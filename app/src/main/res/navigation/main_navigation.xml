@@ -9,7 +9,7 @@
         android:id="@+id/start_destination"
         android:name="name.herbers.android.highsenso.start.StartFragment"
         android:label="start_fragment"
-        tools:layout="@layout/start_fragment">
+        tools:layout="@layout/fragment_start">
         <action
             android:id="@+id/action_startFragment_to_questioningFragment"
             app:destination="@id/questioning_destination" />
@@ -29,7 +29,7 @@
         android:id="@+id/result_destination"
         android:name="name.herbers.android.highsenso.result.ResultFragment"
         android:label="result_fragment"
-        tools:layout="@layout/result_fragment">
+        tools:layout="@layout/fragment_result">
         <action
             android:id="@+id/action_resultFragment_to_startFragment"
             app:destination="@id/start_destination" />

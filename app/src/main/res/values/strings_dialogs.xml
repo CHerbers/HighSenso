@@ -2,7 +2,15 @@
 <resources>
     <string name="positive_button">Yes</string>
     <string name="negative_button">No</string>
+    <string name="accept_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+<!--    reset dialog-->
     <string name="reset_dialog_title">Reset Questions</string>
     <string name="reset_dialog_message">Do you really want to reset all of your question ratings?</string>
     <string name="reset_dialog_toast_message">Questions have been reset!</string>
+<!--    send dialog-->
+    <string name="send_dialog_title">Send Result Anonymously</string>
+    <string name="send_dialog_message">Send Result</string>
+    <string name="send_dialog_age_edit_text_hint">Age</string>
+    <string name="send_dialog_toast_message">Results have been sent!</string>
 </resources>

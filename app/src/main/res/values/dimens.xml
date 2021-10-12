@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--general    -->
     <dimen name="title_textSize">32sp</dimen>
     <dimen name="standard_textSize">16sp</dimen>
-    <dimen name="questionCount_textSize">14sp</dimen>
     <dimen name="standard_textView_layout_margin">16sp</dimen>
     <dimen name="button_textSize">20sp</dimen>
+<!--    questioning Fragment-->
+    <dimen name="questionCount_textSize">14sp</dimen>
+    <dimen name="question_textView_layout_padding">24sp</dimen>
+    <!--    seekBar-->
     <dimen name="seek_bar_thickness">5dp</dimen>
     <dimen name="seek_bar_dashWidth">5dp</dimen>
     <dimen name="seek_bar_thumb_size">26dp</dimen>
     <dimen name="seek_bar_tick_mark_size">13dp</dimen>
+    <!--    seekBar legend-->
     <dimen name="sb_legend_standard_textSize">18sp</dimen>
     <dimen name="sb_legend_selected_textSize">24sp</dimen>
+<!--    send dialog-->
+    <dimen name="list_view_divider_height">5dp</dimen>
 </resources>
