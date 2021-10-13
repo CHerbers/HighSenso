@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
 
@@ -11,6 +12,18 @@ class ResultViewModel(
     val databaseHandler: DatabaseHandler,
     application: Application
 ) : AndroidViewModel(application) {
+
+    //some constants
+    private val appRes = application.applicationContext.resources
+    private val errorInvalidInput =
+        appRes.getString(R.string.send_dialog_text_edit_error_invalid)
+    private val errorTooOld =
+        appRes.getString(R.string.send_dialog_text_edit_error_old)
+    private val errorTooYoung =
+        appRes.getString(R.string.send_dialog_text_edit_error_young)
+    private val maxAge = appRes.getInteger(R.integer.send_result_max_age)
+    private val minAge = appRes.getInteger(R.integer.send_result_min_age)
+    private val regex = "[0-9]".toRegex()
 
     private val _resultContent = MutableLiveData<String>()
     val resultContent: LiveData<String>
@@ -27,19 +40,17 @@ class ResultViewModel(
         //_resultContent = ...
     }
 
-    fun handleSendResult(age: String, gender: String) {
+    fun handleSendResult(age: Int, gender: String) {
         //TODO send the stuff
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("ResultViewModel destroyed!")
-    }
-
-    fun checkSendResultInput(age: String): Boolean {
-
-        val regex = "[0-9]".toRegex()
-        if (regex.containsMatchIn(age) && age.toInt() < 150 && age.toInt() > 14) {
+    /**
+     * Checks if the given input is a valid age.
+     * @param age the users age that is to check
+     * @return true if age is valid - false otherwise
+     * */
+    fun checkSendResultInput(age: Int): Boolean {
+        if (regex.containsMatchIn(age.toString()) && age < maxAge && age > minAge) {
             Timber.i("$age is a valid age!")
             return true
         }
@@ -47,4 +58,21 @@ class ResultViewModel(
         return false
     }
 
+    /**
+     * Calculates a fitting error message depending on the input String.
+     * @param age the users age
+     * @return a fitting error message if there is one or an empty string otherwise
+     * */
+    fun getErrorMessage(age: String): String {
+        if (age == "") return ""
+        if (!regex.containsMatchIn(age)) return errorInvalidInput
+        if (age.toInt() > maxAge) return errorTooOld
+        if (age.toInt() < minAge) return errorTooYoung
+        return ""
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Timber.i("ResultViewModel destroyed!")
+    }
 }

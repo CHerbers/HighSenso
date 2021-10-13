@@ -3,4 +3,6 @@
     <integer name="rating_max">4</integer>
     <integer name="default_rating_progress">2</integer>
     <integer name="default_unrated_rating">-1</integer>
+    <integer name="send_result_min_age">6</integer>
+    <integer name="send_result_max_age">123</integer>
 </resources>
