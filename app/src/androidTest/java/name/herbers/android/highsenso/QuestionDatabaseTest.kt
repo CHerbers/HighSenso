@@ -51,12 +51,22 @@ class QuestionDatabaseTest {
         //create questions
         val questionList = createQuestionList()
 
-        //test insert() function and getAllQuestions()
-        questionList.forEach { question -> questionDao.insert(question) }
-        var loadedQuestionList: List<Question> = questionDao.getAllQuestions()
-        assertEquals("question01", loadedQuestionList[0].title)
+        /* test insert() function and getAllQuestions() */
 
-        //test update() function
+        //insert
+        questionList.forEach { question -> questionDao.insert(question) }
+        //select all
+        var loadedQuestionList: List<Question> = questionDao.getAllQuestions()
+        //test
+        loadedQuestionList.forEach { loadedQuestion ->
+            val originalQuestion = questionList[loadedQuestion.id]
+            assertEquals(originalQuestion.title, loadedQuestion.title)
+            assertEquals(originalQuestion.question, loadedQuestion.question)
+            assertEquals(originalQuestion.explanation, loadedQuestion.explanation)
+            assertEquals(originalQuestion.rating, loadedQuestion.rating)
+        }
+
+        /* test update() function */
         val questionNew = Question(
             0,
             "question04",
@@ -65,12 +75,16 @@ class QuestionDatabaseTest {
         )
         questionDao.update(questionNew)
         loadedQuestionList = questionDao.getAllQuestions()
-        assertEquals("question04", loadedQuestionList[0].title)
+        assertEquals(questionNew.title, loadedQuestionList[0].title)
+        assertEquals(questionNew.question, loadedQuestionList[0].question)
+        assertEquals(questionNew.explanation, loadedQuestionList[0].explanation)
+        assertEquals(questionNew.rating, loadedQuestionList[0].rating)
     }
 
     @Test
-    fun updateNonExistingQuestion(){
-        val question = Question(4,
+    fun updateNonExistingQuestion() {
+        val question = Question(
+            4,
             "notAQuestion",
             "I am no question!",
             "This is really not a question."
@@ -83,7 +97,7 @@ class QuestionDatabaseTest {
      * Creates a [List] of defined [Question]s
      * @return a [List] of [Question]s
      * */
-    private fun createQuestionList(): List<Question>{
+    private fun createQuestionList(): List<Question> {
         val question0 = Question(
             0,
             "question01",

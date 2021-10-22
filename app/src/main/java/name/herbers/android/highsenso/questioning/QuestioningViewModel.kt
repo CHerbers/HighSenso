@@ -1,25 +1,21 @@
 package name.herbers.android.highsenso.questioning
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import name.herbers.android.highsenso.R
+import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.Question
+import name.herbers.android.highsenso.result.ResultFragment
+import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
 
 class QuestioningViewModel(
-//    val database: QuestionDatabaseDao,
-//    var questions: List<Question>,
-    private val databaseHandler: DatabaseHandler,
-    application: Application
-) : AndroidViewModel(application) {
+    private val databaseHandler: DatabaseHandler
+) : ViewModel() {
 
     private var questions: List<Question> = databaseHandler.questions
-    private lateinit var currentQuestion: Question
-    private val defaultRatingProgress =
-        application.applicationContext.resources.getInteger(R.integer.default_rating_progress)
+    lateinit var currentQuestion: Question
+    private val defaultRatingProgress = 2
 
     /* current question number / total questions, observed by associated TextView */
     private val _questionCount = MutableLiveData<String>()
@@ -62,61 +58,82 @@ class QuestioningViewModel(
         Timber.i("QuestioningViewModel created!")
     }
 
-    //TODO doc comment
+    /**
+     * This method checks, if the [currentQuestion] is already initialized and returns its rating
+     * value if so and a default progress rating if not.
+     * @return the [currentQuestion]s rating if initialized and greater or even '0',
+     * or else the [defaultRatingProgress]
+     * */
     fun getRatingToSetProgress(): Int {
-        if (this::currentQuestion.isInitialized){
-            if (currentQuestion.rating >= 0){
+        if (this::currentQuestion.isInitialized) {
+            if (currentQuestion.rating >= 0) {
                 return currentQuestion.rating
             }
         }
         return defaultRatingProgress
     }
 
-    //TODO doc comment
+    /**
+     * This method calls a function to update the rating and decides whether the current question
+     * gets changed to the next one or a fragment change to the [StartFragment] is initiated
+     * @param newRating the new rating the update function is called with
+     * */
     fun handleBackButtonClick(newRating: Int) {
         updateRatingFromSeekBar(newRating)
-        //check if this is the first question
-        if (currentQuestion.id == 1) {
+        //check if this is the first question (also triggers if id is smh. smaller than 1)
+        if (currentQuestion.id <= 1) {
             //initiate change to start fragment
-            _navBackToStartFrag.value = true
+            _navBackToStartFrag.postValue(true)
         } else {
             //load previous question
             updateLiveData(currentQuestion.id - 2)
         }
     }
 
-    //TODO doc comment
+    /**
+     * This method calls a function to update the rating and decides whether the current question
+     * gets changed to the previous one or a fragment change to the [ResultFragment] is initiated
+     * @param newRating the new rating the update function is called with
+     * */
     fun handleNextButtonClick(newRating: Int) {
         updateRatingFromSeekBar(newRating)
-        _navBackToStartFrag.value = false
+        _navBackToStartFrag.postValue(false)
         //check if this is the last question
         if (currentQuestion.id == questions.size) {
             //initiate change to result fragment
-            _isFinished.value = true
-            return
+            _isFinished.postValue(true)
         } else {
             //load next question
             updateLiveData(currentQuestion.id)
         }
     }
 
-    //TODO doc comment
+    /**
+     * This method changes the [currentQuestion] and updates all question-related [LiveData] to
+     * the corresponding data of the current question. This LiveData is observed by UI elements.
+     * A change of the seekBar is triggered to update it on the changed LiveData.
+     * @param nextQuestionIndex the index of the question that becomes [currentQuestion]
+     * */
     private fun updateLiveData(nextQuestionIndex: Int) {
         currentQuestion = questions[nextQuestionIndex]
 
         //LiveData
-        _questionCount.value = "${currentQuestion.id} / ${questions.size}"
-        _currentQuestionTitle.value = currentQuestion.title
-        _currentQuestionContent.value = currentQuestion.question
-        _currentQuestionExplanation.value = currentQuestion.explanation
+        _questionCount.postValue("${currentQuestion.id} / ${questions.size}")
+        _currentQuestionTitle.postValue(currentQuestion.title)
+        _currentQuestionContent.postValue(currentQuestion.question)
+        _currentQuestionExplanation.postValue(currentQuestion.explanation)
 
-        //initiate the change of the progression of SeekBar
-        _changeSeekBar.value = true
-        _changeSeekBar.value = false
+        //trigger change of the progression of SeekBar
+        _changeSeekBar.postValue(true)
+        _changeSeekBar.postValue(false)
         Timber.i("Current Question: $currentQuestion")
     }
 
-    //TODO doc comment
+    /**
+     * This method updates the rating of the [currentQuestion] and updates the corresponding
+     * database entry.
+     * @param progress the new rating
+     * */
     private fun updateRatingFromSeekBar(progress: Int) {
         currentQuestion.rating = progress
         databaseHandler.updateDatabase(currentQuestion)
@@ -125,28 +142,5 @@ class QuestioningViewModel(
     override fun onCleared() {
         super.onCleared()
         Timber.i("QuestioningViewModel destroyed!")
-    }
-
-    //TODO delete methods following this comment
-    private fun createQuestionList(): List<Question> {
-        val question0 = Question(
-            0,
-            "question01",
-            "Is this the first question?",
-            "We want to know if this is the first question."
-        )
-        val question1 = Question(
-            1,
-            "question02",
-            "Is this a question, too?",
-            "We want to know if this is a question."
-        )
-        val question2 = Question(
-            2,
-            "question03",
-            "Does this questioning ever stop?",
-            "We want to know if there are many questions left to ask."
-        )
-        return listOf(question0, question1, question2)
     }
 }

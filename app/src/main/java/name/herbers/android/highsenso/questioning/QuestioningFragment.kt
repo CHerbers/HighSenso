@@ -47,11 +47,10 @@ class QuestioningFragment : Fragment() {
             container,
             false
         )
-        val application = requireNotNull(this.activity).application
         val sharedViewModel: SharedViewModel by activityViewModels()
         val databaseHandler = sharedViewModel.databaseHandler
         val viewModelFactory =
-            QuestioningViewModelFactory(databaseHandler, application)
+            QuestioningViewModelFactory(databaseHandler)
         viewModel = ViewModelProvider(this, viewModelFactory).get(QuestioningViewModel::class.java)
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this

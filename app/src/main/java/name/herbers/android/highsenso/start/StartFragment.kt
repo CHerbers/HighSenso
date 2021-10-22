@@ -2,10 +2,12 @@ package name.herbers.android.highsenso.start
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -26,7 +28,6 @@ import timber.log.Timber
  * */
 class StartFragment : Fragment() {
 
-    //    private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var startViewModel: StartViewModel
     private lateinit var binding: FragmentStartBinding
 
@@ -37,16 +38,15 @@ class StartFragment : Fragment() {
         Timber.i("StartFragment created!")
 
         //init the DataBinding and ViewModel
-        val application = requireNotNull(this.activity).application
         val sharedViewModel: SharedViewModel by activityViewModels()
         val databaseHandler = sharedViewModel.databaseHandler
-        val startViewModelFactory = StartViewModelFactory(databaseHandler, application)
+        val startViewModelFactory = StartViewModelFactory(databaseHandler)
         startViewModel =
             ViewModelProvider(this, startViewModelFactory).get(StartViewModel::class.java)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_start, container, false)
         binding.startViewModel = startViewModel
-            binding.lifecycleOwner = this
+        binding.lifecycleOwner = this
 
         //set title
         (activity as AppCompatActivity).supportActionBar?.title =
@@ -54,6 +54,15 @@ class StartFragment : Fragment() {
 
         //activate menu in this Fragment
         setHasOptionsMenu(true)
+
+        startViewModel.resetDone.observe(viewLifecycleOwner, Observer { resetDone ->
+            if (resetDone){
+                Toast.makeText(context,
+                    R.string.reset_dialog_toast_message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
 
         /* Listener for startButton. Navigation to QuestioningFragment */
         binding.startButton.setOnClickListener { view: View ->

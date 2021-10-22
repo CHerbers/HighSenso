@@ -1,9 +1,8 @@
 package name.herbers.android.highsenso.start
 
-import android.app.Application
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import name.herbers.android.highsenso.R
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
 
@@ -12,9 +11,12 @@ import timber.log.Timber
  * Handles all non-UI tasks for StartFragment.
  * */
 class StartViewModel(
-    val databaseHandler: DatabaseHandler,
-    application: Application
-) : AndroidViewModel(application) {
+    val databaseHandler: DatabaseHandler
+) : ViewModel() {
+
+    private val _resetDone = MutableLiveData(false)
+    val resetDone: LiveData<Boolean>
+        get() = _resetDone
 
     init {
         Timber.i("StartViewModel created!")
@@ -22,24 +24,18 @@ class StartViewModel(
 
     /**
      * Rating of all questions in the database handled by [DatabaseHandler] are updated to the
-     * default (unrated) rating (stored in [R.integer.default_unrated_rating]).
-     * After changing rating a [Toast] is shown with a corresponding message (stored in
-     * [R.string.reset_dialog_toast_message]).
+     * default (unrated) rating (-1).
+     * After changing rating [_resetDone] is set to true to trigger its observer in [StartFragment].
      * */
-    fun handleResetQuestions(): Boolean {
+    fun handleResetQuestions() {
         //set questions rating to default value (-1)
         databaseHandler.questions.forEach { question ->
-            question.rating =
-                getApplication<Application>().applicationContext.resources.getInteger(R.integer.default_unrated_rating)
+            question.rating = -1
             databaseHandler.updateDatabase(question)
         }
-        //Toast message saying that reset is done
-        Toast.makeText(
-            getApplication<Application>().applicationContext,
-            R.string.reset_dialog_toast_message,
-            Toast.LENGTH_SHORT
-        ).show()
-        return true
+        //trigger Toast message on StartFragment
+        _resetDone.postValue(true)
+        _resetDone.postValue(false)
     }
 
     override fun onCleared() {

@@ -78,12 +78,5 @@
                 android:layout_height="wrap_content"
                 android:text="@string/gender_nonBinary_radioButton_text" />
         </RadioGroup>
-
-        <!--    <ListView-->
-        <!--        android:id="@+id/gender_listView"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:divider="@color/list_view_divider"-->
-        <!--        android:dividerHeight="@dimen/list_view_divider_height"/>-->
     </LinearLayout>
 </layout>

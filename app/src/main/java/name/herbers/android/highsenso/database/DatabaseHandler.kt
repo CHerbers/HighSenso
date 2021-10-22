@@ -1,15 +1,19 @@
 package name.herbers.android.highsenso.database
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class DatabaseHandler(
-    var database: QuestionDatabaseDao
+    var database: QuestionDatabaseDao,
+    var dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) {
 
     //needed for coroutines
     private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val uiScope = CoroutineScope(dispatchers.main() + viewModelJob)
 
     var questions:List<Question> = listOf()
 
@@ -28,7 +32,7 @@ class DatabaseHandler(
 
     //TODO doc comment
     private suspend fun getQuestionsFromDatabase(): List<Question> {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatchers.io()) {
             val questionsList: List<Question> = database.getAllQuestions()
             questionsList
         }
@@ -43,7 +47,7 @@ class DatabaseHandler(
 
     //TODO doc comment
     private suspend fun update(question: Question) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatchers.io()) {
             database.update(question)
             Timber.i("Updated Question: $question")
         }

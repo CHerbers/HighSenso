@@ -36,6 +36,10 @@ class ResultViewModel(
     }
 
     private fun calculateResult() {
+        val ratingSum = databaseHandler.questions.sumOf { question ->
+            question.rating + 1
+        }
+        Timber.i("Total rating sum: $ratingSum")
         //TODO calculate which result texts from database should be shown onscreen
         //_resultContent = ...
     }
@@ -50,7 +54,7 @@ class ResultViewModel(
      * @return true if age is valid - false otherwise
      * */
     fun checkSendResultInput(age: Int): Boolean {
-        if (regex.containsMatchIn(age.toString()) && age < maxAge && age > minAge) {
+        if (regex.containsMatchIn(age.toString()) && age <= maxAge && age >= minAge) {
             Timber.i("$age is a valid age!")
             return true
         }

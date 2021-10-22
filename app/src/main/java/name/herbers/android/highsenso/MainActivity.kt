@@ -66,12 +66,14 @@ class MainActivity : AppCompatActivity() {
             Timber.i("Db does exist and will be deleted!")
             roomDb.delete()
         }
-        if (roomDbShm.exists())
+        if (roomDbShm.exists()){
             Timber.i("Db-smh does exist and will be deleted!")
-        roomDbShm.delete()
-        if (roomDbWal.exists())
+            roomDbShm.delete()
+        }
+        if (roomDbWal.exists()){
             Timber.i("Db-wal does exist and will be deleted!")
-        roomDbWal.delete()
+            roomDbWal.delete()
+        }
     }
 
 
