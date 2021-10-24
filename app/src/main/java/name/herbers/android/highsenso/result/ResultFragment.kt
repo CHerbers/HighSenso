@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,6 +18,12 @@ import timber.log.Timber
 
 /** [Fragment] that shows the results depending on the users question ratings.
  * Further advises on how to interpret the result and what can be done next are given.
+ *
+ * Every non-UI task is sourced out to the [ResultViewModel].
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class ResultFragment : Fragment() {
 

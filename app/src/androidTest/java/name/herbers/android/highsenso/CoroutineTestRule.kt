@@ -6,7 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import name.herbers.android.highsenso.database.DispatcherProvider
+import name.herbers.android.highsenso.dispatcher.DispatcherProvider
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 

@@ -4,6 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.DatabaseHandler
 
+/**
+ * [ViewModelProvider.Factory] for [QuestioningViewModel].
+ * Creates a QuestioningViewModel.
+ *
+ * @param databaseHandler the [DatabaseHandler] that manages all database access
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
+ * */
 class QuestioningViewModelFactory(
     private val databaseHandler: DatabaseHandler
 ) : ViewModelProvider.Factory {

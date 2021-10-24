@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.DialogSendBinding
 import name.herbers.android.highsenso.result.ResultViewModel
@@ -19,6 +20,10 @@ import timber.log.Timber
  * This Dialog asks the user for his age and gender in order to anonymously send this information
  * together with the test result.
  * @param resultViewModel the corresponding [ViewModel] which holds the logic for validating input
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class SendDialogFragment(private val resultViewModel: ResultViewModel) : DialogFragment() {
     private lateinit var binding: DialogSendBinding

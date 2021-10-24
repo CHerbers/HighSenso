@@ -8,6 +8,12 @@ import name.herbers.android.highsenso.database.DatabaseHandler
 /**
  * [ViewModelProvider.Factory] for [ResultViewModel].
  * Creates a ResultViewModel.
+ *
+ * @param databaseHandler the [DatabaseHandler] that manages all database access
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class ResultViewModelFactory(
     private val databaseHandler: DatabaseHandler,

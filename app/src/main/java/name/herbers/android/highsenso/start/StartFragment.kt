@@ -22,9 +22,15 @@ import timber.log.Timber
 /**The [StartFragment] is the starting [Fragment] of the HighSenso app.
  * This Fragment introduces the user to this App and provides useful information on how to use this
  * App and what this App can and can't do.
- * <p>
+ *
  * From this Fragment the user can navigate via the menu to the [AboutFragment] and can start the
  * questioning.
+ *
+ * Every non-UI task is sourced out to the [StartViewModel].
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class StartFragment : Fragment() {
 

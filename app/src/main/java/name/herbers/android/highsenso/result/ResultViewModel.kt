@@ -8,6 +8,13 @@ import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
 
+/**
+ * [AndroidViewModel] for the [ResultFragment].
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
+ * */
 class ResultViewModel(
     val databaseHandler: DatabaseHandler,
     application: Application

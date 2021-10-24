@@ -9,6 +9,12 @@ import timber.log.Timber
 /**
  * [StartViewModel] for the [StartFragment].
  * Handles all non-UI tasks for StartFragment.
+ *
+ * This includes the handler for the reset questions button.
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class StartViewModel(
     val databaseHandler: DatabaseHandler
@@ -34,8 +40,8 @@ class StartViewModel(
             databaseHandler.updateDatabase(question)
         }
         //trigger Toast message on StartFragment
-        _resetDone.postValue(true)
-        _resetDone.postValue(false)
+        _resetDone.value = true
+        _resetDone.value = false
     }
 
     override fun onCleared() {

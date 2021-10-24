@@ -1,5 +1,6 @@
 package name.herbers.android.highsenso.questioning
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,6 +34,9 @@ class QuestioningViewModelTest {
     @get: Rule
     var coroutinesRule = CoroutineTestRule()
 
+    @get: Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
     @Before
     fun setUpDatabase() {
         //create context
@@ -65,12 +69,7 @@ class QuestioningViewModelTest {
     }
 
     @Test
-    fun handleBackButtonClickTest() = coroutinesRule.testDispatcher.runBlockingTest {
-
-    }
-
-    @Test
-    fun handleNextButtonClickTest(){
+    fun handleNextButtonClickTest() {
         /* just checking if the starting conditions (isFinished Bool and currentQuestion) are as expected */
         assertTrue(
             "Is finished is true but it is just the beginning!",
@@ -94,13 +93,63 @@ class QuestioningViewModelTest {
         )
         clickNextButton()   //3rd next click -> isFinished should be true
         assertTrue(
-            "Is finished is not true!",
+            "isFinished is not true, but it should be!",
             questioningViewModel.isFinished.value == true
         )
+        clickNextButton()   //4th next click -> should not be possible in real app environment
+        //passes test if no Exception is thrown after 4th click
     }
 
-    private fun clickNextButton() = coroutinesRule.testDispatcher.runBlockingTest {
+    /**
+     * This function represents a nextButton click with a random legal rating (number between 0 and 4).
+     * */
+    private fun clickNextButton() {
         questioningViewModel.handleNextButtonClick(Random.nextInt(0, 4))
+    }
+
+    @Test
+    fun handleBackButtonClickTest() = coroutinesRule.testDispatcher.runBlockingTest {
+        /* just checking if the starting conditions (isFinished Bool and currentQuestion) are as expected */
+        assertTrue(
+            "Is finished is true but it is just the beginning!",
+            questioningViewModel.isFinished.value == false
+        )
+        assertTrue(
+            "The question id is not 1!",
+            questioningViewModel.currentQuestion.id == 1
+        )
+
+        /* start real testing */
+
+        /* 1. Click nextButton two times to have something to go back with backButton */
+        clickNextButton()   // current question.id = 2
+        clickNextButton()   // current question.id = 3
+
+        /* 2. Go back as far as possible */
+        clickBackButton() //1st back click -> current question.id = 2
+        assertTrue(
+            "The question id is not 2!",
+            questioningViewModel.currentQuestion.id == 2
+        )
+        clickBackButton() //2nd back click -> current question.id = 1
+        assertTrue(
+            "The question id is not 1!",
+            questioningViewModel.currentQuestion.id == 1
+        )
+        clickBackButton() //3rd back click -> _navBackToStartFrag should be true
+        assertTrue(
+            "navBack is not true, but it should be!",
+            questioningViewModel.navBackToStartFrag.value == true
+        )
+        clickBackButton() //4th back click -> should not be possible in real app environment
+        //passes test if no Exception is thrown after 4th click
+    }
+
+    /**
+     * This function represents a backButton click with a random legal rating (number between 0 and 4).
+     * */
+    private fun clickBackButton() {
+        questioningViewModel.handleBackButtonClick(Random.nextInt(0, 4))
     }
 
     /**

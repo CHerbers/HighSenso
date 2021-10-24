@@ -4,12 +4,16 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/** Represents a question which should be answered by the user
+/** Represents a question which should be answered by the user.
  * @param id  the unique question id for sequencing and distinguishing the questions
  * @param title the name of the question
  * @param question the actual question (content)
  * @param explanation further information on how to interpret/understand the question
  * @param rating is how the question was rated by the user, default value is "-1" which means "unrated"
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 @Entity(tableName = "questions_table")
 data class Question(

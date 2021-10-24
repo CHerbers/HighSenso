@@ -8,6 +8,24 @@ import androidx.room.RoomDatabase
 import timber.log.Timber
 import java.io.File
 
+/**
+ * This [RoomDatabase] holds all the question and result information needed in the app.
+ *
+ * At the first start of the HighSenso app, a new persistent Database will be stored on the device
+ * made of the *question_database.db* from the *assets* folder.
+ *
+ * On later starts the existing database will be used instead of storing a new one. All database
+ * manipulations during the apps existence will be done on the on-device database.
+ * The *questions_database.db* file will stay untouched!
+ *
+ * In case the on-device database will be deleted a new database will be created and stored on the
+ * device like it was done on the first start of the app. In this case all user data (rating) will
+ * be lost.
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
+ * */
 @Database(entities = [Question::class], version = 1, exportSchema = false)
 abstract class QuestionDatabase : RoomDatabase() {
 

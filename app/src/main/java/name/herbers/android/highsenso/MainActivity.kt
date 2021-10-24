@@ -14,6 +14,10 @@ import java.io.File
 
 /**
  * This is the main (and only) activity of the HighSenso App.
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val dataSource = QuestionDatabase.getInstance(application).questionDatabaseDao
         val databaseHandler = DatabaseHandler(dataSource)
         val sharedViewModelFactory =
-            SharedViewModelFactory(databaseHandler, application)
+            SharedViewModelFactory(databaseHandler)
         sharedViewModel = ViewModelProvider(
             this,
             sharedViewModelFactory

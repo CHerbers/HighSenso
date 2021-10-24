@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import name.herbers.android.highsenso.R
@@ -28,6 +27,10 @@ import timber.log.Timber
  * In the [QuestioningFragment] the user is asked to rate questions. The result whether the user is an
  * HSP or not will be calculated later on in the [ResultViewModel] depending on the users rating.
  * After rating a question there will be asked another question until the questioning is completed.
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class QuestioningFragment : Fragment() {
 
@@ -60,7 +63,7 @@ class QuestioningFragment : Fragment() {
          * If isFirstQuestion is false after backButton is clicked, the Fragment changes
          * to [StartFragment]
          * */
-        viewModel.navBackToStartFrag.observe(viewLifecycleOwner, Observer { isFirstQuestion ->
+        viewModel.navBackToStartFrag.observe(viewLifecycleOwner, { isFirstQuestion ->
             if (isFirstQuestion) {
                 findNavController(this)
                     .navigate(R.id.action_questioning_destination_to_start_destination)
@@ -72,7 +75,7 @@ class QuestioningFragment : Fragment() {
          * was shown.
          * If isFinished is true, Fragment changes to [ResultFragment]
          * */
-        viewModel.isFinished.observe(viewLifecycleOwner, Observer { isFinished ->
+        viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 findNavController(this)
                     .navigate(R.id.action_questioningFragment_to_resultFragment)
@@ -84,7 +87,7 @@ class QuestioningFragment : Fragment() {
          * The [SeekBar] is set to the saved rating for the currently shown [Question] (in default
          * position if no rating is saved at this moment)
          * */
-        viewModel.changeSeekBar.observe(viewLifecycleOwner, Observer { change ->
+        viewModel.changeSeekBar.observe(viewLifecycleOwner, { change ->
             if (change) {
                 binding.seekBar.setProgress(viewModel.getRatingToSetProgress(), false)
             }
@@ -93,7 +96,7 @@ class QuestioningFragment : Fragment() {
         /**
          * If questionCount changes, the ActionBars title will be changed
          * */
-        viewModel.questionCount.observe(viewLifecycleOwner, Observer { count ->
+        viewModel.questionCount.observe(viewLifecycleOwner, { count ->
             (activity as AppCompatActivity).supportActionBar?.title =
                 resources.getString(R.string.questioning_actionBar_title) + " $count"
         })

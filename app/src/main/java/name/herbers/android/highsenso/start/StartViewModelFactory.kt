@@ -7,6 +7,12 @@ import name.herbers.android.highsenso.database.DatabaseHandler
 /**
  * [ViewModelProvider.Factory] for [StartViewModel].
  * Creates a StartViewModel.
+ *
+ * @param databaseHandler the [DatabaseHandler] that manages all database access
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class StartViewModelFactory(
     private val databaseHandler: DatabaseHandler

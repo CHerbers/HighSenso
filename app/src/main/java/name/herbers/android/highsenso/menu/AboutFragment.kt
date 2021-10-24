@@ -12,6 +12,15 @@ import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.FragmentAboutBinding
 import timber.log.Timber
 
+/**
+ * The [AboutFragment] holds information about this app, its purpose and the author.
+ *
+ * This Fragment is accessible via the overflow menu in the StartFragment.
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
+ * */
 class AboutFragment : Fragment() {
 
     private lateinit var binding: FragmentAboutBinding

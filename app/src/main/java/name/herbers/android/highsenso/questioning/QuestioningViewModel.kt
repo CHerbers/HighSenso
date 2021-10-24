@@ -8,7 +8,17 @@ import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
-
+/**
+ * [ViewModel] for the [QuestioningFragment].
+ * Handles all non-UI tasks for the QuestioningFragment.
+ *
+ * This includes handlers for Button clicks and SeekBar changes. Updating from LiveData that is
+ * shown onscreen and calling of the [DatabaseHandler] for database manipulations.
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
+ * */
 class QuestioningViewModel(
     private val databaseHandler: DatabaseHandler
 ) : ViewModel() {
@@ -83,7 +93,7 @@ class QuestioningViewModel(
         //check if this is the first question (also triggers if id is smh. smaller than 1)
         if (currentQuestion.id <= 1) {
             //initiate change to start fragment
-            _navBackToStartFrag.postValue(true)
+            _navBackToStartFrag.value = true
         } else {
             //load previous question
             updateLiveData(currentQuestion.id - 2)
@@ -97,11 +107,11 @@ class QuestioningViewModel(
      * */
     fun handleNextButtonClick(newRating: Int) {
         updateRatingFromSeekBar(newRating)
-        _navBackToStartFrag.postValue(false)
+        _navBackToStartFrag.value = false
         //check if this is the last question
         if (currentQuestion.id == questions.size) {
             //initiate change to result fragment
-            _isFinished.postValue(true)
+            _isFinished.value = true
         } else {
             //load next question
             updateLiveData(currentQuestion.id)
@@ -118,14 +128,14 @@ class QuestioningViewModel(
         currentQuestion = questions[nextQuestionIndex]
 
         //LiveData
-        _questionCount.postValue("${currentQuestion.id} / ${questions.size}")
-        _currentQuestionTitle.postValue(currentQuestion.title)
-        _currentQuestionContent.postValue(currentQuestion.question)
-        _currentQuestionExplanation.postValue(currentQuestion.explanation)
+        _questionCount.value = "${currentQuestion.id} / ${questions.size}"
+        _currentQuestionTitle.value = currentQuestion.title
+        _currentQuestionContent.value = currentQuestion.question
+        _currentQuestionExplanation.value = currentQuestion.explanation
 
         //trigger change of the progression of SeekBar
-        _changeSeekBar.postValue(true)
-        _changeSeekBar.postValue(false)
+        _changeSeekBar.value = true
+        _changeSeekBar.value = false
         Timber.i("Current Question: $currentQuestion")
     }
 

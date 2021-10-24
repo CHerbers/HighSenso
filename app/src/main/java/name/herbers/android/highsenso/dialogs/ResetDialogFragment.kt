@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.start.StartViewModel
 import timber.log.Timber
@@ -13,6 +14,10 @@ import timber.log.Timber
  * safety purpose.
  * @param startViewModel the corresponding [ViewModel] which holds the logic to reset the questions
  * ratings
+ *
+ * @project HighSenso
+ * @author Christoph Herbers
+ * @since 1.0
  * */
 class ResetDialogFragment(private val startViewModel: StartViewModel) : DialogFragment() {
 

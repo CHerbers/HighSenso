@@ -1,5 +1,6 @@
 package name.herbers.android.highsenso.start
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,6 +27,8 @@ class StartViewModelTest {
 
     @get: Rule
     var coroutinesRule = CoroutineTestRule()
+    @get: Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUpDatabase() {
