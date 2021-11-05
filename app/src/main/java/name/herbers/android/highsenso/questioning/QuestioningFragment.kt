@@ -58,6 +58,10 @@ class QuestioningFragment : Fragment() {
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
 
+        //set title
+        (activity as AppCompatActivity).supportActionBar?.title =
+            resources.getString(R.string.questioning_actionBar_title)
+
         /**
          * Observed isFirstQuestion is true if the shown question is the first question.
          * If isFirstQuestion is false after backButton is clicked, the Fragment changes
@@ -96,10 +100,10 @@ class QuestioningFragment : Fragment() {
         /**
          * If questionCount changes, the ActionBars title will be changed
          * */
-        viewModel.questionCount.observe(viewLifecycleOwner, { count ->
-            (activity as AppCompatActivity).supportActionBar?.title =
-                resources.getString(R.string.questioning_actionBar_title) + " $count"
-        })
+//        viewModel.questionCount.observe(viewLifecycleOwner, { count ->
+//            (activity as AppCompatActivity).supportActionBar?.title =
+//                resources.getString(R.string.questioning_actionBar_title) + " $count"
+//        })
 
         /**
          * Listener for nextButton, which progresses to next [Question] or

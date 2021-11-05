@@ -48,7 +48,7 @@ class ResultFragment : Fragment() {
 
         //set title
         (activity as AppCompatActivity).supportActionBar?.title =
-            resources.getString(R.string.app_name)
+            resources.getString(R.string.result_actionBar_title)
 
         /* Listener for sendResultButton */
         binding.sendResultButton.setOnClickListener { view ->

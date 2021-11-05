@@ -121,7 +121,7 @@ class QuestioningViewModelTest {
 
         /* start real testing */
 
-        /* 1. Click nextButton two times to have something to go back with backButton */
+        /* 1. Click nextButton two times to have something to go back to with backButton */
         clickNextButton()   // current question.id = 2
         clickNextButton()   // current question.id = 3
 

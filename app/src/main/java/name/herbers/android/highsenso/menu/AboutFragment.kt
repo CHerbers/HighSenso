@@ -21,7 +21,7 @@ import timber.log.Timber
  * @author Christoph Herbers
  * @since 1.0
  * */
-class AboutFragment : Fragment() {
+class AboutFragment: Fragment() {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel

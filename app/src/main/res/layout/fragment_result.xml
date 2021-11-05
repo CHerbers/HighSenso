@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="resultViewModel"
             type="name.herbers.android.highsenso.result.ResultViewModel" />
@@ -15,13 +14,12 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/result_content_textView"
-            style="@style/standard_text"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:id="@+id/questionTitle_textView"
+            style="@style/general_textView"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:text="@{resultViewModel.resultContent}"
-            android:textSize="@dimen/standard_textSize"
             app:layout_constraintBottom_toTopOf="@+id/send_result_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -31,10 +29,12 @@
         <TextView
             android:id="@+id/result_disclaimer_textView"
             style="@style/standard_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:text="@string/result_disclaimer"
-            app:layout_constraintBottom_toTopOf="@+id/result_content_textView"
+            app:layout_constraintBottom_toTopOf="@+id/questionTitle_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,13 +42,11 @@
         <Button
             android:id="@+id/send_result_button"
             style="@style/general_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/send_result_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/result_content_textView" />
+            app:layout_constraintTop_toBottomOf="@+id/questionTitle_textView" />
 
         <Button
             android:id="@+id/back_to_start_button"
@@ -56,9 +54,9 @@
             android:text="@string/back_to_start_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.085"
+            app:layout_constraintHorizontal_bias="0.075"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.976" />
+            app:layout_constraintVertical_bias="0.975" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

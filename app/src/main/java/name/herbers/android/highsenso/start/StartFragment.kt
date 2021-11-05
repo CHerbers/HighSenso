@@ -56,7 +56,7 @@ class StartFragment : Fragment() {
 
         //set title
         (activity as AppCompatActivity).supportActionBar?.title =
-            resources.getString(R.string.app_name)
+            resources.getString(R.string.start_actionBar_title)
 
         //activate menu in this Fragment
         setHasOptionsMenu(true)
@@ -96,6 +96,11 @@ class StartFragment : Fragment() {
             R.id.reset_rating_destination -> handleResetQuestions()
             //navigate to AboutFragment
             R.id.about_destination -> NavigationUI.onNavDestinationSelected(
+                item,
+                requireView().findNavController()
+            )
+            //navigate to PrivacyFragment
+            R.id.privacy_destination -> NavigationUI.onNavDestinationSelected(
                 item,
                 requireView().findNavController()
             )

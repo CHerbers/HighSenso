@@ -15,18 +15,45 @@
 
         <TextView
             android:id="@+id/about_text"
-            style="@style/standard_text"
-            android:layout_width="290dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            style="@style/general_textView"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/standard_textView_layout_margin"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:text="@string/about_text"
-            android:textSize="@dimen/standard_textSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.096" />
+
+        <TextView
+            android:id="@+id/about_source"
+            style="@style/general_textView"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/standard_textView_layout_margin"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+            android:text="@string/about_source"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/about_text"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/about_imprint"
+            style="@style/general_textView"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/standard_textView_layout_margin"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+            android:text="@string/about_imprint"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/about_source"
+            app:layout_constraintVertical_bias="0.95" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -21,3 +21,5 @@ data class Result(
     @ColumnInfo
     val resultContent: String
 )
+
+//TODO Zuordnung zu Erklärung (allgemein zur Ausprägung) oder Empfehlung (bezogen auf Daten wie: Beruf, Alter, Lebenssituation, Empfinden der HS-Situation)

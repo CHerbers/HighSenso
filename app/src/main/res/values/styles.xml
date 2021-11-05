@@ -10,24 +10,32 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="sb_legend_text">
-        <item name="android:textColor">@color/black</item>
-        <item name="backgroundColor">@color/white</item>
-        <item name="android:textAlignment">center</item>
-        <item name="fontFamily">@font/asap</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="general_textView" parent="standard_text">
+        <item name="android:textSize">@dimen/standard_textSize</item>
+        <item name="android:padding">@dimen/standard_textView_padding</item>
     </style>
 
-    <style name="general_button">
+    <style name="title_textView" parent="general_textView">
+        <item name="android:textSize">@dimen/title_textSize</item>
+
+    </style>
+
+    <style name="sb_legend_textView" parent="standard_text">
+        <item name="android:textSize">@dimen/sb_legend_standard_textSize</item>
+    </style>
+
+    <style name="general_button" parent="standard_text">
+        <item name="android:textSize">@dimen/button_textSize</item>
         <item name="android:textColor">@color/white</item>
         <item name="backgroundTint">@color/purple_500</item>
-        <item name="android:textAlignment">center</item>
-        <item name="fontFamily">@font/asap</item>#
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">24dp</item>
         <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="questioning_fragment_button" parent="general_button">
+<!--        <item name="android:background">@android:drawable/btn_default_small</item>-->
+        <item name="backgroundTint">@color/teal_700</item>
+        <item name="layout_constraintVertical_bias">0.92</item>
     </style>
 
 </resources>

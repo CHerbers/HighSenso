@@ -61,7 +61,7 @@ class StartViewModelTest {
         //reset questions (fun to test)
         startViewModel.handleResetQuestions()
 
-        //test -> load questions from database and check if rating == -1
+        //test -> load questions from database and check if rating equals -1
         questionDao.getAllQuestions().forEach { question ->
             assertTrue("${question.rating} does not equal -1", question.rating == -1)
         }
