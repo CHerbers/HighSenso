@@ -28,8 +28,8 @@ class ResultViewModel(
         appRes.getString(R.string.send_dialog_text_edit_error_old)
     private val errorTooYoung =
         appRes.getString(R.string.send_dialog_text_edit_error_young)
-    private val maxAge = appRes.getInteger(R.integer.send_result_max_age)
-    private val minAge = appRes.getInteger(R.integer.send_result_min_age)
+    private val maxAge = appRes.getInteger(R.integer.max_age)
+    private val minAge = appRes.getInteger(R.integer.min_age)
     private val regex = "[0-9]".toRegex()
 
     private val _resultContent = MutableLiveData<String>()

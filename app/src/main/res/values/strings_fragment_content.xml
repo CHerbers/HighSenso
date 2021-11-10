@@ -49,7 +49,23 @@
     <string name="sb_legend_3">trifft etwas zu</string>
     <string name="sb_legend_4">trifft stark zu</string>
 
-    <!--    result fragment content-->
+<!--    personal questioning fragment content-->
+    <string name="personal_questioning_title">Persönliche Angaben</string>
+    <string name="personal_questioning_disclaimer">
+        Diese persönlichen Angaben werden in der Auswertung berücksichtigt und helfen uns bei der
+        weiteren Forschung.
+    </string>
+    <string name="gender">Geschlecht:</string>
+    <string name="age">Alter:</string>
+    <string name="age_editText_default">Alter</string>
+    <string name="marital_Status">Familienstand:</string>
+    <string name="children">Kinder:</string>
+    <string name="children_editText_default">0</string>
+    <string name="educationalQualification">Höchster Bildungsabschluss:</string>
+    <string name="profession">Beruf:</string>
+    <string name="profession_editText_default">Beruf</string>
+
+<!--    result fragment content-->
     <string name="result_disclaimer">
         Diese App soll eine Hilfestellung für hochsensible Personen darstellen.
         Sie ersetzt in keiner Weise eine medizinische oder therapeuthische Behandlung!

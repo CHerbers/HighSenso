@@ -3,6 +3,7 @@ package name.herbers.android.highsenso
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.database.DatabaseHandler
+import name.herbers.android.highsenso.database.PersonalData
 import timber.log.Timber
 
 /**
@@ -16,7 +17,8 @@ import timber.log.Timber
  * @since 1.0
  * */
 class SharedViewModel(
-    val databaseHandler: DatabaseHandler
+    val databaseHandler: DatabaseHandler,
+    val personalData: PersonalData
 ) : ViewModel() {
 
     init {

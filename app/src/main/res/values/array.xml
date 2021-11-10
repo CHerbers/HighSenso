@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender_array">
+        <item>weiblich</item>
+        <item>männlich</item>
+        <item>divers</item>
+    </string-array>
+    <string-array name="marital_Status_array">
+        <item>ledig</item>
+        <item>feste Partnerschaft</item>
+        <item>verheiratet</item>
+        <item>geschieden</item>
+    </string-array>
+    <string-array name="education_array">
+        <item>(noch) kein Bildungabschluss</item>
+        <item>Hauptschulabschluss</item>
+        <item>Mittlere Reife</item>
+        <item>Fachhochschul-/Hochschulreife</item>
+        <item>Abgeschlossene Ausbildung/Lehre</item>
+        <item>Bachelor</item>
+        <item>Master</item>
+        <item>Diplom</item>
+        <item>Promotion</item>
+    </string-array>
+</resources>

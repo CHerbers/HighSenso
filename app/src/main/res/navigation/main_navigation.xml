@@ -19,11 +19,11 @@
         android:name="name.herbers.android.highsenso.questioning.QuestioningFragment"
         android:label="questioning_fragment">
         <action
-            android:id="@+id/action_questioningFragment_to_resultFragment"
-            app:destination="@id/result_destination" />
-        <action
-            android:id="@+id/action_questioning_destination_to_start_destination"
+            android:id="@+id/action_questioning_to_start"
             app:destination="@id/start_destination" />
+        <action
+            android:id="@+id/action_questioning_to_personalQuestioning"
+            app:destination="@id/personalQuestioning_destination" />
     </fragment>
     <fragment
         android:id="@+id/result_destination"
@@ -42,4 +42,15 @@
         android:id="@+id/privacy_destination"
         android:name="name.herbers.android.highsenso.menu.PrivacyFragment"
         android:label="privacy_fragment"/>
+    <fragment
+        android:id="@+id/personalQuestioning_destination"
+        android:name="name.herbers.android.highsenso.questioning.PersonalQuestioningFragment"
+        android:label="PersonalQuestioningFragment" >
+        <action
+            android:id="@+id/action_personalQuestioningFragment_to_result_destination"
+            app:destination="@id/result_destination" />
+        <action
+            android:id="@+id/action_personalQuestioning_to_questioning"
+            app:destination="@id/questioning_destination" />
+    </fragment>
 </navigation>

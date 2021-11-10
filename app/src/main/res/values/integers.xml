@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    questioning fragment-->
     <integer name="rating_max">4</integer>
     <integer name="default_rating_progress">2</integer>
     <integer name="default_unrated_rating">-1</integer>
-    <integer name="send_result_min_age">6</integer>
-    <integer name="send_result_max_age">123</integer>
+
+<!--    private questioning fragment-->
+    <integer name="min_age">6</integer>
+    <integer name="max_age">123</integer>
+    <integer name="age_length_max">3</integer>
+    <integer name="profession_length_max">32</integer>
+    <!--    this is cheating to get a float-->
+    <item name="item_horizontal_bias" format="float" type="integer">0.0</item>
+    <item name="scroll_view_vertical_bias" format="float" type="integer">0.06</item>
+    <item name="personal_questioning_item_intern_spacing" format="float" type="integer">0.005</item>
+    <item name="personal_questioning_item_extern_spacing" format="float" type="integer">0.025</item>
+    <item name="personal_questioning_button_vertical_bias" format="float" type="integer">0.9</item>
 </resources>

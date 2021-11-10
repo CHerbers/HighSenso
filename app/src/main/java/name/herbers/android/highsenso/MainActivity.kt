@@ -7,6 +7,7 @@ import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.DatabaseHandler
+import name.herbers.android.highsenso.database.PersonalData
 import name.herbers.android.highsenso.database.QuestionDatabase
 import timber.log.Timber
 import java.io.File
@@ -33,8 +34,14 @@ class MainActivity : AppCompatActivity() {
         database = QuestionDatabase.getInstance(application)
         val dataSource = database.questionDatabaseDao
         val databaseHandler = DatabaseHandler(dataSource)
+        val res = applicationContext.resources
+        val personalData = PersonalData(
+            res.getStringArray(R.array.gender_array).toList(),
+            res.getStringArray(R.array.marital_Status_array).toList(),
+            res.getStringArray(R.array.education_array).toList()
+        )
         val sharedViewModelFactory =
-            SharedViewModelFactory(databaseHandler)
+            SharedViewModelFactory(databaseHandler, personalData)
         sharedViewModel = ViewModelProvider(
             this,
             sharedViewModelFactory

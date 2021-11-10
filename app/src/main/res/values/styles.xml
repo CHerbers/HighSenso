@@ -38,4 +38,12 @@
         <item name="layout_constraintVertical_bias">0.92</item>
     </style>
 
+    <style name="general_editText" parent="standard_text">
+        <item name="android:textSize">@dimen/editText_textSize</item>
+    </style>
+
+    <style name="general_spinner" parent="standard_text">
+
+    </style>
+
 </resources>

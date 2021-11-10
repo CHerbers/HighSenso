@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
             android:layout_marginTop="@dimen/send_dialog_message_margin_top"
-            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot"
+            android:paddingVertical="@dimen/editText_padding_top_bot"
             android:text="@string/send_dialog_message" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
-            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot">
+            android:paddingVertical="@dimen/editText_padding_top_bot">
 
             <EditText
                 android:id="@+id/age_editText"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
             android:layout_marginTop="@dimen/send_dialog_message_margin_top"
-            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot"
+            android:paddingVertical="@dimen/editText_padding_top_bot"
             android:text="@string/send_dialog_gender_label_text" />
 
         <RadioGroup
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
-            android:paddingVertical="@dimen/send_dialog_items_padding_top_bot">
+            android:paddingVertical="@dimen/editText_padding_top_bot">
 
             <RadioButton
                 android:id="@+id/gender_female_radioButton"

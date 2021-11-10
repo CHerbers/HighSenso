@@ -70,19 +70,19 @@ class QuestioningFragment : Fragment() {
         viewModel.navBackToStartFrag.observe(viewLifecycleOwner, { isFirstQuestion ->
             if (isFirstQuestion) {
                 findNavController(this)
-                    .navigate(R.id.action_questioning_destination_to_start_destination)
+                    .navigate(R.id.action_questioning_to_start)
             }
         })
 
         /**
          * Observed isFinished becomes true after the nextButton is clicked while the last question
          * was shown.
-         * If isFinished is true, Fragment changes to [ResultFragment]
+         * If isFinished is true, Fragment changes to [PersonalQuestioningFragment]
          * */
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 findNavController(this)
-                    .navigate(R.id.action_questioningFragment_to_resultFragment)
+                    .navigate(R.id.action_questioning_to_personalQuestioning)
             }
         })
 

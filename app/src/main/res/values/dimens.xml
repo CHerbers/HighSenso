@@ -3,6 +3,8 @@
 <!--    general text   -->
     <dimen name="title_textSize">32sp</dimen>
     <dimen name="standard_textSize">16sp</dimen>
+    <dimen name="editText_textSize">24sp</dimen>
+    <dimen name="editText_height">32sp</dimen>
 
 <!--    general button-->
     <dimen name="button_textSize">20sp</dimen>
@@ -14,6 +16,10 @@
 <!--    questioning Fragment-->
     <dimen name="questionCount_textSize">14sp</dimen>
     <dimen name="question_textView_layout_padding">24sp</dimen>
+
+<!--    private questioning Fragment-->
+    <dimen name="personal_questioning_item_intern_spacing">8dp</dimen>
+    <dimen name="personal_questioning_item_external_spacing">16dp</dimen>
 
 <!--    seekBar-->
     <dimen name="seek_bar_thickness">5dp</dimen>
@@ -28,5 +34,5 @@
 <!--    send dialog-->
     <dimen name="send_dialog_items_margin_sides">12dp</dimen>
     <dimen name="send_dialog_message_margin_top">8dp</dimen>
-    <dimen name="send_dialog_items_padding_top_bot">6dp</dimen>
+    <dimen name="editText_padding_top_bot">6dp</dimen>
 </resources>
