@@ -50,4 +50,19 @@
 
     </style>
 
+    <style name="location_dialog_button" parent="standard_text">
+        <item name="android:textSize">@dimen/location_dialog_button_textSize</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="location_dialog_button_default" parent="location_dialog_button">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/location_dialog_button_default_color</item>
+    </style>
+
+    <style name="location_dialog_button_done" parent="location_dialog_button">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/location_dialog_button_done_color</item>
+    </style>
+
 </resources>

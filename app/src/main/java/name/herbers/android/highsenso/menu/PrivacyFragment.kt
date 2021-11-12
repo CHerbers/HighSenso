@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +16,10 @@ import name.herbers.android.highsenso.databinding.FragmentPrivacyBinding
 import timber.log.Timber
 
 /**
+ * This [Fragment] provides privacy information and privacy setting options for the user.
+ * The user can control if sensor data is collected and if this data is sent together with the
+ * users result.
+ * Privacy settings are stored in [SharedPreferences] keys.
  *
  *@project HighSenso
  *@author Herbers
@@ -48,7 +52,7 @@ class PrivacyFragment : Fragment() {
     }
 
     /**
-     * Initializes the two privacy [Switch]es. Set their starting isChecked value and
+     * Initializes the two privacy [SwitchCompat]es. Set their starting isChecked value and
      * adds OnCheckedChangeListeners which set the corresponding [SharedPreferences] key
      * to the specific switch value.
      * */

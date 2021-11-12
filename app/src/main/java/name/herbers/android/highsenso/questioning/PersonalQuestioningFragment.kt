@@ -84,20 +84,26 @@ class PersonalQuestioningFragment : Fragment() {
                 .navigate(R.id.action_personalQuestioning_to_questioning)
         }
 
-        /**
-         * Observed isFinished becomes true after the nextButton is clicked while the last question
-         * was shown.
-         * If isFinished is true, Fragment changes to [ResultFragment]
-         * */
+        //add Observer to navigate to ResultFragment
+        setIsFinishedObserver()
+
+
+        Timber.i("PersonalQuestionFragment created!")
+        return binding.root
+    }
+
+    /**
+     * Observed isFinished becomes true after the nextButton is clicked while the last question
+     * was shown.
+     * If isFinished is true, Fragment changes to [ResultFragment]
+     * */
+    private fun setIsFinishedObserver(){
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 NavHostFragment.findNavController(this)
                     .navigate(R.id.action_personalQuestioningFragment_to_result_destination)
             }
         })
-
-        Timber.i("PersonalQuestionFragment created!")
-        return binding.root
     }
 
     /**

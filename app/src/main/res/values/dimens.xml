@@ -17,6 +17,10 @@
     <dimen name="privacy_dialog_layout_margin">8dp</dimen>
     <dimen name="privacy_dialog_spacing">12dp</dimen>
 
+<!--    location dialog-->
+    <dimen name="location_dialog_button_margin">32dp</dimen>
+    <dimen name="location_dialog_button_textSize">16sp</dimen>
+
 <!--    questioning Fragment-->
     <dimen name="questionCount_textSize">14sp</dimen>
     <dimen name="question_textView_layout_padding">24sp</dimen>

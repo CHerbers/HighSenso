@@ -9,6 +9,7 @@ import name.herbers.android.highsenso.database.DatabaseHandler
  * Creates a QuestioningViewModel.
  *
  * @param databaseHandler the [DatabaseHandler] that manages all database access
+ * @param startingQuestionPos the number of the question that should be shown first
  *
  * @project HighSenso
  * @author Christoph Herbers

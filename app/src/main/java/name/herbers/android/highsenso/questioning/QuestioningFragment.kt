@@ -43,7 +43,7 @@ class QuestioningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        //init the DataBinding and QuestioningViewModel
+        //init DataBinding and QuestioningViewModel
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_questioning,
@@ -55,7 +55,7 @@ class QuestioningFragment : Fragment() {
 
         //checks if this Fragment was called from PersonalQuestioningFragment
         val startingQuestionPos =
-            if (sharedViewModel.backFromPersonalQuestioning) databaseHandler.questions.size-1
+            if (sharedViewModel.backFromPersonalQuestioning) databaseHandler.questions.size - 1
             else 0
 
         //reset backFromPersonalQuestioning
@@ -85,7 +85,7 @@ class QuestioningFragment : Fragment() {
     /**
      * Calls functions that add Observers to the LiveData.
      * */
-    private fun addLiveDataObservers(){
+    private fun addLiveDataObservers() {
         addBackToStartObserver()
         addIsFinishedObserver()
         addSeekBarObserver()
@@ -96,7 +96,7 @@ class QuestioningFragment : Fragment() {
      * If isFirstQuestion is false after backButton is clicked, the Fragment changes
      * to [StartFragment].
      * */
-    private fun addBackToStartObserver(){
+    private fun addBackToStartObserver() {
         viewModel.navBackToStartFrag.observe(viewLifecycleOwner, { isFirstQuestion ->
             if (isFirstQuestion) {
                 findNavController(this)
@@ -110,7 +110,7 @@ class QuestioningFragment : Fragment() {
      * was shown.
      * If isFinished is true, Fragment changes to [PersonalQuestioningFragment]
      * */
-    private fun addIsFinishedObserver(){
+    private fun addIsFinishedObserver() {
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 findNavController(this)
@@ -124,7 +124,7 @@ class QuestioningFragment : Fragment() {
      * The [SeekBar] is set to the saved rating for the currently shown [Question] (in default
      * position if no rating is saved at this moment)
      * */
-    private fun addSeekBarObserver(){
+    private fun addSeekBarObserver() {
         viewModel.changeSeekBar.observe(viewLifecycleOwner, { change ->
             if (change) {
                 binding.seekBar.setProgress(viewModel.getRatingToSetProgress(), false)
@@ -135,7 +135,7 @@ class QuestioningFragment : Fragment() {
     /**
      * Calls functions that add Listeners to the backButton, nextButton and seekBar.
      * */
-    private fun setListeners(){
+    private fun setListeners() {
         addNextButtonListener()
         addBackButtonListener()
         addSeekBarListener()
@@ -145,7 +145,7 @@ class QuestioningFragment : Fragment() {
      * Adds a Click Listener to the nextButton, which progresses to next [Question] or
      * to [ResultFragment].
      * */
-    private fun addNextButtonListener(){
+    private fun addNextButtonListener() {
         binding.nextButton.setOnClickListener {
             Timber.i("nextButton was clicked!")
             viewModel.handleNextButtonClick(binding.seekBar.progress)
@@ -156,7 +156,7 @@ class QuestioningFragment : Fragment() {
      * Adds a ClickListener to the backButton, which navigates back to the previous [Question] or
      * to [StartFragment].
      * */
-    private fun addBackButtonListener(){
+    private fun addBackButtonListener() {
         binding.backButton.setOnClickListener {
             Timber.i("backButton was clicked!")
             viewModel.handleBackButtonClick(binding.seekBar.progress)
@@ -168,7 +168,7 @@ class QuestioningFragment : Fragment() {
      * If seekBar is progressed the current value is highlighted (bold and bigger size).
      * Every other value is set to standard size and default typeface.
      */
-    private fun addSeekBarListener(){
+    private fun addSeekBarListener() {
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             //list of the TextViews that represent the SeekBar values
             val progressTextViews: MutableList<TextView> = mutableListOf(

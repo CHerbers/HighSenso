@@ -6,6 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.database.DatabaseHandler
 
 /**
+ *[ViewModelProvider.Factory] for [PersonalQuestioningViewModel].
+ * Creates a QuestioningViewModel.
+ *
+ * @param databaseHandler the [DatabaseHandler] that manages all database access
+ * @param application the [Application] of the App
  *
  *@project HighSenso
  *@author Herbers

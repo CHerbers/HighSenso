@@ -1,6 +1,7 @@
 package name.herbers.android.highsenso.start
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -8,20 +9,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.databinding.FragmentStartBinding
+import name.herbers.android.highsenso.dialogs.LocationDialogFragment
 import name.herbers.android.highsenso.dialogs.PrivacyDialogFragment
 import name.herbers.android.highsenso.dialogs.ResetDialogFragment
 import name.herbers.android.highsenso.menu.AboutFragment
 import timber.log.Timber
 
-/**The [StartFragment] is the starting [Fragment] of the HighSenso app.
+/**
+ * The [StartFragment] is the starting [Fragment] of the HighSenso app.
  * This Fragment introduces the user to this App and provides useful information on how to use this
  * App and what this App can and can't do.
  *
@@ -38,6 +41,7 @@ class StartFragment : Fragment() {
 
     private lateinit var startViewModel: StartViewModel
     private lateinit var binding: FragmentStartBinding
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +49,7 @@ class StartFragment : Fragment() {
     ): View {
         Timber.i("StartFragment created!")
 
-        //init the DataBinding and ViewModel
+        //init DataBinding and ViewModel
         val sharedViewModel: SharedViewModel by activityViewModels()
         val databaseHandler = sharedViewModel.databaseHandler
         val startViewModelFactory = StartViewModelFactory(databaseHandler)
@@ -56,6 +60,9 @@ class StartFragment : Fragment() {
         binding.startViewModel = startViewModel
         binding.lifecycleOwner = this
 
+        //init SharedPreferences
+        preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+
         //set title
         (activity as AppCompatActivity).supportActionBar?.title =
             resources.getString(R.string.start_actionBar_title)
@@ -63,26 +70,17 @@ class StartFragment : Fragment() {
         //activate menu in this Fragment
         setHasOptionsMenu(true)
 
-        startViewModel.resetDone.observe(viewLifecycleOwner, Observer { resetDone ->
-            if (resetDone){
-                Toast.makeText(context,
-                    R.string.reset_dialog_toast_message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+        //Observer to show a Toast after reset is done
+        setResetObserver()
+        setLocationDialogObserver(sharedViewModel)
 
-        /* Listener for startButton. Navigation to QuestioningFragment */
-        binding.startButton.setOnClickListener { view: View ->
-            Timber.i("startButton was clicked!")
-            Navigation.findNavController(view)
-                .navigate(R.id.action_startFragment_to_questioningFragment)
-        }
+        //Listener to navigate to QuestioningFragment
+        setStartButtonListener(sharedViewModel)
 
         //checking if first start of App and calls privacy dialog if so
         privacyCheck()
 
-        // inflate the layout for this Fragment
+        //inflate the layout for this Fragment
         return binding.root
     }
 
@@ -115,6 +113,50 @@ class StartFragment : Fragment() {
     }
 
     /**
+     * Sets a OnClickListener to the [binding.startButton].
+     * Navigates to the [QuestioningFragment] to start the questioning.
+     * */
+    private fun setStartButtonListener(sharedViewModel: SharedViewModel){
+        binding.startButton.setOnClickListener { view: View ->
+            Timber.i("startButton was clicked!")
+            if (preferences.getBoolean(getString(R.string.privacy_setting_send_general_data_key),true)){
+                LocationDialogFragment(preferences, sharedViewModel).show(childFragmentManager, "LocationDialog")
+            }else{
+                Navigation.findNavController(view)
+                    .navigate(R.id.action_startFragment_to_questioningFragment)
+            }
+        }
+    }
+
+    /**
+     * Sets an Observer to [startViewModel.resetDone]. Shows a [Toast] message onscreen if true.
+     * Message tells user that the reset is done.
+     * */
+    private fun setResetObserver(){
+        startViewModel.resetDone.observe(viewLifecycleOwner, { resetDone ->
+            if (resetDone){
+                Toast.makeText(context,
+                    R.string.reset_dialog_toast_message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+    /**
+     * Sets an Observer to [sharedViewModel.localDialogDismiss]. Navigates to [QuestioningFragment]
+     * if true.
+     * */
+    private fun setLocationDialogObserver(sharedViewModel: SharedViewModel){
+        sharedViewModel.locationDialogDismiss.observe(viewLifecycleOwner, { dismissed ->
+            if (dismissed){
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_startFragment_to_questioningFragment)
+            }
+        })
+    }
+
+    /**
      * [ResetDialogFragment] is called to check if the user really wants to reset all ratings.
      * */
     private fun handleResetQuestions(): Boolean {
@@ -127,7 +169,7 @@ class StartFragment : Fragment() {
      * is called. This is needed for legal reasons. The user can define the privacy settings.
      * */
     private fun privacyCheck(){
-        val preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+
         val privacyIsFirstCall = preferences.getBoolean(
             getString(R.string.privacy_setting_first_call_key), true
         )

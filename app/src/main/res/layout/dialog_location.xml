@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="sharedViewModel"
+            type="name.herbers.android.highsenso.SharedViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/location_dialog_textView"
+            style="@style/general_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/privacy_dialog_layout_margin"
+            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginEnd="@dimen/privacy_dialog_layout_margin"
+            android:text="@string/location_dialog_message" />
+
+        <Button
+            android:id="@+id/location_dialog_option_home_button"
+            style="@style/location_dialog_button_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/location_dialog_button_margin"
+            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginEnd="@dimen/location_dialog_button_margin"
+            android:text="@string/location_dialog_option_home" />
+
+        <Button
+            android:id="@+id/location_dialog_option_work_button"
+            style="@style/location_dialog_button_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/location_dialog_button_margin"
+            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginEnd="@dimen/location_dialog_button_margin"
+            android:text="@string/location_dialog_option_work" />
+
+        <Button
+            android:id="@+id/location_dialog_option_outside_button"
+            style="@style/location_dialog_button_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/location_dialog_button_margin"
+            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginEnd="@dimen/location_dialog_button_margin"
+            android:text="@string/location_dialog_option_outside" />
+
+        <Button
+            android:id="@+id/location_dialog_option_else_button"
+            style="@style/location_dialog_button_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/location_dialog_button_margin"
+            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginEnd="@dimen/location_dialog_button_margin"
+            android:text="@string/location_dialog_option_else" />
+
+    </LinearLayout>
+</layout>

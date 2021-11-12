@@ -17,4 +17,7 @@
 <!--    send dialog-->
     <color name="edit_text_color_highlight">#FF03DAC5</color>
     <color name="list_view_divider">#FF000000</color>
+<!--    location dialog-->
+    <color name="location_dialog_button_default_color">#333333</color>
+    <color name="location_dialog_button_done_color">#154f30</color>
 </resources>

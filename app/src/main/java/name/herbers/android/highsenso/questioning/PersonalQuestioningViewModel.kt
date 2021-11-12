@@ -9,6 +9,9 @@ import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
 
 /**
+ * This is the [AndroidViewModel] of the [PersonalQuestioningFragment]. It holds every non UI-based
+ * logic needed in the Fragment. This includes validity checks for user input, selection of error
+ * messages and initialization of data sending.
  *
  *@project HighSenso
  *@author Herbers
@@ -16,7 +19,7 @@ import timber.log.Timber
 class PersonalQuestioningViewModel(
     private val databaseHandler: DatabaseHandler,
     application: Application
-) : AndroidViewModel(application)  {
+) : AndroidViewModel(application) {
 
     /* observed by PersonalQuestioningFragment, if true: navigation to ResultFragment */
     private val _isFinished = MutableLiveData(false)

@@ -15,13 +15,14 @@
     <string name="privacy_dialog_message">
         HighSenso ist ein Projekt im Rahmen der <b>Erforschung von Hochsensibilität</b>.
         \n
-        Deshalb sendet die App <b>annonymisierte Daten</b>, die ausschließlich zu
+        Deshalb sendet die App <b>annonymisierte Daten ohne Personenbezug</b>, die ausschließlich zu
         <b>Forschungszwecken</b> weiterverwendet werden
-        (genaueres dazu findest Du unter dem Menüpunkt <b>\'Über HighSenso\'</b>).
+        (genaueres zur Forschung findest Du unter dem Menüpunkt <b>\'Über HighSenso\'</b>).
         \n\n
         Außerdem sammelt HighSenso <b>Sensordaten</b> während der Nutzung und sendet diese ebenfalls.
         \n
         Eine genaue Auflistung der erhobenen Sensordaten findest Du unter dem Menüpunkt <b>\'Privatsphäre\'</b>.
+        Dort kannst Du auch die Privatsphäreeinstellungen jederzeit anpassen.
     </string>
     <string name="privacy_dialog_questioning_setting_checkBox">
         Ich stimme der annonymisierten Übersendung meines Ergebnisses zu
@@ -29,6 +30,20 @@
     <string name="privacy_dialog_sensor_data_setting_checkBox">
         Ich stimme dem Sammeln und annonymisierten Senden von Sensordaten zu
     </string>
+<!--    location dialog-->
+    <string name="location_dialog_title">Standortangabe</string>
+    <string name="location_dialog_message">
+        Gib bitte an, wo Du Dich gerade befindest.
+        \n
+        Dies hat keinen Einfluss auf das Ergebnis, wird aber aus Forschungsgründen erhoben.
+        \n
+        Bestenfalls wiederholst Du die Befragung an unterschiedlichen Standorten, um zu prüfen,
+        ob der aktuelle Standort einen Anfluss auf das Ergebnis hat.
+    </string>
+    <string name="location_dialog_option_home">Zuhause</string>
+    <string name="location_dialog_option_work">Auf Arbeit</string>
+    <string name="location_dialog_option_outside">Draußen/Unterwegs</string>
+    <string name="location_dialog_option_else">Anderes/Keine Angabe</string>
 <!--    send dialog-->
     <string name="send_dialog_title">Send Result Anonymously</string>
     <string name="send_dialog_message">Send Result</string>
