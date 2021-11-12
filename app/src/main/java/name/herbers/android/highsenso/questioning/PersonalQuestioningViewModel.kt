@@ -33,13 +33,15 @@ class PersonalQuestioningViewModel(
         appRes.getString(R.string.send_dialog_text_edit_error_young)
     private val maxAge = appRes.getInteger(R.integer.max_age)
     private val minAge = appRes.getInteger(R.integer.min_age)
-    private val regex = "[0-9]".toRegex()
+    private val regexNumbers = "[0-9]".toRegex()
+    private val regexLetters = "[a-zA-ZäöüÄÖÜß]".toRegex()
 
     init {
         Timber.i("PersonalQuestioningViewModel created!")
     }
 
     fun handleNextButtonClick() {
+        //TODO: send data after checking privacy settings (but only one time!)
         _isFinished.value = true
         _isFinished.value = false
     }
@@ -50,22 +52,37 @@ class PersonalQuestioningViewModel(
 
     /**
      * Calculates a fitting error message depending on the input String.
+     * Regarding [maxAge], [minAge] and [regexNumbers].
      * @param age the users age
      * @return a fitting error message if there is one or an empty string otherwise
      * */
     fun getAgeErrorMessage(age: String): String {
         if (age == "") return ""
-        if (!regex.containsMatchIn(age)) return errorInvalidInput
+        if (!regexNumbers.containsMatchIn(age)) return errorInvalidInput
         if (age.toInt() > maxAge) return errorTooOld
         if (age.toInt() < minAge) return errorTooYoung
         return ""
     }
 
+    /**
+     * Calculates a fitting error message depending on the input String. Regarding [regexNumbers].
+     * @param childCount the amount of children the user has
+     * @return a fitting error message if there is one or an empty string otherwise
+     * */
     fun getChildrenErrorMessage(childCount: String): String {
+        if (childCount == "") return ""
+        if (!regexNumbers.containsMatchIn(childCount)) return errorInvalidInput
         return ""
     }
 
+    /**
+     * Calculates a fitting error message depending on the input String. Regarding [regexLetters].
+     * @param profession the users profession
+     * @return a fitting error message if there is one or an empty string otherwise
+     * */
     fun getProfessionErrorMessage(profession: String): String {
+        if (profession == "") return ""
+        if (!regexLetters.containsMatchIn(profession)) return errorInvalidInput
         return ""
     }
 

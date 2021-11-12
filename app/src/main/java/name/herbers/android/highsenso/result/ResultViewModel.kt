@@ -32,9 +32,17 @@ class ResultViewModel(
     private val minAge = appRes.getInteger(R.integer.min_age)
     private val regex = "[0-9]".toRegex()
 
-    private val _resultContent = MutableLiveData<String>()
-    val resultContent: LiveData<String>
-        get() = _resultContent
+    private val _resultTypeContent = MutableLiveData<String>()
+    val resultTypeContent: LiveData<String>
+        get() = _resultTypeContent
+
+    private val _resultPersonalContent = MutableLiveData<String>()
+    val resultPersonalContent: LiveData<String>
+        get() = _resultPersonalContent
+
+    private val _resultConditionalContent = MutableLiveData<String>()
+    val resultConditionalContent: LiveData<String>
+        get() = _resultConditionalContent
 
 
     init {

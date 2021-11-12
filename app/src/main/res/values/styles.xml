@@ -46,4 +46,8 @@
 
     </style>
 
+    <style name="result_content_textView" parent="general_textView">
+
+    </style>
+
 </resources>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="resultViewModel"
             type="name.herbers.android.highsenso.result.ResultViewModel" />
@@ -14,49 +15,113 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/questionTitle_textView"
-            style="@style/general_textView"
+            android:id="@+id/result_title_textView"
+            style="@style/title_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@{resultViewModel.resultContent}"
-            app:layout_constraintBottom_toTopOf="@+id/send_result_button"
+            android:layout_marginBottom="@dimen/result_content_spacing"
+            android:text="@string/result_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/result_disclaimer_textView" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/result_disclaimer_textView"
-            style="@style/standard_text"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:text="@string/result_disclaimer"
-            app:layout_constraintBottom_toTopOf="@+id/questionTitle_textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--        <Button-->
+<!--            android:id="@+id/send_result_button"-->
+<!--            style="@style/general_button"-->
+<!--            android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+<!--            android:layout_marginTop="@dimen/standard_textView_layout_margin"-->
+<!--            android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+<!--            android:layout_marginBottom="@dimen/standard_textView_layout_margin"-->
+<!--            android:text="@string/send_result_button"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="1.0" />-->
 
-        <Button
-            android:id="@+id/send_result_button"
-            style="@style/general_button"
-            android:text="@string/send_result_button"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/result_content_spacing"
+            android:layout_marginBottom="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/back_to_start_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/questionTitle_textView" />
+            app:layout_constraintTop_toBottomOf="@+id/result_title_textView"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/result_disclaimer_textView"
+                    style="@style/general_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@string/result_disclaimer" />
+
+                <TextView
+                    android:id="@+id/result_type_textView"
+                    style="@style/result_content_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@{resultViewModel.resultTypeContent}"
+                    tools:text="@string/dummy_text" />
+
+                <TextView
+                    android:id="@+id/result_personal_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@{resultViewModel.resultPersonalContent}"
+                    tools:text="@string/dummy_text" />
+
+                <TextView
+                    android:id="@+id/result_conditional_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@{resultViewModel.resultConditionalContent}"
+                    tools:text="@string/dummy_text" />
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/back_to_start_button"
             style="@style/general_button"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/standard_textView_layout_margin"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:text="@string/back_to_start_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.075"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.975" />
+            app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

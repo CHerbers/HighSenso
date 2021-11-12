@@ -79,6 +79,9 @@ class PersonalQuestioningFragment : Fragment() {
         binding.backButton.setOnClickListener {
             Timber.i("backButton was clicked!")
             viewModel.handleBackButtonClick()
+            sharedViewModel.backFromPersonalQuestioning = true
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_personalQuestioning_to_questioning)
         }
 
         /**
@@ -98,7 +101,7 @@ class PersonalQuestioningFragment : Fragment() {
     }
 
     /**
-     * Calls [initSpinner] for every of the three [Spinner]s with its corresponding string-array
+     * Calls [initSpinner] for every of the four [Spinner]s with its corresponding string-array
      * and starting selection.
      * */
     private fun initAllSpinners() {
@@ -116,6 +119,11 @@ class PersonalQuestioningFragment : Fragment() {
             binding.educationSpinner,
             R.array.education_array,
             personalData.education
+        )
+        initSpinner(
+            binding.professionTypeSpinner,
+            R.array.professionType_array,
+            personalData.professionType
         )
     }
 
@@ -158,6 +166,10 @@ class PersonalQuestioningFragment : Fragment() {
                         personalData.education = position
                         Timber.i("Education was changed to '${personalData.educationString}'!")
                     }
+                    binding.professionTypeSpinner ->{
+                        personalData.professionType = position
+                        Timber.i("ProfessionType was changed to '${personalData.professionTypeString}'")
+                    }
                 }
             }
 
@@ -167,13 +179,30 @@ class PersonalQuestioningFragment : Fragment() {
         }
     }
 
+    /**
+     * Calls [initEditText] for every of the three [EditText]s.
+     * */
     private fun initAllEditTexts() {
-        initEditText(binding.ageEditText)
-        initEditText(binding.childrenEditText)
-        initEditText(binding.professionEditText)
+        initEditText(binding.ageEditText, personalData.age.toString())
+        initEditText(binding.childrenEditText, personalData.children.toString())
+        initEditText(binding.professionEditText, personalData.profession)
     }
 
-    private fun initEditText(editText: EditText) {
+    /**
+     * Changes the given [editText]s hint to the given [hint].
+     * Adds a textChangeListener to the editText which shows an error message if the user writes
+     * an invalid text
+     * @param editText the [EditText] that shall be initialized
+     * @param hint the hint that should be shown in the [editText]
+     * */
+    private fun initEditText(editText: EditText, hint: String) {
+        val ageEditText = binding.ageEditText
+        val childrenEditText = binding.childrenEditText
+        val professionEditText = binding.professionEditText
+
+        //sets hint to the given hint
+        editText.hint = hint
+
         /* EditText shows realtime error if input is invalid */
         editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -187,15 +216,23 @@ class PersonalQuestioningFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s == null) return
+                /* checks if the changed text is valid and sets an error message if not */
                 val errorMessage = when (editText) {
-                    binding.ageEditText -> viewModel.getAgeErrorMessage(s.toString())
-                    binding.childrenEditText -> viewModel.getChildrenErrorMessage(s.toString())
-                    binding.professionEditText -> viewModel.getProfessionErrorMessage(s.toString())
+                    ageEditText -> viewModel.getAgeErrorMessage(s.toString())
+                    childrenEditText -> viewModel.getChildrenErrorMessage(s.toString())
+                    professionEditText -> viewModel.getProfessionErrorMessage(s.toString())
                     else -> ""
                 }
 
                 if (errorMessage != "") {
                     editText.error = errorMessage
+                }else if (s.toString() != ""){
+                    /* the personalData gets updated if the changed text is not invalid nor empty */
+                    when(editText){
+                        ageEditText -> personalData.age = Integer.parseInt(s.toString())
+                        childrenEditText -> personalData.children = Integer.parseInt(s.toString())
+                        professionEditText -> personalData.profession = s.toString()
+                    }
                 }
             }
 

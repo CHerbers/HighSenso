@@ -8,6 +8,7 @@ import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
+
 /**
  * [ViewModel] for the [QuestioningFragment].
  * Handles all non-UI tasks for the QuestioningFragment.
@@ -20,7 +21,8 @@ import timber.log.Timber
  * @since 1.0
  * */
 class QuestioningViewModel(
-    private val databaseHandler: DatabaseHandler
+    private val databaseHandler: DatabaseHandler,
+    startingQuestionPos: Int = 0
 ) : ViewModel() {
 
     private var questions: List<Question> = databaseHandler.questions
@@ -42,11 +44,6 @@ class QuestioningViewModel(
     val currentQuestionContent: LiveData<String>
         get() = _currentQuestionContent
 
-    /* current question explanation, observed by */
-    private val _currentQuestionExplanation = MutableLiveData<String>()
-    val currentQuestionExplanation: LiveData<String> //TODO show the explanation onscreen (maybe pop-up-like)
-        get() = _currentQuestionExplanation
-
     /* observed by QuestioningFragment, if true: SeekBar is changed to current rating */
     private val _changeSeekBar = MutableLiveData(false)
     val changeSeekBar: LiveData<Boolean>
@@ -64,7 +61,7 @@ class QuestioningViewModel(
 
     init {
         //load questions from database
-        updateLiveData(0)
+        updateLiveData(startingQuestionPos)
         Timber.i("QuestioningViewModel created!")
     }
 
@@ -125,13 +122,22 @@ class QuestioningViewModel(
      * @param nextQuestionIndex the index of the question that becomes [currentQuestion]
      * */
     private fun updateLiveData(nextQuestionIndex: Int) {
+        //catches if fun is called with out of bound index (should never happen)
+        if (nextQuestionIndex >= questions.size || nextQuestionIndex < 0) {
+            Timber.e(
+                "updateLiveData is called with invalid index! " +
+                        "Index will be changed index of last question!"
+            )
+            updateLiveData(questions.size - 1)
+            return
+        }
+
         currentQuestion = questions[nextQuestionIndex]
 
         //LiveData
         _questionCount.value = "${currentQuestion.id} / ${questions.size}"
         _currentQuestionTitle.value = currentQuestion.title
         _currentQuestionContent.value = currentQuestion.question
-        _currentQuestionExplanation.value = currentQuestion.explanation
 
         //trigger change of the progression of SeekBar
         _changeSeekBar.value = true

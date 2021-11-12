@@ -9,11 +9,13 @@ data class PersonalData(
     private val genderList: List<String>,
     private val martialStatusList: List<String>,
     private val educationList: List<String>,
+    private val professionTypeList: List<String>,
     var gender: Int = 0,
-    var age: Int = 99,
+    var age: Int = 0,
     var martialStatus: Int = 0,
     var children: Int = 0,
     var education: Int = 0,
+    var professionType: Int = 0,
     var profession: String = ""
 ) {
     val genderString: String
@@ -34,6 +36,13 @@ data class PersonalData(
         get() {
             return if (education >= 0 && educationList.size > education)
                 educationList[education]
+            else ""
+        }
+
+    val professionTypeString: String
+        get() {
+            return if(professionType >= 0 && professionTypeList.size > professionType)
+                professionTypeList[professionType]
             else ""
         }
 }

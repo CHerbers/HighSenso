@@ -22,4 +22,14 @@
         <item>Diplom</item>
         <item>Promotion</item>
     </string-array>
+    <string-array name="professionType_array">
+        <item>Schüler*in</item>
+        <item>Student*in</item>
+        <item>Arbeitssuchend</item>
+        <item>Teilzeit</item>
+        <item>Vollzeit</item>
+        <item>Selbstständig</item>
+        <item>Berentet</item>
+        <item>Anders</item>
+    </string-array>
 </resources>

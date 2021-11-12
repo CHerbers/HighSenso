@@ -52,8 +52,18 @@ class QuestioningFragment : Fragment() {
         )
         val sharedViewModel: SharedViewModel by activityViewModels()
         val databaseHandler = sharedViewModel.databaseHandler
+
+        //checks if this Fragment was called from PersonalQuestioningFragment
+        val startingQuestionPos =
+            if (sharedViewModel.backFromPersonalQuestioning) databaseHandler.questions.size-1
+            else 0
+
+        //reset backFromPersonalQuestioning
+        sharedViewModel.backFromPersonalQuestioning = false
+
+        //init QuestioningViewModel
         val viewModelFactory =
-            QuestioningViewModelFactory(databaseHandler)
+            QuestioningViewModelFactory(databaseHandler, startingQuestionPos)
         viewModel = ViewModelProvider(this, viewModelFactory).get(QuestioningViewModel::class.java)
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
@@ -62,71 +72,103 @@ class QuestioningFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title =
             resources.getString(R.string.questioning_actionBar_title)
 
-        /**
-         * Observed isFirstQuestion is true if the shown question is the first question.
-         * If isFirstQuestion is false after backButton is clicked, the Fragment changes
-         * to [StartFragment]
-         * */
+        //add Observers
+        addLiveDataObservers()
+
+        //set Listeners
+        setListeners()
+
+        Timber.i("QuestionFragment created!")
+        return binding.root
+    }
+
+    /**
+     * Calls functions that add Observers to the LiveData.
+     * */
+    private fun addLiveDataObservers(){
+        addBackToStartObserver()
+        addIsFinishedObserver()
+        addSeekBarObserver()
+    }
+
+    /**
+     * Observed isFirstQuestion is true if the shown question is the first question.
+     * If isFirstQuestion is false after backButton is clicked, the Fragment changes
+     * to [StartFragment].
+     * */
+    private fun addBackToStartObserver(){
         viewModel.navBackToStartFrag.observe(viewLifecycleOwner, { isFirstQuestion ->
             if (isFirstQuestion) {
                 findNavController(this)
                     .navigate(R.id.action_questioning_to_start)
             }
         })
+    }
 
-        /**
-         * Observed isFinished becomes true after the nextButton is clicked while the last question
-         * was shown.
-         * If isFinished is true, Fragment changes to [PersonalQuestioningFragment]
-         * */
+    /**
+     * Observed isFinished becomes true after the nextButton is clicked while the last question
+     * was shown.
+     * If isFinished is true, Fragment changes to [PersonalQuestioningFragment]
+     * */
+    private fun addIsFinishedObserver(){
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 findNavController(this)
                     .navigate(R.id.action_questioning_to_personalQuestioning)
             }
         })
+    }
 
-        /**
-         * Observed changeSeekBar becomes true if the current [Question] is changed.
-         * The [SeekBar] is set to the saved rating for the currently shown [Question] (in default
-         * position if no rating is saved at this moment)
-         * */
+    /**
+     * Observed changeSeekBar becomes true if the current [Question] is changed.
+     * The [SeekBar] is set to the saved rating for the currently shown [Question] (in default
+     * position if no rating is saved at this moment)
+     * */
+    private fun addSeekBarObserver(){
         viewModel.changeSeekBar.observe(viewLifecycleOwner, { change ->
             if (change) {
                 binding.seekBar.setProgress(viewModel.getRatingToSetProgress(), false)
             }
         })
+    }
 
-        /**
-         * If questionCount changes, the ActionBars title will be changed
-         * */
-//        viewModel.questionCount.observe(viewLifecycleOwner, { count ->
-//            (activity as AppCompatActivity).supportActionBar?.title =
-//                resources.getString(R.string.questioning_actionBar_title) + " $count"
-//        })
+    /**
+     * Calls functions that add Listeners to the backButton, nextButton and seekBar.
+     * */
+    private fun setListeners(){
+        addNextButtonListener()
+        addBackButtonListener()
+        addSeekBarListener()
+    }
 
-        /**
-         * Listener for nextButton, which progresses to next [Question] or
-         * to [ResultFragment]
-         * */
+    /**
+     * Adds a Click Listener to the nextButton, which progresses to next [Question] or
+     * to [ResultFragment].
+     * */
+    private fun addNextButtonListener(){
         binding.nextButton.setOnClickListener {
             Timber.i("nextButton was clicked!")
             viewModel.handleNextButtonClick(binding.seekBar.progress)
         }
+    }
 
-        /**
-         * Listener for backButton, which navigates back to the previous [Question] or
-         * to [StartFragment]
-         * */
+    /**
+     * Adds a ClickListener to the backButton, which navigates back to the previous [Question] or
+     * to [StartFragment].
+     * */
+    private fun addBackButtonListener(){
         binding.backButton.setOnClickListener {
             Timber.i("backButton was clicked!")
             viewModel.handleBackButtonClick(binding.seekBar.progress)
         }
+    }
 
-        /**
-         * If [SeekBar] is progressed the current value is highlighted (bold and bigger size).
-         * Every other value is set to standard size and default typeface
-         */
+    /**
+     * Adds an OnSeekBarChangeListener to the [SeekBar].
+     * If seekBar is progressed the current value is highlighted (bold and bigger size).
+     * Every other value is set to standard size and default typeface.
+     */
+    private fun addSeekBarListener(){
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             //list of the TextViews that represent the SeekBar values
             val progressTextViews: MutableList<TextView> = mutableListOf(
@@ -165,8 +207,6 @@ class QuestioningFragment : Fragment() {
                 //this override method is not needed
             }
         })
-        Timber.i("QuestionFragment created!")
-        return binding.root
     }
 }
 

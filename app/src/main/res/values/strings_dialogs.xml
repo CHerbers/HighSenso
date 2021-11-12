@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="positive_button">Yes</string>
-    <string name="negative_button">No</string>
-    <string name="accept_button">OK</string>
-    <string name="cancel_button">Cancel</string>
+<!--    button texts-->
+    <string name="positive_button">Ja</string>
+    <string name="negative_button">Nein</string>
+    <string name="accept_button">Auswahl bestätigen</string>
+    <string name="cancel_button">Abbrechen</string>
+    <string name="decline_all_button">Alles Ablehnen</string>
 <!--    reset dialog-->
     <string name="reset_dialog_title">Reset Questions</string>
     <string name="reset_dialog_message">Do you really want to reset all of your question ratings?</string>
     <string name="reset_dialog_toast_message">Questions have been reset!</string>
+<!--    privacy dialog-->
+    <string name="privacy_dialog_title">Privatsphäre-Einstellungen</string>
+    <string name="privacy_dialog_message">
+        HighSenso ist ein Projekt im Rahmen der <b>Erforschung von Hochsensibilität</b>.
+        \n
+        Deshalb sendet die App <b>annonymisierte Daten</b>, die ausschließlich zu
+        <b>Forschungszwecken</b> weiterverwendet werden
+        (genaueres dazu findest Du unter dem Menüpunkt <b>\'Über HighSenso\'</b>).
+        \n\n
+        Außerdem sammelt HighSenso <b>Sensordaten</b> während der Nutzung und sendet diese ebenfalls.
+        \n
+        Eine genaue Auflistung der erhobenen Sensordaten findest Du unter dem Menüpunkt <b>\'Privatsphäre\'</b>.
+    </string>
+    <string name="privacy_dialog_questioning_setting_checkBox">
+        Ich stimme der annonymisierten Übersendung meines Ergebnisses zu
+    </string>
+    <string name="privacy_dialog_sensor_data_setting_checkBox">
+        Ich stimme dem Sammeln und annonymisierten Senden von Sensordaten zu
+    </string>
 <!--    send dialog-->
     <string name="send_dialog_title">Send Result Anonymously</string>
     <string name="send_dialog_message">Send Result</string>

@@ -1,5 +1,6 @@
 package name.herbers.android.highsenso
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -30,16 +31,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val application = requireNotNull(this).application
-//        deleteDatabaseInAppData()
+//        deleteDatabaseInAppData()             //development only
+//        resetFirstCallPreferencesKey()        //development only
         database = QuestionDatabase.getInstance(application)
         val dataSource = database.questionDatabaseDao
         val databaseHandler = DatabaseHandler(dataSource)
         val res = applicationContext.resources
+
+        //init personalData with string-arrays as param
         val personalData = PersonalData(
             res.getStringArray(R.array.gender_array).toList(),
             res.getStringArray(R.array.marital_Status_array).toList(),
-            res.getStringArray(R.array.education_array).toList()
+            res.getStringArray(R.array.education_array).toList(),
+            res.getStringArray(R.array.professionType_array).toList()
         )
+
+        //init sharedViewModel
         val sharedViewModelFactory =
             SharedViewModelFactory(databaseHandler, personalData)
         sharedViewModel = ViewModelProvider(
@@ -57,7 +64,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Deletes the database files in the data folder on the device
+     * Deletes the database files in the data folder on the device.
+     * This is only for development purpose.
      * */
     private fun deleteDatabaseInAppData() {
         //create a Files from an existing question_database (-shm, -wal)
@@ -80,6 +88,19 @@ class MainActivity : AppCompatActivity() {
             Timber.i("Db-wal does exist and will be deleted!")
             roomDbWal.delete()
         }
+    }
+
+    /**
+     * Resets the privacy_setting_first_call_key (sets it to true).
+     * This is only for development purpose.
+     * */
+    private fun resetFirstCallPreferencesKey(){
+        val preferences = this.getPreferences(Context.MODE_PRIVATE)
+        preferences.edit().putBoolean(
+            getString(R.string.privacy_setting_first_call_key),
+            true
+        ).apply()
+        Timber.i("First call set to false!")
     }
 
     override fun onDestroy() {

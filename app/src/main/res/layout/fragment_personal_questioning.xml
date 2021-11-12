@@ -30,29 +30,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.02" />
 
-        <TextView
-            android:id="@+id/personal_questioning_disclaimer_textView"
-            style="@style/standard_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:text="@string/personal_questioning_disclaimer"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/personal_questioning_title_textView"
-            app:layout_constraintVertical_bias="@integer/personal_questioning_item_extern_spacing" />
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             app:layout_constraintBottom_toTopOf="@+id/back_button"
-            app:layout_constraintTop_toBottomOf="@+id/personal_questioning_disclaimer_textView"
-            app:layout_constraintVertical_bias="@integer/scroll_view_vertical_bias">
+            app:layout_constraintTop_toBottomOf="@+id/personal_questioning_title_textView"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="-16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +46,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/personal_questioning_disclaimer_textView"
+                    style="@style/standard_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:text="@string/personal_questioning_disclaimer" />
+
+                <TextView
                     android:id="@+id/gender_textView"
+                    style="@style/standard_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
@@ -78,29 +75,30 @@
                     android:background="@android:drawable/btn_dropdown"
                     android:spinnerMode="dropdown" />
 
-                <TextView
-                    android:id="@+id/age_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
-                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:text="@string/age" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/age_textView"-->
+                <!--                    style="@style/standard_text"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"-->
+                <!--                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:text="@string/age" />-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/age_editText_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/personal_questioning_item_intern_spacing"
+                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:paddingVertical="@dimen/editText_padding_top_bot">
 
                     <EditText
                         android:id="@+id/age_editText"
+                        style="@style/general_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="@string/age_editText_default"
                         android:ems="10"
                         android:hint="@string/age_editText_default"
                         android:inputType="number"
@@ -110,6 +108,7 @@
 
                 <TextView
                     android:id="@+id/maritalStatus_textView"
+                    style="@style/standard_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
@@ -127,21 +126,22 @@
                     android:background="@android:drawable/btn_dropdown"
                     android:spinnerMode="dropdown" />
 
-                <TextView
-                    android:id="@+id/children_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
-                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:text="@string/children" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/children_textView"-->
+                <!--                    style="@style/standard_text"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"-->
+                <!--                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:text="@string/children" />-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/children_editText_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/personal_questioning_item_intern_spacing"
+                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:paddingVertical="@dimen/editText_padding_top_bot">
 
@@ -150,7 +150,6 @@
                         style="@style/general_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="@string/children_editText_default"
                         android:ems="10"
                         android:hint="@string/children_editText_default"
                         android:inputType="number"
@@ -160,6 +159,7 @@
 
                 <TextView
                     android:id="@+id/education_textView"
+                    style="@style/standard_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
@@ -178,20 +178,41 @@
                     android:spinnerMode="dropdown" />
 
                 <TextView
-                    android:id="@+id/profession_textView"
+                    android:id="@+id/professionType_textView"
+                    style="@style/standard_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:text="@string/profession" />
+                    android:text="@string/professionType" />
+
+                <Spinner
+                    android:id="@+id/professionType_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/personal_questioning_item_intern_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown" />
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/profession_textView"-->
+                <!--                    style="@style/standard_text"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"-->
+                <!--                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:text="@string/profession" />-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/profession_editText_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/personal_questioning_item_intern_spacing"
+                    android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:paddingVertical="@dimen/editText_padding_top_bot">
 
@@ -200,7 +221,6 @@
                         style="@style/general_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="@string/profession_editText_default"
                         android:ems="10"
                         android:hint="@string/profession_editText_default"
                         android:inputType="text"

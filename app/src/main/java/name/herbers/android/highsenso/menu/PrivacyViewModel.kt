@@ -10,6 +10,8 @@ import timber.log.Timber
  */
 class PrivacyViewModel: ViewModel() {
 
+
+
     init {
         Timber.i("PrivacyViewModel created!")
     }

@@ -15,12 +15,13 @@ import name.herbers.android.highsenso.database.DatabaseHandler
  * @since 1.0
  * */
 class QuestioningViewModelFactory(
-    private val databaseHandler: DatabaseHandler
+    private val databaseHandler: DatabaseHandler,
+    private val startingQuestionPos: Int = 0
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(QuestioningViewModel::class.java)) {
-            return QuestioningViewModel(databaseHandler) as T
+            return QuestioningViewModel(databaseHandler, startingQuestionPos) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

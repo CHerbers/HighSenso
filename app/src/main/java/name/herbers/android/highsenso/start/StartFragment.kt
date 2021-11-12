@@ -1,5 +1,6 @@
 package name.herbers.android.highsenso.start
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -15,6 +16,7 @@ import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.databinding.FragmentStartBinding
+import name.herbers.android.highsenso.dialogs.PrivacyDialogFragment
 import name.herbers.android.highsenso.dialogs.ResetDialogFragment
 import name.herbers.android.highsenso.menu.AboutFragment
 import timber.log.Timber
@@ -77,6 +79,9 @@ class StartFragment : Fragment() {
                 .navigate(R.id.action_startFragment_to_questioningFragment)
         }
 
+        //checking if first start of App and calls privacy dialog if so
+        privacyCheck()
+
         // inflate the layout for this Fragment
         return binding.root
     }
@@ -115,5 +120,32 @@ class StartFragment : Fragment() {
     private fun handleResetQuestions(): Boolean {
         ResetDialogFragment(startViewModel).show(childFragmentManager, ResetDialogFragment.TAG)
         return true
+    }
+
+    /**
+     * This function is checking if its the first start of the App. If so the [PrivacyDialogFragment]
+     * is called. This is needed for legal reasons. The user can define the privacy settings.
+     * */
+    private fun privacyCheck(){
+        val preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+        val privacyIsFirstCall = preferences.getBoolean(
+            getString(R.string.privacy_setting_first_call_key), true
+        )
+        if (privacyIsFirstCall){
+            /* if first call, sets the privacy settings to false per default */
+            preferences.edit().putBoolean(
+                getString(R.string.privacy_setting_send_general_data_key),
+                false
+            ).apply()
+            Timber.i("General privacy setting set to false!")
+            preferences.edit().putBoolean(
+                getString(R.string.privacy_setting_send_sensor_data_key),
+                false
+            ).apply()
+            Timber.i("Sensor data privacy setting set to false!")
+
+            /* call privacy dialog */
+            PrivacyDialogFragment(preferences).show(childFragmentManager, "PrivacyDialog")
+        }
     }
 }

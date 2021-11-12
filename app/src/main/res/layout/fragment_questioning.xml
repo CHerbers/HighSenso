@@ -22,7 +22,7 @@
             android:text="@{questioningViewModel.questionCount}"
             android:textColor="@color/questionCount_text_color"
             android:textSize="@dimen/questionCount_textSize"
-            app:layout_constraintBottom_toTopOf="@+id/questionTitle_textView"
+            app:layout_constraintBottom_toTopOf="@+id/result_type_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
             tools:text="Question Count (42/42)" />
 
         <TextView
-            android:id="@+id/questionTitle_textView"
+            android:id="@+id/result_type_textView"
             style="@style/title_textView"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"

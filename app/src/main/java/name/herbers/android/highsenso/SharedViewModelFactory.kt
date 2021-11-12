@@ -16,8 +16,8 @@ import name.herbers.android.highsenso.database.PersonalData
  * @since 1.0
  * */
 class SharedViewModelFactory(
-private val databaseHandler: DatabaseHandler,
-private val personalData: PersonalData
+    private val databaseHandler: DatabaseHandler,
+    private val personalData: PersonalData
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

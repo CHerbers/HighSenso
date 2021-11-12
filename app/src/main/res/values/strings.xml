@@ -1,6 +1,9 @@
 <resources>
     <!--    general-->
     <string name="app_name">HighSenso</string>
+    <string name="privacy_setting_first_call_key">privacy_setting_first_call_key</string>
+    <string name="privacy_setting_send_general_data_key">privacy_setting_send_general_data_key</string>
+    <string name="privacy_setting_send_sensor_data_key">privacy_setting_send_sensor_data_key</string>
     <!--    start-->
     <string name="start_actionBar_title">Willkommen bei HighSenso</string>
     <string name="start_button">Befragung starten</string>

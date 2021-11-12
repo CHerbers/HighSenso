@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!--    menu content-->
+    <!--    about fragment-->
     <string name="about_text">
         Die HighSenso App wurde 2021 im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
     </string>
@@ -12,6 +13,10 @@
     <string name="about_imprint">
         Impressum: \n
         Christoph Herbers (christoph@herbers.name)
+    </string>
+    <!--    privacy fragment-->
+    <string name="privacy_content_general">
+        Highsenso Privatsphäre TODO
     </string>
 
 <!--    start fragment content-->
@@ -60,17 +65,30 @@
     <string name="age_editText_default">Alter</string>
     <string name="marital_Status">Familienstand:</string>
     <string name="children">Kinder:</string>
-    <string name="children_editText_default">0</string>
+    <string name="children_editText_default">Kinder</string>
     <string name="educationalQualification">Höchster Bildungsabschluss:</string>
+    <string name="professionType">Berufsverhältnis:</string>
     <string name="profession">Beruf:</string>
     <string name="profession_editText_default">Beruf</string>
 
 <!--    result fragment content-->
+    <string name="result_title">Ergebnis</string>
     <string name="result_disclaimer">
         Diese App soll eine Hilfestellung für hochsensible Personen darstellen.
         Sie ersetzt in keiner Weise eine medizinische oder therapeuthische Behandlung!
         Solltest Du unter Aspekten Deiner Hochsensibilität leiden, bitten wir Dich, Dir ärztlichen
-        oder psychologischen Rat einzuholen!
+        oder psychologischen Rat zu suchen!
     </string>
     <string name="resultText">This is the result of your test.</string>
+
+<!--    overall-->
+    <string name="dummy_text">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+        ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+        sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+        tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+        accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+        est Lorem ipsum dolor sit amet.
+    </string>
 </resources>

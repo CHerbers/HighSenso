@@ -13,7 +13,6 @@ import androidx.navigation.Navigation
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.databinding.FragmentResultBinding
-import name.herbers.android.highsenso.dialogs.SendDialogFragment
 import timber.log.Timber
 
 /** [Fragment] that shows the results depending on the users question ratings.
@@ -51,13 +50,10 @@ class ResultFragment : Fragment() {
             resources.getString(R.string.result_actionBar_title)
 
         /* Listener for sendResultButton */
-        binding.sendResultButton.setOnClickListener { view ->
-            Timber.i("sendResetButton clicked!")
-            SendDialogFragment(viewModel).show(childFragmentManager, SendDialogFragment.TAG)
-            //TODO new fragment or overlay and asking for gender and age (and country?)
-
-            //TODO hide button/ make is not clickable to prevent multiple sending
-        }
+//        binding.sendResultButton.setOnClickListener {
+//            Timber.i("sendResetButton clicked!")
+////            SendDialogFragment(viewModel).show(childFragmentManager, SendDialogFragment.TAG)
+//        }
 
         /* Listener for backToStartButton. Navigation back to StartFragment */
         binding.backToStartButton.setOnClickListener { view ->

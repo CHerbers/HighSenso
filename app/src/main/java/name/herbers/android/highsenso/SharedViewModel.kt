@@ -20,6 +20,7 @@ class SharedViewModel(
     val databaseHandler: DatabaseHandler,
     val personalData: PersonalData
 ) : ViewModel() {
+    var backFromPersonalQuestioning: Boolean = false
 
     init {
         Timber.i("SharedViewModel created!")
