@@ -11,8 +11,11 @@ import timber.log.Timber
 /**
  * This [AndroidViewModel] belongs to the [MainActivity] and can therefore be accessed by
  * every Fragment of this App under this activity.
- * It is used to provide the [databaseHandler], that is used to handle every
- * database access, to the Fragments and their corresponding ViewModels.
+ * It is used to provide a [DatabaseHandler] and [PersonalData] to the Fragments and their
+ * corresponding ViewModels.
+ * The [databaseHandler] is used to handle every database access/manipulation.
+ * The [personalData] stores user data that is not permanently stored on the device while the App
+ * is alive.
  *
  * @project HighSenso
  * @author Christoph Herbers
@@ -23,7 +26,6 @@ class SharedViewModel(
     val personalData: PersonalData
 ) : ViewModel() {
     var backFromPersonalQuestioning: Boolean = false
-    var currentLocation: String = "missing location"
 
     private val _locationDialogDismiss = MutableLiveData(false)
     val locationDialogDismiss: LiveData<Boolean>
@@ -33,6 +35,13 @@ class SharedViewModel(
         Timber.i("SharedViewModel created!")
     }
 
+    /**
+     * Sets the observed [locationDialogDismiss] to true to initiate a change from
+     * [name.herbers.android.highsenso.start.StartFragment] to
+     * [name.herbers.android.highsenso.questioning.QuestioningFragment].
+     * This is done after the [name.herbers.android.highsenso.dialogs.LocationDialogFragment] is
+     * dismissed.
+     * */
     fun dialogGetsDismissed(){
         _locationDialogDismiss.value = true
         _locationDialogDismiss.value = false

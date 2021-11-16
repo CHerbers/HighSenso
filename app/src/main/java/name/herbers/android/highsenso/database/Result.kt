@@ -19,7 +19,9 @@ data class Result(
     @PrimaryKey
     val id: Int,
     @ColumnInfo
-    val resultContent: String
+    val resultContent: String,
+    @ColumnInfo
+    val isPersonal: Boolean
 )
 
 //TODO Zuordnung zu Erklärung (allgemein zur Ausprägung) oder Empfehlung (bezogen auf Daten wie: Beruf, Alter, Lebenssituation, Empfinden der HS-Situation)

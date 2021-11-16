@@ -36,7 +36,8 @@ class LocationDialogFragment(
 
             builder.setTitle(R.string.location_dialog_title)
 
-            setButtonStyles()
+            //set up buttons
+            setButtonBackgroundTints()
             setButtonListeners()
 
             val dialog = builder.create()
@@ -44,7 +45,12 @@ class LocationDialogFragment(
         }
     }
 
-    private fun setButtonStyles() {
+    /**
+     * This method changes the background tint of a Button if its corresponding preferences key is
+     * true. The tint is changed to [R.color.location_dialog_button_done_color] to show that a
+     * questioning was already done on this location.
+     * */
+    private fun setButtonBackgroundTints() {
         val buttonList: MutableList<Button> = mutableListOf()
 
         if (preferences.getBoolean(getString(R.string.location_option_home_key), false))
@@ -64,27 +70,27 @@ class LocationDialogFragment(
         }
     }
 
+    /**
+     * This method sets an OnClickListener to all of the four [Button]s shown onScreen.
+     * When a Button is clicked, the current location of the personalData is changed to the
+     * corresponding value of the Button.
+     * The [DialogFragment] gets dismissed after.
+     * */
     private fun setButtonListeners() {
         val homeButton = binding.locationDialogOptionHomeButton
         val workButton = binding.locationDialogOptionWorkButton
         val outsideButton = binding.locationDialogOptionOutsideButton
         val elseButton = binding.locationDialogOptionElseButton
-        var currentLocation = sharedViewModel.currentLocation
+        var currentLocation = sharedViewModel.personalData.currentLocation
 
         val listener = View.OnClickListener { view ->
             when (view) {
-                homeButton -> currentLocation =
-                    getString(R.string.location_dialog_option_home)
-                workButton -> currentLocation =
-                    getString(R.string.location_dialog_option_work)
-                outsideButton -> currentLocation =
-                    getString(R.string.location_dialog_option_outside)
-                elseButton -> currentLocation =
-                    getString(R.string.location_dialog_option_else)
+                homeButton -> currentLocation = 0
+                workButton -> currentLocation = 1
+                outsideButton -> currentLocation = 2
+                elseButton -> currentLocation = 3
             }
             Timber.i("Current location is: $currentLocation")
-            preferences.edit().putBoolean(getString(R.string.location_option_work_key), true)
-                .apply()
             sharedViewModel.dialogGetsDismissed()
             dismiss()
         }

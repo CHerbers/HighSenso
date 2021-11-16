@@ -6,10 +6,12 @@ package name.herbers.android.highsenso.database
  *@author Herbers
  */
 data class PersonalData(
+    private val locationList: List<String>,
     private val genderList: List<String>,
     private val martialStatusList: List<String>,
     private val educationList: List<String>,
     private val professionTypeList: List<String>,
+    var currentLocation: Int = 3,
     var gender: Int = 0,
     var age: Int = 0,
     var martialStatus: Int = 0,
@@ -18,6 +20,13 @@ data class PersonalData(
     var professionType: Int = 0,
     var profession: String = ""
 ) {
+    val currentLocationString: String
+        get() {
+            return if (currentLocation >= 0 && locationList.size > currentLocation)
+                locationList[currentLocation]
+            else "missing location"
+        }
+
     val genderString: String
         get() {
             return if (gender >= 0 && genderList.size > gender)

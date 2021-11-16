@@ -61,6 +61,8 @@ class ResultViewModel(
 
     fun handleSendResult(age: Int, gender: String) {
         //TODO send the stuff
+        //TODO change specific location key after sending
+        // preferences.edit().putBoolean(getString(R.string.location_option_work_key), true).apply()
     }
 
     /**

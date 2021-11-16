@@ -2,6 +2,8 @@ package name.herbers.android.highsenso
 
 import android.content.Context
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         //init personalData with string-arrays as param
         val personalData = PersonalData(
+            locationList(),
             res.getStringArray(R.array.gender_array).toList(),
             res.getStringArray(R.array.marital_Status_array).toList(),
             res.getStringArray(R.array.education_array).toList(),
@@ -53,6 +56,9 @@ class MainActivity : AppCompatActivity() {
             this,
             sharedViewModelFactory
         ).get(SharedViewModel::class.java)
+
+        val mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
 
         Timber.i("onCreate called!")
     }
@@ -94,7 +100,7 @@ class MainActivity : AppCompatActivity() {
      * Resets the privacy_setting_first_call_key (sets it to true).
      * This is only for development purpose.
      * */
-    private fun resetFirstCallPreferencesKey(){
+    private fun resetFirstCallPreferencesKey() {
         val preferences = this.getPreferences(Context.MODE_PRIVATE)
         preferences.edit().putBoolean(
             getString(R.string.privacy_setting_first_call_key),
@@ -103,13 +109,30 @@ class MainActivity : AppCompatActivity() {
         Timber.i("First call set to false!")
     }
 
+    /**
+     * Creates a [List] with all strings that represent a location.
+     * */
+    private fun locationList(): List<String> {
+        return mutableListOf(
+            getString(R.string.location_dialog_option_home),
+            getString(R.string.location_dialog_option_work),
+            getString(R.string.location_dialog_option_outside),
+            getString(R.string.location_dialog_option_else)
+        )
+    }
+
+    private fun getSensors(mSensorManager: SensorManager){
+        val sensorList = listOf<Sensor>(
+            mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE),
+            mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         database.close()
     }
 
-    //TODO: Impressum (Appname, Version, copyright + Name)
     //TODO: Datenschutzerklärung (inkl. Abfrage nach Datensammlung bei erstem Appstart + speichern in einer config datei)
-    //TODO: mögl. Ergänzung von Feedbackmöglichkeit (E-Mail)
     //TODO: Weiterführende Links zum Thema HSP
 }
