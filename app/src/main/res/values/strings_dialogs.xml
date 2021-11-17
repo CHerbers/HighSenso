@@ -44,6 +44,24 @@
     <string name="location_dialog_option_work">Auf Arbeit</string>
     <string name="location_dialog_option_outside">Draußen/Unterwegs</string>
     <string name="location_dialog_option_else">Anderes/Keine Angabe</string>
+<!--    login dialog-->
+    <string name="login_dialog_title">Login</string>
+    <string name="login_dialog_message">Melde dich an, um die App zu nutzen.</string>
+    <string name="login_dialog_username_editText_default">Benutzer*innenname / E-Mail Adresse</string>
+    <string name="login_dialog_password_editText_default">Passwort</string>
+    <string name="login_dialog_login_button">Login</string>
+    <string name="login_dialog_forgotPW_button">Passwort vergessen?</string>
+<!--    register dialog-->
+    <string name="register_dialog_title">Registrieren</string>
+    <string name="register_dialog_message">Registriere dich, um die App zu nutzen.</string>
+    <string name="register_dialog_username_editText_default">Benutzer*innenname</string>
+    <string name="register_dialog_password_editText_default">Passwort</string>
+    <string name="register_dialog_password_repeat_editText_default">Passwort (Wiederholung)</string>
+    <string name="register_dialog_mail_editText_default">E-Mail Adresse</string>
+    <string name="register_dialog_mail_repeat_editText_default">E-Mail Adresse (Wiederholung)</string>
+    <string name="register_dialog_country_editText_default">Heimatland</string>
+    <string name="register_dialog_register_button">Registrieren</string>
+
 <!--    send dialog-->
     <string name="send_dialog_title">Send Result Anonymously</string>
     <string name="send_dialog_message">Send Result</string>

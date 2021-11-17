@@ -16,4 +16,9 @@
     <item name="personal_questioning_item_intern_spacing" format="float" type="integer">0.005</item>
     <item name="personal_questioning_item_extern_spacing" format="float" type="integer">0.025</item>
     <item name="personal_questioning_button_vertical_bias" format="float" type="integer">0.9</item>
+<!--    login / register dialogs-->
+    <integer name="username_length_max">32</integer>
+    <integer name="mail_length_max">32</integer>
+    <integer name="password_length_min">8</integer>
+    <integer name="password_length_max">32</integer>
 </resources>

@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+        <variable
+            name="sharedViewModel"
+            type="name.herbers.android.highsenso.SharedViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/login_dialog_message_textView"
+            style="@style/general_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/privacy_dialog_layout_margin"
+            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginEnd="@dimen/privacy_dialog_layout_margin"
+            android:text="@string/login_dialog_message" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_dialog_username_editText_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
+            android:paddingVertical="@dimen/editText_padding_top_bot">
+
+            <EditText
+                android:id="@+id/login_dialog_username_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_dialog_username_editText_default"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textColorHighlight="@color/edit_text_color_highlight" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_dialog_password_editText_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/send_dialog_items_margin_sides"
+            android:paddingVertical="@dimen/editText_padding_top_bot">
+
+            <EditText
+                android:id="@+id/login_dialog_password_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_dialog_password_editText_default"
+                android:ems="10"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+</layout>
