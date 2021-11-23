@@ -6,10 +6,9 @@ import androidx.room.PrimaryKey
 
 /** Represents a question which should be answered by the user.
  * @param id  the unique question id for sequencing and distinguishing the questions
- * @param title the name of the question
  * @param question the actual question (content)
- * @param explanation further information on how to interpret/understand the question
- * @param rating is how the question was rated by the user, default value is "-1" which means "unrated"
+ * @param itemQuestion is true if the question is part of the 27-Items
+ * @param rating is how the question was rated by the user
  *
  * @project HighSenso
  * @author Christoph Herbers
@@ -20,17 +19,13 @@ data class Question(
     @PrimaryKey
     val id: Int,
     @ColumnInfo
-    val title: String,
-    @ColumnInfo
     val question: String,
     @ColumnInfo
-    val explanation: String,
-//    @ColumnInfo
-//    val subscale: String,
+    val itemQuestion: Boolean,
     @ColumnInfo
-    var rating: Int = -1
+    var rating: Boolean = false
 ) {
     override fun toString(): String {
-        return "id: '${id}', title: '${title}', question: '${question}', explanation: '${explanation}', rating: '${rating}'"
+        return "id: '${id}', question: '${question}', part of 27-Items: '${itemQuestion}', rating: '${rating}'"
     }
 }

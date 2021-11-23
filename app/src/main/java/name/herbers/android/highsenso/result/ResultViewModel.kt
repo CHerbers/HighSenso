@@ -51,8 +51,11 @@ class ResultViewModel(
     }
 
     private fun calculateResult() {
-        val ratingSum = databaseHandler.questions.sumOf { question ->
-            question.rating + 1
+        var ratingSum = 0
+        databaseHandler.questions.forEach { question ->
+            if (question.itemQuestion)
+                if (question.rating)
+                    ratingSum++
         }
         Timber.i("Total rating sum: $ratingSum")
         //TODO calculate which result texts from database should be shown onscreen

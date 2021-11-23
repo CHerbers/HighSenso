@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.PersonalData
@@ -60,8 +59,12 @@ class PersonalQuestioningFragment : Fragment() {
         personalData = sharedViewModel.personalData
 
         //set title
-        (activity as AppCompatActivity).supportActionBar?.title =
-            resources.getString(R.string.questioning_actionBar_title)
+        val actionBar = (activity as AppCompatActivity).supportActionBar
+        if (actionBar != null) {
+            actionBar.title =
+                resources.getString(R.string.questioning_actionBar_title)
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
 
         //init spinners (dropdown selections)
         initAllSpinners()
@@ -76,16 +79,16 @@ class PersonalQuestioningFragment : Fragment() {
         }
 
         //back button
-        binding.backButton.setOnClickListener {
-            Timber.i("backButton was clicked!")
-            viewModel.handleBackButtonClick()
-            sharedViewModel.backFromPersonalQuestioning = true
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_personalQuestioning_to_questioning)
-        }
+//        binding.backButton.setOnClickListener {
+//            Timber.i("backButton was clicked!")
+//            viewModel.handleBackButtonClick()
+//            sharedViewModel.backFromResult = true
+//            NavHostFragment.findNavController(this)
+//                .navigate(R.id.action_personalQuestioning_to_questioning)
+//        }
 
         //add Observer to navigate to ResultFragment
-        setIsFinishedObserver()
+//        setIsFinishedObserver()
 
 
         Timber.i("PersonalQuestionFragment created!")
@@ -97,14 +100,14 @@ class PersonalQuestioningFragment : Fragment() {
      * was shown.
      * If isFinished is true, Fragment changes to [ResultFragment]
      * */
-    private fun setIsFinishedObserver(){
-        viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
-            if (isFinished) {
-                NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_personalQuestioningFragment_to_result_destination)
-            }
-        })
-    }
+//    private fun setIsFinishedObserver(){
+//        viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
+//            if (isFinished) {
+//                NavHostFragment.findNavController(this)
+//                    .navigate(R.id.action_personalQuestioningFragment_to_result_destination)
+//            }
+//        })
+//    }
 
     /**
      * Calls [initSpinner] for every of the four [Spinner]s with its corresponding string-array

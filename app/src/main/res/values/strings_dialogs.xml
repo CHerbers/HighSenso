@@ -47,10 +47,11 @@
 <!--    login dialog-->
     <string name="login_dialog_title">Login</string>
     <string name="login_dialog_message">Melde dich an, um die App zu nutzen.</string>
-    <string name="login_dialog_username_editText_default">Benutzer*innenname / E-Mail Adresse</string>
+    <string name="login_dialog_username_editText_default">Username / E-Mail</string>
     <string name="login_dialog_password_editText_default">Passwort</string>
     <string name="login_dialog_login_button">Login</string>
-    <string name="login_dialog_forgotPW_button">Passwort vergessen?</string>
+    <string name="login_dialog_register_button">Registrieren</string>
+    <string name="login_dialog_forgotPW_button"><u>Passwort vergessen?</u></string>
 <!--    register dialog-->
     <string name="register_dialog_title">Registrieren</string>
     <string name="register_dialog_message">Registriere dich, um die App zu nutzen.</string>
@@ -60,7 +61,15 @@
     <string name="register_dialog_mail_editText_default">E-Mail Adresse</string>
     <string name="register_dialog_mail_repeat_editText_default">E-Mail Adresse (Wiederholung)</string>
     <string name="register_dialog_country_editText_default">Heimatland</string>
+    <string name="register_dialog_privacy_textView">
+        Indem du dich registrierst, stimmst du den <a href="http://www.google.com">Datenschutzrichtlinien</a> zu.
+    </string>
     <string name="register_dialog_register_button">Registrieren</string>
+    <string name="register_dialog_to_login_button">
+        Bereits registriert?
+        \n
+        Zum Login
+    </string>
 
 <!--    send dialog-->
     <string name="send_dialog_title">Send Result Anonymously</string>

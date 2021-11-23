@@ -27,27 +27,16 @@ class QuestioningViewModel(
 
     private var questions: List<Question> = databaseHandler.questions
     lateinit var currentQuestion: Question
-    private val defaultRatingProgress = 2
 
     /* current question number / total questions, observed by associated TextView */
     private val _questionCount = MutableLiveData<String>()
     val questionCount: LiveData<String>
         get() = _questionCount
 
-    /* current question title, observed by the associated TextView */
-    private val _currentQuestionTitle = MutableLiveData<String>()
-    val currentQuestionTitle: LiveData<String>
-        get() = _currentQuestionTitle
-
     /* current question content (actual question), observed by the associated TextView */
     private val _currentQuestionContent = MutableLiveData<String>()
     val currentQuestionContent: LiveData<String>
         get() = _currentQuestionContent
-
-    /* observed by QuestioningFragment, if true: SeekBar is changed to current rating */
-    private val _changeSeekBar = MutableLiveData(false)
-    val changeSeekBar: LiveData<Boolean>
-        get() = _changeSeekBar
 
     /* observed by QuestioningFragment, if true: navigation to StartFragment */
     private val _navBackToStartFrag = MutableLiveData(false)
@@ -66,27 +55,10 @@ class QuestioningViewModel(
     }
 
     /**
-     * This method checks, if the [currentQuestion] is already initialized and returns its rating
-     * value if so and a default progress rating if not.
-     * @return the [currentQuestion]s rating if initialized and greater or even '0',
-     * or else the [defaultRatingProgress]
-     * */
-    fun getRatingToSetProgress(): Int {
-        if (this::currentQuestion.isInitialized) {
-            if (currentQuestion.rating >= 0) {
-                return currentQuestion.rating
-            }
-        }
-        return defaultRatingProgress
-    }
-
-    /**
      * This method calls a function to update the rating and decides whether the current question
      * gets changed to the next one or a fragment change to the [StartFragment] is initiated
-     * @param newRating the new rating the update function is called with
      * */
-    fun handleBackButtonClick(newRating: Int) {
-        updateRatingFromSeekBar(newRating)
+    fun handleBackButtonClick() {
         //check if this is the first question (also triggers if id is smh. smaller than 1)
         if (currentQuestion.id <= 1) {
             //initiate change to start fragment
@@ -102,7 +74,7 @@ class QuestioningViewModel(
      * gets changed to the previous one or a fragment change to the [ResultFragment] is initiated
      * @param newRating the new rating the update function is called with
      * */
-    fun handleNextButtonClick(newRating: Int) {
+    fun handleAnswerButtonClick(newRating: Boolean) {
         updateRatingFromSeekBar(newRating)
         _navBackToStartFrag.value = false
         //check if this is the last question
@@ -136,22 +108,17 @@ class QuestioningViewModel(
 
         //LiveData
         _questionCount.value = "${currentQuestion.id} / ${questions.size}"
-        _currentQuestionTitle.value = currentQuestion.title
         _currentQuestionContent.value = currentQuestion.question
-
-        //trigger change of the progression of SeekBar
-        _changeSeekBar.value = true
-        _changeSeekBar.value = false
         Timber.i("Current Question: $currentQuestion")
     }
 
     /**
      * This method updates the rating of the [currentQuestion] and updates the corresponding
      * database entry.
-     * @param progress the new rating
+     * @param rating the new rating
      * */
-    private fun updateRatingFromSeekBar(progress: Int) {
-        currentQuestion.rating = progress
+    private fun updateRatingFromSeekBar(rating: Boolean) {
+        currentQuestion.rating = rating
         databaseHandler.updateDatabase(currentQuestion)
     }
 

@@ -20,4 +20,8 @@
 <!--    location dialog-->
     <color name="location_dialog_button_default_color">#333333</color>
     <color name="location_dialog_button_done_color">#154f30</color>
+<!--    register/login dialog-->
+    <color name="register_dialog_button_register_color">#154f30</color>
+    <color name="register_dialog_button_to_login_color">#333333</color>
+    <color name="login_dialog_forgotPW_text_color">#FF018786</color>
 </resources>

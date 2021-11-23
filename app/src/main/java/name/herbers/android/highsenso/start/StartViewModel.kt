@@ -36,7 +36,7 @@ class StartViewModel(
     fun handleResetQuestions() {
         //set questions rating to default value (-1)
         databaseHandler.questions.forEach { question ->
-            question.rating = -1
+            question.rating = false
             databaseHandler.updateDatabase(question)
         }
         //trigger Toast message on StartFragment

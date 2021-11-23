@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/privacy_dialog_layout_margin"
-            android:layout_marginTop="@dimen/privacy_dialog_spacing"
+            android:layout_marginTop="@dimen/dialog_general_marginVertical"
             android:layout_marginEnd="@dimen/privacy_dialog_layout_margin"
             android:text="@string/login_dialog_message" />
 
@@ -55,6 +55,30 @@
                 android:ems="10"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/login_dialog_login_button"
+            style="@style/login_dialog_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dialog_button_margin"
+            android:text="@string/login_dialog_login_button" />
+
+        <Button
+            android:id="@+id/login_dialog_register_button"
+            style="@style/login_dialog_button_to_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dialog_button_margin"
+            android:text="@string/login_dialog_register_button" />
+
+        <TextView
+            android:id="@+id/login_dialog_forgot_password_textView"
+            style="@style/login_dialog_forgotPW_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dialog_general_marginVertical"
+            android:text="@string/login_dialog_forgotPW_button" />
 
     </LinearLayout>
 </layout>

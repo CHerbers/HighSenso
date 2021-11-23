@@ -23,6 +23,8 @@
     <string name="questioning_actionBar_title">Befragung</string>
     <string name="next_button">Weiter</string>
     <string name="back_button">Zurück</string>
+    <string name="agree_button">Ja</string>
+    <string name="decline_button">Nein</string>
 <!--    personal questioning-->
     <string name="personal_questioning_actionBar_title">Befragung</string>
 <!--    result-->

@@ -1,13 +1,11 @@
 package name.herbers.android.highsenso.questioning
 
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -55,11 +53,11 @@ class QuestioningFragment : Fragment() {
 
         //checks if this Fragment was called from PersonalQuestioningFragment
         val startingQuestionPos =
-            if (sharedViewModel.backFromPersonalQuestioning) databaseHandler.questions.size - 1
+            if (sharedViewModel.backFromResult) databaseHandler.questions.size - 1
             else 0
 
         //reset backFromPersonalQuestioning
-        sharedViewModel.backFromPersonalQuestioning = false
+        sharedViewModel.backFromResult = false
 
         //init QuestioningViewModel
         val viewModelFactory =
@@ -68,9 +66,14 @@ class QuestioningFragment : Fragment() {
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
 
-        //set title
-        (activity as AppCompatActivity).supportActionBar?.title =
-            resources.getString(R.string.questioning_actionBar_title)
+        //set actionBar (title and button)
+        val actionBar = (activity as AppCompatActivity).supportActionBar
+        if (actionBar != null) {
+            actionBar.title =
+                resources.getString(R.string.questioning_actionBar_title)
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+        setHasOptionsMenu(true)
 
         //add Observers
         addLiveDataObservers()
@@ -83,12 +86,27 @@ class QuestioningFragment : Fragment() {
     }
 
     /**
+     * Override fun to define an action when actionBar back button is clicked.
+     * If clicked a fun in the [QuestioningViewModel] is called to handle the click.
+     * */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.i("$item clicked!")
+        return when (item.itemId) {
+            android.R.id.home -> {
+                Timber.i("actionBar back button clicked!")
+                viewModel.handleBackButtonClick()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
      * Calls functions that add Observers to the LiveData.
      * */
     private fun addLiveDataObservers() {
         addBackToStartObserver()
         addIsFinishedObserver()
-        addSeekBarObserver()
     }
 
     /**
@@ -114,20 +132,7 @@ class QuestioningFragment : Fragment() {
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 findNavController(this)
-                    .navigate(R.id.action_questioning_to_personalQuestioning)
-            }
-        })
-    }
-
-    /**
-     * Observed changeSeekBar becomes true if the current [Question] is changed.
-     * The [SeekBar] is set to the saved rating for the currently shown [Question] (in default
-     * position if no rating is saved at this moment)
-     * */
-    private fun addSeekBarObserver() {
-        viewModel.changeSeekBar.observe(viewLifecycleOwner, { change ->
-            if (change) {
-                binding.seekBar.setProgress(viewModel.getRatingToSetProgress(), false)
+                    .navigate(R.id.action_questioning_destination_to_result_destination)
             }
         })
     }
@@ -136,77 +141,19 @@ class QuestioningFragment : Fragment() {
      * Calls functions that add Listeners to the backButton, nextButton and seekBar.
      * */
     private fun setListeners() {
-        addNextButtonListener()
-        addBackButtonListener()
-        addSeekBarListener()
+        addAnswerButtonListener(binding.agreeButton, true, "agreeButton")
+        addAnswerButtonListener(binding.declineButton, false, "declineButton")
     }
 
     /**
      * Adds a Click Listener to the nextButton, which progresses to next [Question] or
      * to [ResultFragment].
      * */
-    private fun addNextButtonListener() {
-        binding.nextButton.setOnClickListener {
-            Timber.i("nextButton was clicked!")
-            viewModel.handleNextButtonClick(binding.seekBar.progress)
+    private fun addAnswerButtonListener(button: Button, rating: Boolean, logMessage: String) {
+        button.setOnClickListener {
+            Timber.i("$logMessage was clicked!")
+            viewModel.handleAnswerButtonClick(rating)
         }
-    }
-
-    /**
-     * Adds a ClickListener to the backButton, which navigates back to the previous [Question] or
-     * to [StartFragment].
-     * */
-    private fun addBackButtonListener() {
-        binding.backButton.setOnClickListener {
-            Timber.i("backButton was clicked!")
-            viewModel.handleBackButtonClick(binding.seekBar.progress)
-        }
-    }
-
-    /**
-     * Adds an OnSeekBarChangeListener to the [SeekBar].
-     * If seekBar is progressed the current value is highlighted (bold and bigger size).
-     * Every other value is set to standard size and default typeface.
-     */
-    private fun addSeekBarListener() {
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            //list of the TextViews that represent the SeekBar values
-            val progressTextViews: MutableList<TextView> = mutableListOf(
-                binding.sbLegend0,
-                binding.sbLegend1,
-                binding.sbLegend2,
-                binding.sbLegend3,
-                binding.sbLegend4
-            )
-
-            //on change the progressed value is set to 'bold' and a bigger size
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                Timber.i("SeekBar changed to $progress!")
-
-                progressTextViews.forEach { textView: TextView ->
-                    textView.setTextSize(
-                        TypedValue.COMPLEX_UNIT_PX,
-                        resources.getDimension(R.dimen.sb_legend_standard_textSize)
-                    )
-                    textView.typeface = Typeface.DEFAULT
-                }
-
-                val progressedTextView = progressTextViews[progress]
-                progressedTextView.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimension(R.dimen.sb_legend_selected_textSize)
-                )
-                progressedTextView.typeface = Typeface.DEFAULT_BOLD
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                //this override method is not needed
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                //this override method is not needed
-            }
-        })
     }
 }
 

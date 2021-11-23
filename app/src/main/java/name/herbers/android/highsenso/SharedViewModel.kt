@@ -25,11 +25,27 @@ class SharedViewModel(
     val databaseHandler: DatabaseHandler,
     val personalData: PersonalData
 ) : ViewModel() {
-    var backFromPersonalQuestioning: Boolean = false
+    var backFromResult: Boolean = false
 
     private val _locationDialogDismiss = MutableLiveData(false)
     val locationDialogDismiss: LiveData<Boolean>
         get() = _locationDialogDismiss
+
+    private val _startRegisterDialog = MutableLiveData(false)
+    val startRegisterDialog: LiveData<Boolean>
+        get() = _startRegisterDialog
+
+    private val _startLoginDialog = MutableLiveData(false)
+    val startLoginDialog: LiveData<Boolean>
+        get() = _startLoginDialog
+
+    private val _errorSendingData = MutableLiveData("")
+    val errorSendingData: LiveData<String>
+        get() = _errorSendingData
+
+    private val _serverLoginResponse = MutableLiveData(-1)
+    val serverLoginResponse: LiveData<Int>
+        get() = _serverLoginResponse
 
     init {
         Timber.i("SharedViewModel created!")
@@ -42,13 +58,32 @@ class SharedViewModel(
      * This is done after the [name.herbers.android.highsenso.dialogs.LocationDialogFragment] is
      * dismissed.
      * */
-    fun dialogGetsDismissed(){
+    fun dialogGetsDismissed() {
         _locationDialogDismiss.value = true
         _locationDialogDismiss.value = false
+    }
+
+    fun sendLogin(username: String, password: String) {
+        //TODO hash password
+        // call handler
     }
 
     override fun onCleared() {
         super.onCleared()
         Timber.i("SharedViewModel destroyed!")
+    }
+
+    fun handleLoginDialogRegisterButtonClick() {
+        _startRegisterDialog.value = true
+        _startRegisterDialog.value = false
+    }
+
+    fun handleForgotPasswordClick() {
+        //TODO reset password
+    }
+
+    fun handleRegisterDialogLoginButtonClick() {
+        _startLoginDialog.value = true
+        _startLoginDialog.value = false
     }
 }

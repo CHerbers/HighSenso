@@ -104,7 +104,7 @@ class QuestioningViewModelTest {
      * This function represents a nextButton click with a random legal rating (number between 0 and 4).
      * */
     private fun clickNextButton() {
-        questioningViewModel.handleNextButtonClick(Random.nextInt(0, 4))
+        questioningViewModel.handleAnswerButtonClick(Random.nextInt(0, 4))
     }
 
     @Test

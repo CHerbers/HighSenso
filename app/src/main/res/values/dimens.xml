@@ -13,9 +13,17 @@
     <dimen name="standard_textView_layout_margin">16dp</dimen>
     <dimen name="standard_textView_padding">8dp</dimen>
 
+<!--    general dialog-->
+    <dimen name="dialog_general_marginVertical">12dp</dimen>
+    <dimen name="dialog_button_margin">24dp</dimen>
+
 <!--    privacy dialog-->
     <dimen name="privacy_dialog_layout_margin">8dp</dimen>
     <dimen name="privacy_dialog_spacing">12dp</dimen>
+
+<!--    register/login dialog-->
+    <dimen name="register_dialog_editView_margin">12dp</dimen>
+    <dimen name="login_dialog_forgotPW_textSize">20sp</dimen>
 
 <!--    location dialog-->
     <dimen name="location_dialog_button_margin">32dp</dimen>

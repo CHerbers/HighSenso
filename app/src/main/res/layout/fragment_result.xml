@@ -74,7 +74,7 @@
                     android:text="@string/result_disclaimer" />
 
                 <TextView
-                    android:id="@+id/result_type_textView"
+                    android:id="@+id/questioningContent_disclaimer_textView"
                     style="@style/result_content_textView"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/result_content_spacing"

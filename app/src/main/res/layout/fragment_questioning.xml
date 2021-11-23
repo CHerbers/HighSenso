@@ -22,7 +22,7 @@
             android:text="@{questioningViewModel.questionCount}"
             android:textColor="@color/questionCount_text_color"
             android:textSize="@dimen/questionCount_textSize"
-            app:layout_constraintBottom_toTopOf="@+id/result_type_textView"
+            app:layout_constraintBottom_toTopOf="@+id/questioningContent_disclaimer_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,46 +30,45 @@
             tools:text="Question Count (42/42)" />
 
         <TextView
-            android:id="@+id/result_type_textView"
+            android:id="@+id/questioningContent_disclaimer_textView"
             style="@style/title_textView"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@{questioningViewModel.currentQuestionTitle}"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.521"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.134"
-            tools:text="Question Title" />
+            tools:text="Little Disclaimer on how this questioning works" />
 
         <TextView
             android:id="@+id/questionContent_textView"
             style="@style/general_textView"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:padding="@dimen/question_textView_layout_padding"
             android:text="@{questioningViewModel.currentQuestionContent}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.548"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.344"
-            tools:text="this is a reaaaaaaaaaaaaaaaaaaaaaaaally long question just to test the question layout with a reaaaaaaaally long quesiton! How does it look like? Does it look good? I really hope so! And there is the 5th (?) line! Nice!" />
+            app:layout_constraintTop_toBottomOf="@+id/questioningContent_disclaimer_textView"
+            app:layout_constraintVertical_bias="0.087"
+            tools:text="@string/dummy_text" />
 
         <Button
-            android:id="@+id/next_button"
+            android:id="@+id/agree_button"
             style="@style/questioning_fragment_button"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/next_button"
+            android:text="@string/agree_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -78,117 +77,19 @@
             app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias"  />
 
         <Button
-            android:id="@+id/back_button"
+            android:id="@+id/decline_button"
             style="@style/questioning_fragment_button"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/back_button"
+            android:text="@string/decline_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias"  />
-
-        <SeekBar
-            android:id="@+id/seek_bar"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="333dp"
-            android:layout_height="55dp"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:max="@integer/rating_max"
-            android:maxHeight="10dip"
-            android:minHeight="10dip"
-            android:paddingLeft="10dip"
-            android:paddingTop="10dip"
-            android:paddingRight="10dip"
-            android:paddingBottom="9dip"
-            android:progress="@{questioningViewModel.ratingToSetProgress}"
-            android:progressDrawable="@drawable/seek_bar"
-            android:thumb="@drawable/seek_bar_thumb"
-            android:tickMark="@drawable/seek_bar_tick_mark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.616" />
-
-        <TextView
-            android:id="@+id/sb_legend_0"
-            style="@style/sb_legend_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:text="@string/sb_legend_0"
-            app:layout_constraintBottom_toTopOf="@+id/seek_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/sb_legend_1"
-            style="@style/sb_legend_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/sb_legend_1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/sb_legend_2"
-            style="@style/sb_legend_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:text="@string/sb_legend_2"
-            app:layout_constraintBottom_toTopOf="@+id/seek_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/sb_legend_3"
-            style="@style/sb_legend_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:text="@string/sb_legend_3"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.75"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/sb_legend_4"
-            style="@style/sb_legend_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:text="@string/sb_legend_4"
-            app:layout_constraintBottom_toTopOf="@+id/seek_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
