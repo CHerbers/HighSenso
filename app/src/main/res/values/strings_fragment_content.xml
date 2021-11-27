@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    menu content-->
+    <!--    menu content-->
     <!--    about fragment-->
     <string name="about_text">
         Die HighSenso App wurde 2021 im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
@@ -19,7 +19,7 @@
         Highsenso Privatsphäre TODO
     </string>
 
-<!--    start fragment content-->
+    <!--    start fragment content-->
     <string name="start_title">
         Willkommen \n bei HighSenso
     </string>
@@ -29,23 +29,34 @@
         Du kannst direkt loslegen oder Dir erst einmal durchlesen, was Hochsensibilität überhaupt ist.
     </string>
     <string name="start_sensitivity_definition">
-        Hochsensibilität ist <b>keine Krankheit</b> vielmehr ist sie eine Eigenschaft die jeder Mensch in
-        einem gewissen Maße besitzt. Dabei geht man momentan davon aus, dass etwa 30% aller Menschen
-        wenig oder fast nicht, um die 40% mittelmäßig und rund 30% sehr ausgeprägt hochsensibel sind.
-        Hochsensibilität kann sich bei Menschen unterschiedlich äußern, sie hat aber immer etwas mit
-        einer hohen <b>Reizwahrnehmung</b> oder <b>Reizverarbeitung</b> zu tun. Das bedeutet in kurz:
-        Dinge werden stärker wahrgenommen.
-        Durch die unterschiedliche Ausprägung, kann eine Hochsensibilität teilweise belastend oder
+        Hochsensibilität ist <b>keine Krankheit</b>!
+        \n
+        Vielmehr ist sie eine Eigenschaft, die jeder Mensch in einem gewissen Maße besitzt.
+        Dabei geht man momentan davon aus, dass etwa 30% aller Menschen wenig oder fast nicht,
+        um die 40% mittelmäßig und rund 30% sehr ausgeprägt hochsensibel sind.
+        Hochsensibilität kann sich bei Menschen unterschiedlich äußern,
+        sie hat aber immer etwas mit einer hohen <b>Reizwahrnehmung</b> und/oder
+        <b>Reizverarbeitung</b> zu tun.Das bedeutet in kurz:
+        \n
+        Äußere Einflüsse und Gefühle werden stärker wahrgenommen.
+        Durch unterschiedliche Ausprägungen, kann eine Hochsensibilität teilweise belastend oder
         aber auch hilfreich sein.
-        Darum gibt die HighSenso App nach der Befragung auch Tipps, wie mit der jeweiligen Ausprägung
-        der Hochsensibilität umgegangen werden kann.
+        Darum gibt die HighSenso App Dir nach der Befragung auch Tipps, wie Du mit der jeweiligen
+        Ausprägung Deiner Hochsensibilität umgehen kannst.
     </string>
     <string name="start_short_about">
         Die HighSenso App wurde im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
+        \n
         Die Fragen und Auswertung wurden aufgrund wissenschaftlicher Erkenntnisse formuliert.
+        \n
+        \n
+        Die HighSenso App kann und möchte keine medizinische oder thereapeuthische Behandlung
+        ersetzen! Fühlst Du Dich unwohl mit Aspekten deiner Hochsensibilität oder auch unabhängig
+        von einer möglichen Hochsensibilität, raten wir Dir zu einem Gespräch mit eine*r Ärzt*in
+        oder Psycholog*in!
     </string>
 
-<!--    questioning fragment content-->
+    <!--    questioning fragment content-->
     <string name="question_title">This is a question title</string>
     <string name="question_content">This is a question! Pls rate</string>
     <string name="sb_legend_0">trifft nicht zu</string>
@@ -54,7 +65,7 @@
     <string name="sb_legend_3">trifft etwas zu</string>
     <string name="sb_legend_4">trifft stark zu</string>
 
-<!--    personal questioning fragment content-->
+    <!--    personal questioning fragment content-->
     <string name="personal_questioning_title">Persönliche Angaben</string>
     <string name="personal_questioning_disclaimer">
         Diese persönlichen Angaben werden in der Auswertung berücksichtigt und helfen uns bei der
@@ -71,17 +82,18 @@
     <string name="profession">Beruf:</string>
     <string name="profession_editText_default">Beruf</string>
 
-<!--    result fragment content-->
+    <!--    result fragment content-->
     <string name="result_title">Ergebnis</string>
     <string name="result_disclaimer">
         Diese App soll eine Hilfestellung für hochsensible Personen darstellen.
         Sie ersetzt in keiner Weise eine medizinische oder therapeuthische Behandlung!
+        \n
         Solltest Du unter Aspekten Deiner Hochsensibilität leiden, bitten wir Dich, Dir ärztlichen
         oder psychologischen Rat zu suchen!
     </string>
     <string name="resultText">This is the result of your test.</string>
 
-<!--    overall-->
+    <!--    overall-->
     <string name="dummy_text">
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
         ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo

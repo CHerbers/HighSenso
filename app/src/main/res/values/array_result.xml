@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="general_HSP_result_probability_array">
+        <item>relativ sicher</item>
+        <item>wahrscheinlich</item>
+    </array>
+</resources>

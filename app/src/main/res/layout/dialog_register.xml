@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/fragment_background_color"
         android:orientation="vertical">
 
         <TextView
@@ -113,6 +114,12 @@
                 android:maxLength="@integer/password_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/register_dialog_country_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/register_dialog_editView_margin" />
 
         <CheckBox
             android:id="@+id/register_dialog_privacy_checkBox"

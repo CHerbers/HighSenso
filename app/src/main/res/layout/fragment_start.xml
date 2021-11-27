@@ -15,42 +15,103 @@
         android:id="@+id/constLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/fragment_background_color"
         tools:context=".start.StartFragment">
 
-        <TextView
-            android:id="@+id/startTitle_textView"
-            style="@style/title_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/start_title"
-            android:textSize="@dimen/title_textSize"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/start_textView_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.185" />
+            app:layout_constraintTop_toBottomOf="@+id/start_fragment_register_button">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/startTitle_textView"
+                    style="@style/title_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/start_textView_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@string/start_welcome_text"
+                    android:textSize="@dimen/title_textSize"
+                    tools:layout_editor_absoluteX="84dp"
+                    tools:layout_editor_absoluteY="119dp" />
+
+                <TextView
+                    android:id="@+id/start_fragment_short_about_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/start_textView_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@string/start_welcoming"
+                    tools:layout_editor_absoluteY="249dp" />
+
+                <TextView
+                    android:id="@+id/start_fragment_sensitivity_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/start_textView_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@string/start_sensitivity_definition"
+                    tools:layout_editor_absoluteY="444dp" />
+
+                <Button
+                    android:id="@+id/startButton"
+                    style="@style/start_fragment_start_button"
+                    android:layout_width="299dp"
+                    android:layout_height="98dp"
+
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/standard_textView_layout_margin"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@string/start_button"
+                    android:textSize="@dimen/button_textSize"/>
+            </LinearLayout>
+        </ScrollView>
 
         <Button
-            android:id="@+id/startButton"
-            style="@style/standard_text"
-            android:layout_width="299dp"
-            android:layout_height="98dp"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:background="@android:drawable/btn_default"
-            android:text="@string/start_button"
-            android:textColor="@color/black"
-            android:textSize="@dimen/button_textSize"
+            android:id="@+id/start_fragment_login_button"
+            style="@style/start_fragment_login_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_textView_layout_margin"
+            android:text="@string/start_fragment_login_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toEndOf="@+id/start_fragment_register_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/start_fragment_register_button"
+            style="@style/start_fragment_login_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_textView_layout_margin"
+            android:text="@string/start_fragment_register_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.933" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

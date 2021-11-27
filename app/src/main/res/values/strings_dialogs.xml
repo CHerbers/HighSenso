@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    button texts-->
+    <!--    button texts-->
     <string name="positive_button">Ja</string>
     <string name="negative_button">Nein</string>
     <string name="accept_button">Auswahl bestätigen</string>
     <string name="cancel_button">Abbrechen</string>
     <string name="decline_all_button">Alles Ablehnen</string>
-<!--    reset dialog-->
+
+    <!--    reset dialog-->
     <string name="reset_dialog_title">Reset Questions</string>
     <string name="reset_dialog_message">Do you really want to reset all of your question ratings?</string>
     <string name="reset_dialog_toast_message">Questions have been reset!</string>
-<!--    privacy dialog-->
+
+    <!--    privacy dialog-->
     <string name="privacy_dialog_title">Privatsphäre-Einstellungen</string>
     <string name="privacy_dialog_message">
         HighSenso ist ein Projekt im Rahmen der <b>Erforschung von Hochsensibilität</b>.
@@ -30,7 +32,8 @@
     <string name="privacy_dialog_sensor_data_setting_checkBox">
         Ich stimme dem Sammeln und annonymisierten Senden von Sensordaten zu
     </string>
-<!--    location dialog-->
+
+    <!--    location dialog-->
     <string name="location_dialog_title">Standortangabe</string>
     <string name="location_dialog_message">
         Gib bitte an, wo Du Dich gerade befindest.
@@ -44,7 +47,8 @@
     <string name="location_dialog_option_work">Auf Arbeit</string>
     <string name="location_dialog_option_outside">Draußen/Unterwegs</string>
     <string name="location_dialog_option_else">Anderes/Keine Angabe</string>
-<!--    login dialog-->
+
+    <!--    login dialog-->
     <string name="login_dialog_title">Login</string>
     <string name="login_dialog_message">Melde dich an, um die App zu nutzen.</string>
     <string name="login_dialog_username_editText_default">Username / E-Mail</string>
@@ -52,7 +56,14 @@
     <string name="login_dialog_login_button">Login</string>
     <string name="login_dialog_register_button">Registrieren</string>
     <string name="login_dialog_forgotPW_button"><u>Passwort vergessen?</u></string>
-<!--    register dialog-->
+    <string name="login_dialog_bad_combination_toast_message">
+        Ungültige Username-Passwort-Kombination!
+    </string>
+    <string name="login_dialog_invalid_input_toast_message">
+        Bitte alle Felder korrekt ausfüllen!
+    </string>
+
+    <!--    register dialog-->
     <string name="register_dialog_title">Registrieren</string>
     <string name="register_dialog_message">Registriere dich, um die App zu nutzen.</string>
     <string name="register_dialog_username_editText_default">Benutzer*innenname</string>
@@ -71,7 +82,7 @@
         Zum Login
     </string>
 
-<!--    send dialog-->
+    <!--    send dialog-->
     <string name="send_dialog_title">Send Result Anonymously</string>
     <string name="send_dialog_message">Send Result</string>
     <string name="send_dialog_age_edit_text_hint">Age</string>

@@ -11,11 +11,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/fragment_background_color">
 
         <TextView
             android:id="@+id/about_text"
-            style="@style/general_textView"
+            style="@style/about_fragment_textView"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
@@ -29,7 +30,7 @@
 
         <TextView
             android:id="@+id/about_source"
-            style="@style/general_textView"
+            style="@style/about_fragment_textView"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"

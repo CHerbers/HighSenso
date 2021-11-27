@@ -1,5 +1,6 @@
 package name.herbers.android.highsenso.result
 
+import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -22,6 +23,7 @@ class ResultViewModel(
 
     //some constants
     private val appRes = application.applicationContext.resources
+    private val limitPositive = appRes.getInteger(R.integer.hsp_positive_limit)
     private val errorInvalidInput =
         appRes.getString(R.string.send_dialog_text_edit_error_invalid)
     private val errorTooOld =
@@ -58,6 +60,7 @@ class ResultViewModel(
                     ratingSum++
         }
         Timber.i("Total rating sum: $ratingSum")
+        _resultTypeContent.value = buildGeneralResultString(ratingSum)
         //TODO calculate which result texts from database should be shown onscreen
         //_resultContent = ...
     }
@@ -93,6 +96,32 @@ class ResultViewModel(
         if (age.toInt() > maxAge) return errorTooOld
         if (age.toInt() < minAge) return errorTooYoung
         return ""
+    }
+
+    @SuppressLint("StringFormatMatches")
+    fun buildGeneralResultString(rating: Int): String {
+        var resultString = ""
+
+        val probabilityArray = appRes.getStringArray(R.array.general_HSP_result_probability_array)
+        val resultPositivity =
+            if (rating > limitPositive * 1.5 || rating < limitPositive * 0.5)
+                probabilityArray[0]
+            else probabilityArray[1]
+        val isPositive =
+            if (rating < limitPositive)
+                appRes.getString(R.string.general_HSP_negative)
+            else ""
+        resultString = appRes.getString(
+            R.string.general_HSP_part_0_declaration,
+            resultPositivity,
+            isPositive
+        )
+        resultString += appRes.getString(
+            R.string.general_HSP_part_1_score,
+            rating
+        )
+
+        return resultString
     }
 
     override fun onCleared() {

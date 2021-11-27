@@ -29,19 +29,14 @@
     <dimen name="location_dialog_button_margin">32dp</dimen>
     <dimen name="location_dialog_button_textSize">16sp</dimen>
 
+<!--    start Fragment-->
+    <dimen name="start_login_buttons_textSize">14sp</dimen>
+    <dimen name="start_fragment_start_button_textSize">18sp</dimen>
+    <dimen name="start_textView_spacing">12dp</dimen>
+
 <!--    questioning Fragment-->
     <dimen name="questionCount_textSize">14sp</dimen>
     <dimen name="question_textView_layout_padding">24sp</dimen>
-
-    <!--    seekBar-->
-    <dimen name="seek_bar_thickness">5dp</dimen>
-    <dimen name="seek_bar_dashWidth">5dp</dimen>
-    <dimen name="seek_bar_thumb_size">26dp</dimen>
-    <dimen name="seek_bar_tick_mark_size">13dp</dimen>
-
-    <!--    seekBar legend-->
-    <dimen name="sb_legend_standard_textSize">12sp</dimen>
-    <dimen name="sb_legend_selected_textSize">16sp</dimen>
 
 <!--    private questioning Fragment-->
     <dimen name="personal_questioning_item_intern_spacing">8dp</dimen>

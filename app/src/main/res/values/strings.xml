@@ -1,33 +1,56 @@
 <resources>
-<!--    general-->
+    <!--    general-->
     <string name="app_name">HighSenso</string>
-<!--    keys-->
+
+    <!--    keys-->
     <string name="privacy_setting_first_call_key">name_highSenso_privacy_setting_first_call_key</string>
     <string name="privacy_setting_send_general_data_key">name_highSenso_privacy_setting_send_general_data_key</string>
     <string name="privacy_setting_send_sensor_data_key">name_highSenso_privacy_setting_send_sensor_data_key</string>
+    <string name="login_data_username_key">name_highSenso_login_data_username_key</string>
+    <string name="login_data_password_hash_key">name_highSenso_login_data_password_hash_key</string>
+
     <!--    location keys-->
     <string name="location_option_home_key">name_highSenso_location_option_home_key</string>
     <string name="location_option_work_key">name_highSenso_location_option_work_key</string>
     <string name="location_option_outside_key">name_highSenso_location_option_outside_key</string>
-<!--    start-->
+
+    <!--    start-->
+    <string name="start_fragment_login_button"><b>Einloggen</b></string>
+    <string name="start_fragment_logout_button"><b>Ausloggen</b></string>
+    <string name="start_fragment_register_button"><b>Registrieren</b></string>
     <string name="start_actionBar_title">Willkommen bei HighSenso</string>
-    <string name="start_button">Befragung starten</string>
-<!--    menu-->
+    <string name="start_welcome_text"><b>
+        Willkommen bei
+        \n
+        HighSenso
+    </b></string>
+    <string name="start_welcome_username_text"><b>
+        Willkommen zurück
+        \n
+        %1$s
+    </b></string>
+    <string name="start_button"><b>Befragung starten</b></string>
+
+    <!--    menu-->
     <string name="about_menu_item_title">Über diese App</string>
     <string name="reset_menu_item_title">Bewertung zurücksetzen</string>
     <string name="privacy_menu_item_title">Privatsphäre-Einstellungen</string>
+
     <!--    menu fragments-->
     <string name="about_actionBar_title">Über diese App</string>
     <string name="privacy_actionBar_title">Privatsphäre</string>
-<!--    questioning-->
+
+    <!--    questioning-->
     <string name="questioning_actionBar_title">Befragung</string>
     <string name="next_button">Weiter</string>
     <string name="back_button">Zurück</string>
     <string name="agree_button">Ja</string>
     <string name="decline_button">Nein</string>
-<!--    personal questioning-->
+
+    <!--    personal questioning-->
     <string name="personal_questioning_actionBar_title">Befragung</string>
-<!--    result-->
+
+    <!--    result-->
     <string name="result_actionBar_title">Ergebnis</string>
     <string name="send_result_button">Send result \n anonymously</string>
     <string name="back_to_start_button">Zurück zum Start</string>

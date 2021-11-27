@@ -66,12 +66,8 @@ class StartFragment : Fragment() {
         //init SharedPreferences
         preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
 
-        //TODO delete
-//        RegisterDialogFragment(sharedViewModel,loginViewModel = LoginViewModel()).show(childFragmentManager, "RegisterDialog")
-        LoginDialogFragment(sharedViewModel, loginViewModel = LoginViewModel()).show(
-            childFragmentManager,
-            "LoginDialog"
-        )
+        //loginButton is a logoutButton and registerButton is invisible if user is already logged in
+        setUpButtons()
 
         //set title
         val actionBar = (activity as AppCompatActivity).supportActionBar
@@ -81,7 +77,6 @@ class StartFragment : Fragment() {
             actionBar.setDisplayHomeAsUpEnabled(false)
         }
 
-
         //activate menu in this Fragment
         setHasOptionsMenu(true)
 
@@ -89,7 +84,7 @@ class StartFragment : Fragment() {
         setAllObservers()
 
         //Listener to navigate to QuestioningFragment
-        setStartButtonListener(sharedViewModel)
+        setAllButtonListeners(sharedViewModel)
 
         //checking if first start of App and calls privacy dialog if so
         privacyCheck()
@@ -126,6 +121,34 @@ class StartFragment : Fragment() {
         }
     }
 
+    private fun isLoggedIn(): Boolean {
+        //TODO how to check if logged in
+        return false
+    }
+
+    private fun setUpButtons() {
+        if (isLoggedIn()) {
+            binding.startFragmentLoginButton.text =
+                getString(R.string.start_fragment_logout_button)
+            binding.startFragmentRegisterButton.visibility = View.INVISIBLE
+            val username = preferences.getString(getString(R.string.login_data_username_key), "")
+            binding.startTitleTextView.text =
+                getString(R.string.start_welcome_username_text, username)
+        } else {
+            binding.startFragmentLoginButton.text =
+                getString(R.string.start_fragment_login_button)
+            binding.startFragmentRegisterButton.visibility = View.VISIBLE
+            binding.startTitleTextView.text =
+                getString(R.string.start_welcome_text)
+        }
+    }
+
+    private fun setAllButtonListeners(sharedViewModel: SharedViewModel) {
+        setStartButtonListener(sharedViewModel)
+        setLoginButtonListener(sharedViewModel)
+        setRegisterButtonListener(sharedViewModel)
+    }
+
     /**
      * Sets a OnClickListener to the [binding.startButton].
      * Navigates to the [QuestioningFragment] to start the questioning.
@@ -146,6 +169,24 @@ class StartFragment : Fragment() {
                 Navigation.findNavController(view)
                     .navigate(R.id.action_startFragment_to_questioningFragment)
             }
+        }
+    }
+
+    private fun setLoginButtonListener(sharedViewModel: SharedViewModel) {
+        binding.startFragmentLoginButton.setOnClickListener {
+            Timber.i("loginButton was clicked!")
+            if (isLoggedIn()) {
+                //TODO show logout dialog
+            } else {
+                sharedViewModel.handleLoginButtonClick()
+            }
+        }
+    }
+
+    private fun setRegisterButtonListener(sharedViewModel: SharedViewModel) {
+        binding.startFragmentRegisterButton.setOnClickListener {
+            Timber.i("registerButton was clicked!")
+            sharedViewModel.handleRegisterButtonClick()
         }
     }
 

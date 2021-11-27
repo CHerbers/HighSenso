@@ -73,7 +73,7 @@ class SharedViewModel(
         Timber.i("SharedViewModel destroyed!")
     }
 
-    fun handleLoginDialogRegisterButtonClick() {
+    fun handleRegisterButtonClick() {
         _startRegisterDialog.value = true
         _startRegisterDialog.value = false
     }
@@ -82,7 +82,7 @@ class SharedViewModel(
         //TODO reset password
     }
 
-    fun handleRegisterDialogLoginButtonClick() {
+    fun handleLoginButtonClick() {
         _startLoginDialog.value = true
         _startLoginDialog.value = false
     }

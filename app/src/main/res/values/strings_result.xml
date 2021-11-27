@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    general HSP result-->
+    <string name="general_HSP_part_0_declaration">
+        Du bist %1$s %2$s hochsensibel!
+        \n
+    </string>
+    <string name="general_HSP_negative">
+        <u>nicht</u>
+    </string>
+    <string name="general_HSP_part_1_score">
+        Dein Hochsensibilitäts-Score liegt bei %1$d von 27.
+    </string>
+</resources>
