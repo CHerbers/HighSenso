@@ -21,9 +21,11 @@ class ResultViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    //some constants
+    /* some constants */
     private val appRes = application.applicationContext.resources
+    private val questions = databaseHandler.questions
     private val limitPositive = appRes.getInteger(R.integer.hsp_positive_limit)
+    //error messages
     private val errorInvalidInput =
         appRes.getString(R.string.send_dialog_text_edit_error_invalid)
     private val errorTooOld =
@@ -34,9 +36,24 @@ class ResultViewModel(
     private val minAge = appRes.getInteger(R.integer.min_age)
     private val regex = "[0-9]".toRegex()
 
-    private val _resultTypeContent = MutableLiveData<String>()
-    val resultTypeContent: LiveData<String>
-        get() = _resultTypeContent
+    /* Observed LiveData */
+    //LiveData observed by Fragment
+    private val _disableHelpTextViews = MutableLiveData<Boolean>()
+    val disableHelpTextViews: LiveData<Boolean>
+        get() = _disableHelpTextViews
+
+    private val _isSuffering = MutableLiveData<Boolean>()
+    val isSuffering: LiveData<Boolean>
+        get() = _isSuffering
+
+    //LiveData observed by TextViews
+    private val _resultGeneralHspContent = MutableLiveData<String>()
+    val resultGeneralHspContent: LiveData<String>
+        get() = _resultGeneralHspContent
+
+    private val _sufferingMessageContent = MutableLiveData<String>()
+    val sufferingMessageContent: LiveData<String>
+        get() = _sufferingMessageContent
 
     private val _resultPersonalContent = MutableLiveData<String>()
     val resultPersonalContent: LiveData<String>
@@ -45,7 +62,6 @@ class ResultViewModel(
     private val _resultConditionalContent = MutableLiveData<String>()
     val resultConditionalContent: LiveData<String>
         get() = _resultConditionalContent
-
 
     init {
         Timber.i("ResultViewModel created!")
@@ -59,10 +75,30 @@ class ResultViewModel(
                 if (question.rating)
                     ratingSum++
         }
-        Timber.i("Total rating sum: $ratingSum")
-        _resultTypeContent.value = buildGeneralResultString(ratingSum)
+        Timber.i("Total rating sum: $ratingSum!")
+        _resultGeneralHspContent.value = buildGeneralResultString(ratingSum)
+        if (checkSuffering()) {
+            Timber.i("User seems to suffer!")
+            _isSuffering.value = true
+            _resultConditionalContent.value =
+                if (ratingSum < limitPositive) appRes.getString(R.string.detected_suffering_negative_hsp_message)
+                else appRes.getString(R.string.detected_suffering_positive_hsp_message)
+        }
+        _isSuffering.value = false
+
         //TODO calculate which result texts from database should be shown onscreen
         //_resultContent = ...
+    }
+
+    /**
+     * This function checks the rating of the questions that are meant to detect if the user is suffering.
+     * If one of those three questions was answered positively, the return value is true.
+     *
+     * @return if the user is suffering
+     * */
+    private fun checkSuffering(): Boolean {
+        if (questions.size <= 34) return false
+        return questions[32].rating || questions[33].rating || questions[34].rating
     }
 
     fun handleSendResult(age: Int, gender: String) {
@@ -101,26 +137,26 @@ class ResultViewModel(
     @SuppressLint("StringFormatMatches")
     fun buildGeneralResultString(rating: Int): String {
         var resultString = ""
+        val isNegative = rating < limitPositive
 
         val probabilityArray = appRes.getStringArray(R.array.general_HSP_result_probability_array)
         val resultPositivity =
             if (rating > limitPositive * 1.5 || rating < limitPositive * 0.5)
                 probabilityArray[0]
             else probabilityArray[1]
-        val isPositive =
-            if (rating < limitPositive)
-                appRes.getString(R.string.general_HSP_negative)
-            else ""
+
         resultString = appRes.getString(
             R.string.general_HSP_part_0_declaration,
             resultPositivity,
-            isPositive
+            if (isNegative) {
+                _disableHelpTextViews.value = true
+                appRes.getString(R.string.general_HSP_negative)
+            } else ""
         )
         resultString += appRes.getString(
             R.string.general_HSP_part_1_score,
             rating
         )
-
         return resultString
     }
 

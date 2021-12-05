@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.google.android.material.chip.Chip
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.Question
@@ -107,6 +109,7 @@ class QuestioningFragment : Fragment() {
     private fun addLiveDataObservers() {
         addBackToStartObserver()
         addIsFinishedObserver()
+        addIsLastQuestion()
     }
 
     /**
@@ -138,21 +141,49 @@ class QuestioningFragment : Fragment() {
     }
 
     /**
+     * Observed isFinished becomes true if the current question is the last question.
+     * isFinished becomes false if the current question is not the last question.
+     * Depending if isFinished is true or false, another text is shown on the nextButton.
+     * */
+    private fun addIsLastQuestion() {
+        viewModel.isLastQuestion.observe(viewLifecycleOwner, { isLastQuestion ->
+            if (isLastQuestion) binding.questionNextButton.text =
+                resources.getString(R.string.confirm_and_move_to_result)
+            else binding.questionNextButton.text = resources.getString(R.string.next_button)
+        })
+    }
+
+    /**
      * Calls functions that add Listeners to the backButton, nextButton and seekBar.
      * */
     private fun setListeners() {
-        addAnswerButtonListener(binding.agreeButton, true, "agreeButton")
-        addAnswerButtonListener(binding.declineButton, false, "declineButton")
+        addAnswerButtonListener(binding.questionNextButton, "agreeButton")
+//        addAnswerButtonListener(binding.declineButton, false, "declineButton")
+        addChipListener(binding.questionPositiveChip)
+        addChipListener(binding.questionNegativeChip)
     }
 
     /**
      * Adds a Click Listener to the nextButton, which progresses to next [Question] or
      * to [ResultFragment].
      * */
-    private fun addAnswerButtonListener(button: Button, rating: Boolean, logMessage: String) {
+    private fun addAnswerButtonListener(button: Button, logMessage: String) {
         button.setOnClickListener {
             Timber.i("$logMessage was clicked!")
-            viewModel.handleAnswerButtonClick(rating)
+            viewModel.handleAnswerButtonClick(binding.questionPositiveChip.isChecked)
+        }
+    }
+
+    private fun addChipListener(chip: Chip) {
+        chip.setOnCheckedChangeListener { _, isChecked ->
+            Timber.i("Chip was clicked! ${chip.isChecked}")
+            if (isChecked) {
+                chip.setChipBackgroundColorResource(R.color.question_chip_selected_color)
+                chip.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+            } else {
+                chip.setChipBackgroundColorResource(R.color.question_chip_unselected_color)
+                chip.setTextColor(ContextCompat.getColor(context!!, R.color.black))
+            }
         }
     }
 }

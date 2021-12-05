@@ -33,19 +33,19 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <!--        <Button-->
-<!--            android:id="@+id/send_result_button"-->
-<!--            style="@style/general_button"-->
-<!--            android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
-<!--            android:layout_marginTop="@dimen/standard_textView_layout_margin"-->
-<!--            android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
-<!--            android:layout_marginBottom="@dimen/standard_textView_layout_margin"-->
-<!--            android:text="@string/send_result_button"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="1.0"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintVertical_bias="1.0" />-->
+        <!--            android:id="@+id/send_result_button"-->
+        <!--            style="@style/general_button"-->
+        <!--            android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+        <!--            android:layout_marginTop="@dimen/standard_textView_layout_margin"-->
+        <!--            android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+        <!--            android:layout_marginBottom="@dimen/standard_textView_layout_margin"-->
+        <!--            android:text="@string/send_result_button"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="1.0"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="1.0" />-->
 
         <ScrollView
             android:id="@+id/scrollView2"
@@ -67,21 +67,34 @@
 
                 <TextView
                     android:id="@+id/result_disclaimer_textView"
-                    style="@style/general_textView"
-                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/result_content_spacing"
-                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:text="@string/result_disclaimer" />
-
-                <TextView
-                    android:id="@+id/questioningContent_disclaimer_textView"
                     style="@style/result_content_textView"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:text="@{resultViewModel.resultTypeContent}"
+                    android:background="@color/caution_red_background_color"
+                    android:text="@string/result_disclaimer" />
+
+                <TextView
+                    android:id="@+id/result_hsp_info_textView"
+                    style="@style/result_content_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@{resultViewModel.resultGeneralHspContent}"
+                    tools:text="@string/dummy_text" />
+
+                <TextView
+                    android:id="@+id/suffering_message_textView"
+                    style="@style/result_content_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:background="@color/caution_red_background_color"
+                    android:text="@{resultViewModel.sufferingMessageContent}"
+                    android:visibility="gone"
                     tools:text="@string/dummy_text" />
 
                 <TextView
@@ -107,6 +120,16 @@
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
                     android:text="@{resultViewModel.resultConditionalContent}"
                     tools:text="@string/dummy_text" />
+
+                <TextView
+                    android:id="@+id/link_list_textView"
+                    style="@style/result_content_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@{@string/list_of_hsp_links}"
+                    android:textColorLink="@color/link_text_color" />
             </LinearLayout>
         </ScrollView>
 

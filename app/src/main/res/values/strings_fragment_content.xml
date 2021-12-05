@@ -26,7 +26,32 @@
     <string name="start_welcoming">
         Mit der HighSenso App kannst Du herausfinden ob Du eine <b>hochsensible Person (HSP)</b> bist.
         Dafür werden Dir eine Reihe von Fragen gestellt.
-        Du kannst direkt loslegen oder Dir erst einmal durchlesen, was Hochsensibilität überhaupt ist.
+    </string>
+    <string name="start_disclaimer_title">
+        <b>Wichtig:</b>
+    </string>
+    <string name="start_disclaimer">
+        Diese App wurde im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
+        \n
+        Die Fragen und Auswertung wurden aufgrund wissenschaftlicher Erkenntnisse formuliert.
+        \n
+        \n
+        Die HighSenso App kann und möchte keine medizinische oder thereapeuthische Behandlung
+        ersetzen! Fühlst Du Dich unwohl mit Aspekten deiner Hochsensibilität oder auch unabhängig
+        von einer möglichen Hochsensibilität, raten wir Dir zu einem Gespräch mit eine*r Ärzt*in
+        oder Psycholog*in!
+    </string>
+    <string name="start_read_or_answer">
+        Zur Nutzung der App benötigst Du ein <b>Benutzerkonto</b>!
+        \n
+        Dafür kannst Du Dich sofort <b>kostenlos registrieren</b> oder Dich <b>einloggen</b>,
+        solltest Du bereits ein Konto haben.
+        \n
+        Bist Du eingeloggt kannst direkt mit dem Test loslegen oder
+        Dir erst einmal durchlesen, was Hochsensibilität überhaupt ist:
+    </string>
+    <string name="start_sensitivity_title">
+        <b>Hochsensibilität:</b>
     </string>
     <string name="start_sensitivity_definition">
         Hochsensibilität ist <b>keine Krankheit</b>!
@@ -39,31 +64,20 @@
         <b>Reizverarbeitung</b> zu tun.Das bedeutet in kurz:
         \n
         Äußere Einflüsse und Gefühle werden stärker wahrgenommen.
+        \n
+        \n
         Durch unterschiedliche Ausprägungen, kann eine Hochsensibilität teilweise belastend oder
         aber auch hilfreich sein.
         Darum gibt die HighSenso App Dir nach der Befragung auch Tipps, wie Du mit der jeweiligen
         Ausprägung Deiner Hochsensibilität umgehen kannst.
     </string>
-    <string name="start_short_about">
-        Die HighSenso App wurde im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
-        \n
-        Die Fragen und Auswertung wurden aufgrund wissenschaftlicher Erkenntnisse formuliert.
-        \n
-        \n
-        Die HighSenso App kann und möchte keine medizinische oder thereapeuthische Behandlung
-        ersetzen! Fühlst Du Dich unwohl mit Aspekten deiner Hochsensibilität oder auch unabhängig
-        von einer möglichen Hochsensibilität, raten wir Dir zu einem Gespräch mit eine*r Ärzt*in
-        oder Psycholog*in!
-    </string>
+
 
     <!--    questioning fragment content-->
     <string name="question_title">This is a question title</string>
-    <string name="question_content">This is a question! Pls rate</string>
-    <string name="sb_legend_0">trifft nicht zu</string>
-    <string name="sb_legend_1">trifft kaum zu</string>
-    <string name="sb_legend_2">weder noch</string>
-    <string name="sb_legend_3">trifft etwas zu</string>
-    <string name="sb_legend_4">trifft stark zu</string>
+    <string name="question_instruction">
+        Lies Dir die Aussage gut durch und bewerte, ob sie eher auf Dich zutrifft oder eher nicht.
+    </string>
 
     <!--    personal questioning fragment content-->
     <string name="personal_questioning_title">Persönliche Angaben</string>

@@ -73,7 +73,7 @@ class PersonalQuestioningFragment : Fragment() {
         initAllEditTexts()
 
         //next button
-        binding.nextButton.setOnClickListener {
+        binding.questionNextButton.setOnClickListener {
             Timber.i("nextButton was clicked!")
             viewModel.handleNextButtonClick()
         }

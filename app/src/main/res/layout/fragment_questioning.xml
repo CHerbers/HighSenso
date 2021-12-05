@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="questioningViewModel"
             type="name.herbers.android.highsenso.questioning.QuestioningViewModel" />
@@ -23,7 +24,7 @@
             android:text="@{questioningViewModel.questionCount}"
             android:textColor="@color/questionCount_text_color"
             android:textSize="@dimen/questionCount_textSize"
-            app:layout_constraintBottom_toTopOf="@+id/questioningContent_disclaimer_textView"
+            app:layout_constraintBottom_toTopOf="@+id/result_hsp_info_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,66 +32,102 @@
             tools:text="Question Count (42/42)" />
 
         <TextView
-            android:id="@+id/questioningContent_disclaimer_textView"
-            style="@style/title_textView"
+            android:id="@+id/result_hsp_info_textView"
+            style="@style/standard_text"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text=""
+            android:text="@string/question_instruction"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.134"
-            tools:text="Little Disclaimer on how this questioning works" />
+            app:layout_constraintVertical_bias="0.135" />
+
 
         <TextView
             android:id="@+id/questionContent_textView"
-            style="@style/general_textView"
+            style="@style/questioning_textView"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/start_textView_spacing"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:padding="@dimen/question_textView_layout_padding"
             android:text="@{questioningViewModel.currentQuestionContent}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.548"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/questioningContent_disclaimer_textView"
-            app:layout_constraintVertical_bias="0.087"
-            tools:text="@string/dummy_text" />
+            app:layout_constraintTop_toBottomOf="@+id/result_hsp_info_textView"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/question_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_textView_layout_margin"
+            app:chipSpacingHorizontal="@dimen/chip_spacing"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/question_positive_chip"
+                style="@style/questioning_fragment_chip"
+                android:text="@string/agree_button"
+                android:checkable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/question_negative_chip"
+                style="@style/questioning_fragment_chip"
+                android:text="@string/decline_button"
+                android:checkable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.google.android.material.chip.ChipGroup>
 
         <Button
-            android:id="@+id/agree_button"
+            android:id="@+id/question_next_button"
             style="@style/questioning_fragment_button"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/agree_button"
+            android:text="@string/next_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias"  />
+            app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias" />
 
-        <Button
-            android:id="@+id/decline_button"
-            style="@style/questioning_fragment_button"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/standard_textView_layout_margin"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/decline_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias"  />
+        <!--        <Button-->
+        <!--            android:id="@+id/decline_button"-->
+        <!--            style="@style/questioning_fragment_button"-->
+        <!--            android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+        <!--            android:layout_marginTop="@dimen/standard_textView_layout_margin"-->
+        <!--            android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+        <!--            android:layout_marginBottom="@dimen/standard_textView_layout_margin"-->
+        <!--            android:text="@string/decline_button"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.1"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias"  />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

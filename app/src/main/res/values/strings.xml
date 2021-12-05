@@ -7,7 +7,7 @@
     <string name="privacy_setting_send_general_data_key">name_highSenso_privacy_setting_send_general_data_key</string>
     <string name="privacy_setting_send_sensor_data_key">name_highSenso_privacy_setting_send_sensor_data_key</string>
     <string name="login_data_username_key">name_highSenso_login_data_username_key</string>
-    <string name="login_data_password_hash_key">name_highSenso_login_data_password_hash_key</string>
+    <string name="login_data_token">name_highSenso_login_data_token_key</string>
 
     <!--    location keys-->
     <string name="location_option_home_key">name_highSenso_location_option_home_key</string>
@@ -32,17 +32,18 @@
     <string name="start_button"><b>Befragung starten</b></string>
 
     <!--    menu-->
-    <string name="about_menu_item_title">Über diese App</string>
+    <string name="about_menu_item_title">Über HighSenso / Impressum</string>
     <string name="reset_menu_item_title">Bewertung zurücksetzen</string>
     <string name="privacy_menu_item_title">Privatsphäre-Einstellungen</string>
 
     <!--    menu fragments-->
-    <string name="about_actionBar_title">Über diese App</string>
+    <string name="about_actionBar_title">Über HighSenso</string>
     <string name="privacy_actionBar_title">Privatsphäre</string>
 
     <!--    questioning-->
     <string name="questioning_actionBar_title">Befragung</string>
     <string name="next_button">Weiter</string>
+    <string name="confirm_and_move_to_result">Bestätigen und zum Ergebnis</string>
     <string name="back_button">Zurück</string>
     <string name="agree_button">Ja</string>
     <string name="decline_button">Nein</string>

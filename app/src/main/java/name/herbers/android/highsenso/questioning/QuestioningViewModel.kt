@@ -48,6 +48,11 @@ class QuestioningViewModel(
     val isFinished: LiveData<Boolean>
         get() = _isFinished
 
+    /* observed by QuestioningFragment, if true: navigation to ResultFragment */
+    private val _isLastQuestion = MutableLiveData(false)
+    val isLastQuestion: LiveData<Boolean>
+        get() = _isLastQuestion
+
     init {
         //load questions from database
         updateLiveData(startingQuestionPos)
@@ -78,10 +83,13 @@ class QuestioningViewModel(
         updateRatingFromSeekBar(newRating)
         _navBackToStartFrag.value = false
         //check if this is the last question
+
         if (currentQuestion.id == questions.size) {
             //initiate change to result fragment
             _isFinished.value = true
         } else {
+            //initiate next button text change
+            _isLastQuestion.value = currentQuestion.id == questions.size - 1
             //load next question
             updateLiveData(currentQuestion.id)
         }
@@ -103,7 +111,6 @@ class QuestioningViewModel(
             updateLiveData(questions.size - 1)
             return
         }
-
         currentQuestion = questions[nextQuestionIndex]
 
         //LiveData

@@ -19,7 +19,7 @@
     <item name="scroll_view_vertical_bias" format="float" type="integer">0.06</item>
     <item name="personal_questioning_item_intern_spacing" format="float" type="integer">0.005</item>
     <item name="personal_questioning_item_extern_spacing" format="float" type="integer">0.025</item>
-    <item name="personal_questioning_button_vertical_bias" format="float" type="integer">0.9</item>
+    <item name="personal_questioning_button_vertical_bias" format="float" type="integer">0.95</item>
     <item name="start_login_buttons_vertical_bias" format="float" type="integer">0.08</item>
 
     <!--    login / register dialogs-->

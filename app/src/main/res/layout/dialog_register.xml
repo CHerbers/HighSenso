@@ -119,7 +119,8 @@
             android:id="@+id/register_dialog_country_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/register_dialog_editView_margin" />
+            android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
+            android:paddingVertical="@dimen/editText_padding_top_bot" />
 
         <CheckBox
             android:id="@+id/register_dialog_privacy_checkBox"

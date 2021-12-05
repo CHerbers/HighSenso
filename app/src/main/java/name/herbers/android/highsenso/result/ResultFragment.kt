@@ -1,6 +1,7 @@
 package name.herbers.android.highsenso.result
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -55,7 +56,12 @@ class ResultFragment : Fragment() {
                 resources.getString(R.string.result_actionBar_title)
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
-        setHasOptionsMenu(true)
+        initObservers()
+        binding.linkListTextView.movementMethod = LinkMovementMethod.getInstance()
+
+
+//        binding.resultHspInfoTextView.visibility = View.GONE
+//        setHasOptionsMenu(true)
 
         /* Listener for sendResultButton */
 //        binding.sendResultButton.setOnClickListener {
@@ -80,10 +86,10 @@ class ResultFragment : Fragment() {
      * */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.i("$item clicked!")
-        return when(item.itemId){
+        return when (item.itemId) {
             android.R.id.home -> {
                 Timber.i("actionBar back button clicked!")
-                val sharedViewModel : SharedViewModel by activityViewModels()
+                val sharedViewModel: SharedViewModel by activityViewModels()
                 sharedViewModel.backFromResult = true
                 findNavController(this)
                     .navigate(R.id.action_result_destination_to_questioning_destination)
@@ -93,6 +99,20 @@ class ResultFragment : Fragment() {
         }
     }
 
+    private fun initObservers() {
+        viewModel.disableHelpTextViews.observe(viewLifecycleOwner, { disable ->
+            if (disable) {
+                Timber.i("User negative! TextViews visibility set to 'gone'!")
+                binding.resultConditionalTextView.visibility = View.GONE
+                binding.resultPersonalTextView.visibility = View.GONE
+            }
+        })
 
+        viewModel.isSuffering.observe(viewLifecycleOwner, { isSuffering ->
+            if (isSuffering) {
+                binding.sufferingMessageTextView.visibility = View.VISIBLE
+            }
+        })
+    }
 
 }

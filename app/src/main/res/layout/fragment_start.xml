@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="startViewModel"
             type="name.herbers.android.highsenso.start.StartViewModel" />
@@ -32,13 +32,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_gravity="start"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/startTitle_textView"
                     style="@style/title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/start_textView_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
@@ -49,24 +51,69 @@
                     tools:layout_editor_absoluteY="119dp" />
 
                 <TextView
-                    android:id="@+id/start_fragment_short_about_textView"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/start_fragment_welcoming_textView"
+                    style="@style/start_fragment_textView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/start_textView_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
                     android:text="@string/start_welcoming"
                     tools:layout_editor_absoluteY="249dp" />
 
                 <TextView
-                    android:id="@+id/start_fragment_sensitivity_textView"
-                    android:layout_width="wrap_content"
+                    style="@style/start_fragment_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/start_textView_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:background="@color/caution_red_background_color"
+                    android:text="@string/start_disclaimer_title" />
+
+
+                <TextView
+                    android:id="@+id/start_fragment_disclaimer_textView"
+                    style="@style/start_fragment_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:background="@color/caution_red_background_color"
+                    android:text="@string/start_disclaimer"
+                    tools:layout_editor_absoluteY="444dp" />
+
+                <TextView
+                    android:id="@+id/start_fragment_read_or_answer_textView"
+                    style="@style/start_fragment_textView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/start_textView_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:text="@string/start_read_or_answer"
+                    tools:layout_editor_absoluteY="444dp" />
+
+                <TextView
+                    android:id="@+id/start_fragment_sensitivity_title_textView"
+                    style="@style/start_fragment_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:background="@color/highlighted_light_blue_background_color"
+                    android:text="@string/start_sensitivity_title" />
+
+                <TextView
+                    android:id="@+id/start_fragment_sensitivity_textView"
+                    style="@style/start_fragment_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:background="@color/highlighted_light_blue_background_color"
                     android:text="@string/start_sensitivity_definition"
                     tools:layout_editor_absoluteY="444dp" />
 
@@ -81,7 +128,7 @@
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
                     android:text="@string/start_button"
-                    android:textSize="@dimen/button_textSize"/>
+                    android:textSize="@dimen/button_textSize" />
             </LinearLayout>
         </ScrollView>
 

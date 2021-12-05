@@ -31,12 +31,18 @@
 
 <!--    start Fragment-->
     <dimen name="start_login_buttons_textSize">14sp</dimen>
+    <dimen name="start_fragment_definition_title_textSize">24sp</dimen>
     <dimen name="start_fragment_start_button_textSize">18sp</dimen>
     <dimen name="start_textView_spacing">12dp</dimen>
 
 <!--    questioning Fragment-->
     <dimen name="questionCount_textSize">14sp</dimen>
     <dimen name="question_textView_layout_padding">24sp</dimen>
+    <dimen name="question_textSize">24sp</dimen>
+    <dimen name="question_next_button_textSize">24sp</dimen>
+    <dimen name="chip_spacing">32dp</dimen>
+    <dimen name="chip_width">160dp</dimen>
+    <dimen name="chip_height">64dp</dimen>
 
 <!--    private questioning Fragment-->
     <dimen name="personal_questioning_item_intern_spacing">8dp</dimen>

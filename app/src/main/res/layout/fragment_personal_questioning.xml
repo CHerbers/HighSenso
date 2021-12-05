@@ -248,7 +248,7 @@
             app:layout_constraintVertical_bias="@integer/personal_questioning_button_vertical_bias" />
 
         <Button
-            android:id="@+id/next_button"
+            android:id="@+id/question_next_button"
             style="@style/questioning_fragment_button"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
