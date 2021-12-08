@@ -122,13 +122,85 @@
                     tools:text="@string/dummy_text" />
 
                 <TextView
+                    android:id="@+id/result_enthusiasm_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:visibility="gone"
+                    android:text="@string/enthusiasm_message" />
+
+                <TextView
+                    android:id="@+id/result_emotional_vulnerability_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:visibility="gone"
+                    android:text="@string/emotional_vulnerability_message" />
+
+                <TextView
+                    android:id="@+id/result_self_doubt_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:visibility="gone"
+                    android:text="@string/self_doubt_message" />
+
+                <TextView
+                    android:id="@+id/result_world_pain_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:visibility="gone"
+                    android:text="@string/world_pain_message"/>
+
+                <TextView
+                    android:id="@+id/result_lingering_emotions_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:visibility="gone"
+                    android:text="@string/lingering_emotions_message" />
+
+                <TextView
+                    android:id="@+id/result_workplace_textView"
+                    style="@style/result_content_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/result_content_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:visibility="gone"
+                    android:text="@string/workplace_message" />
+
+                <TextView
                     android:id="@+id/link_list_textView"
                     style="@style/result_content_textView"
                     android:layout_marginStart="@dimen/standard_textView_layout_margin"
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:text="@{@string/list_of_hsp_links}"
+                    android:text="@string/list_of_hsp_links"
                     android:textColorLink="@color/link_text_color" />
             </LinearLayout>
         </ScrollView>

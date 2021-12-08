@@ -27,6 +27,10 @@ class SharedViewModel(
 ) : ViewModel() {
     var backFromResult: Boolean = false
 
+    private val _gatherSensorData = MutableLiveData(false)
+    val gatherSensorData: LiveData<Boolean>
+        get() = _gatherSensorData
+
     private val _locationDialogDismiss = MutableLiveData(false)
     val locationDialogDismiss: LiveData<Boolean>
         get() = _locationDialogDismiss
@@ -68,11 +72,6 @@ class SharedViewModel(
         // call handler
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("SharedViewModel destroyed!")
-    }
-
     fun handleRegisterButtonClick() {
         _startRegisterDialog.value = true
         _startRegisterDialog.value = false
@@ -85,5 +84,18 @@ class SharedViewModel(
     fun handleLoginButtonClick() {
         _startLoginDialog.value = true
         _startLoginDialog.value = false
+    }
+
+    fun startGatherSensorData(){
+        _gatherSensorData.value = true
+    }
+
+    fun stopGatherSensorData(){
+        _gatherSensorData.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Timber.i("SharedViewModel destroyed!")
     }
 }

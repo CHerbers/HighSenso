@@ -40,11 +40,19 @@
     <fragment
         android:id="@+id/about_destination"
         android:name="name.herbers.android.highsenso.menu.AboutFragment"
-        android:label="about_fragment" />
+        android:label="about_fragment" >
+        <action
+            android:id="@+id/action_about_destination_to_start_destination"
+            app:destination="@id/start_destination" />
+    </fragment>
     <fragment
         android:id="@+id/privacy_destination"
         android:name="name.herbers.android.highsenso.menu.PrivacyFragment"
-        android:label="privacy_fragment"/>
+        android:label="privacy_fragment">
+        <action
+            android:id="@+id/action_privacy_destination_to_start_destination"
+            app:destination="@id/start_destination" />
+    </fragment>
     <fragment
         android:id="@+id/personalQuestioning_destination"
         android:name="name.herbers.android.highsenso.questioning.PersonalQuestioningFragment"

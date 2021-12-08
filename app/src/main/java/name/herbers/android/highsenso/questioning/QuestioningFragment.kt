@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -92,7 +91,6 @@ class QuestioningFragment : Fragment() {
      * If clicked a fun in the [QuestioningViewModel] is called to handle the click.
      * */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Timber.i("$item clicked!")
         return when (item.itemId) {
             android.R.id.home -> {
                 Timber.i("actionBar back button clicked!")
@@ -157,8 +155,7 @@ class QuestioningFragment : Fragment() {
      * Calls functions that add Listeners to the backButton, nextButton and seekBar.
      * */
     private fun setListeners() {
-        addAnswerButtonListener(binding.questionNextButton, "agreeButton")
-//        addAnswerButtonListener(binding.declineButton, false, "declineButton")
+        addAnswerButtonListener()
         addChipListener(binding.questionPositiveChip)
         addChipListener(binding.questionNegativeChip)
     }
@@ -167,10 +164,13 @@ class QuestioningFragment : Fragment() {
      * Adds a Click Listener to the nextButton, which progresses to next [Question] or
      * to [ResultFragment].
      * */
-    private fun addAnswerButtonListener(button: Button, logMessage: String) {
-        button.setOnClickListener {
-            Timber.i("$logMessage was clicked!")
-            viewModel.handleAnswerButtonClick(binding.questionPositiveChip.isChecked)
+    private fun addAnswerButtonListener() {
+        binding.questionNextButton.setOnClickListener {
+            Timber.i("NextButton was clicked!")
+            viewModel.handleNextButtonClick(binding.questionPositiveChip.isChecked)
+            //reset checked status on both chips
+            binding.questionPositiveChip.isChecked = false
+            binding.questionNegativeChip.isChecked = false
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +12,10 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.FragmentPrivacyBinding
+import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
 
 /**
@@ -41,8 +44,12 @@ class PrivacyFragment : Fragment() {
         binding.lifecycleOwner = this
 
         //set title
-        (activity as AppCompatActivity).supportActionBar?.title =
-            resources.getString(R.string.privacy_actionBar_title)
+        val actionBar = (activity as AppCompatActivity).supportActionBar
+        if (actionBar != null) {
+            actionBar.title = resources.getString(R.string.privacy_actionBar_title)
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+        setHasOptionsMenu(true)
 
         //init switches (value and Listeners)
         initSwitches()
@@ -73,6 +80,22 @@ class PrivacyFragment : Fragment() {
         binding.privacySensorDataSwitch.setOnCheckedChangeListener { _, isChecked ->
             preferences.edit().putBoolean(sensorDataPrivacyKey, isChecked).apply()
             Timber.i("Sensor data privacy setting set to ${isChecked}!")
+        }
+    }
+
+    /**
+     * Override fun to define an action when actionBar back button is clicked.
+     * If the button is clicked, the app navigated back to the [StartFragment]
+     * */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                Timber.i("actionBar back button clicked!")
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_privacy_destination_to_start_destination)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE resources [
-<!ENTITY visit_trained_personal "Bitte wende Dich an eine Psychotherapeut*in. Ein abklärendes
-Gespräch mit einer geschulten Person kann Dir sehr dabei helfen glücklich zu werden.">
-]>
+<!DOCTYPE resources
+    [<!ENTITY visit_trained_personal "Bitte wende Dich an eine Psychotherapeut*in. Ein abklärendes
+    Gespräch mit einer geschulten Person kann Dir sehr dabei helfen glücklich zu werden.">]
+    >
 <resources>
     <!--    general HSP result-->
     <string name="general_HSP_part_0_declaration">
@@ -26,21 +26,42 @@ Gespräch mit einer geschulten Person kann Dir sehr dabei helfen glücklich zu w
         Hochsensibilität ansehen:
     </string>
     <string name="positive_HSP_message">
-        
+        Du bist ein HSP.
     </string>
-
-<!--    message if user is detected to be suffering-->
+    <!--    message if enthusiasm question was answered positively-->
+    <string name="enthusiasm_message">
+        Begeisterungsfähig
+    </string>
+<!--    message if user is emotional vulnerable-->
+    <string name="emotional_vulnerability_message">
+        Emotionale Verletzlichkeit
+    </string>
+<!--    message if user has self doubt-->
+    <string name="self_doubt_message">
+        Selbstzweifel
+    </string>
+<!--    message if user feels world pain-->
+    <string name="world_pain_message">
+        Weltschmerz
+    </string>
+<!--    message if users emotions linger-->
+    <string name="lingering_emotions_message">
+        Nachklingende Gefühle
+    </string>
+    <!--    message if user is detected to be suffering-->
     <string name="detected_suffering_positive_hsp_message">
         Du scheinst unter Aspekten Deiner Hochsensibilität stark zu leiden! &visit_trained_personal;
         Zusätzlich können Dir die folgenden Tipps dabei helfen, mit Deiner Hochsensibilität umzugehen
         und sie vielleicht sogar zu nutzen.
     </string>
     <string name="detected_suffering_negative_hsp_message">
-        Du bist zwar keine hochsensible Person, aber Du scheinst psychischem Leiden ausgesetzt zu sein!
-        &visit_trained_personal;
+        Du bist zwar keine hochsensible Person, aber Du scheinst psychischem Leiden ausgesetzt zu sein! &visit_trained_personal;
     </string>
-
-<!--    list of links to hsp related web sites-->
+    <!--    message if user seems to be uncomfortable at their workplace-->
+    <string name="workplace_message">
+        Unwohl am Arbeitsplatz
+    </string>
+    <!--    list of links to hsp related web sites-->
     <string name="list_of_hsp_links">
         <a href="https://www.aurum-cordis.de">Kompetenzzentrum für Hochsensibilität (Beratung und Coaching)</a> \n
         <a href="https://www.zartbesaitet.net">Zart Besaitet (Beratung und Informationen)</a> \n
@@ -48,5 +69,4 @@ Gespräch mit einer geschulten Person kann Dir sehr dabei helfen glücklich zu w
         <a href="https://www.hochsensibel.org">Hochsensibel.org (Informationen und Forschung)</a> \n
         <a href="https://sensitivityresearch.com">Sensivity Research (Forschung (englisch))</a> \n
     </string>
-
 </resources>

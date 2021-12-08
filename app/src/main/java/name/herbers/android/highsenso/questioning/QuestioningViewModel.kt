@@ -79,7 +79,7 @@ class QuestioningViewModel(
      * gets changed to the previous one or a fragment change to the [ResultFragment] is initiated
      * @param newRating the new rating the update function is called with
      * */
-    fun handleAnswerButtonClick(newRating: Boolean) {
+    fun handleNextButtonClick(newRating: Boolean) {
         updateRatingFromSeekBar(newRating)
         _navBackToStartFrag.value = false
         //check if this is the last question

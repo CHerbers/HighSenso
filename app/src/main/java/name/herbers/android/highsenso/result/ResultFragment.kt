@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment.findNavController
@@ -54,7 +57,7 @@ class ResultFragment : Fragment() {
         if (actionBar != null) {
             actionBar.title =
                 resources.getString(R.string.result_actionBar_title)
-            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setDisplayHomeAsUpEnabled(false)
         }
         initObservers()
         binding.linkListTextView.movementMethod = LinkMovementMethod.getInstance()
@@ -99,6 +102,9 @@ class ResultFragment : Fragment() {
         }
     }
 
+    /**
+     * This function is initiating every needed [Observer] of [LiveData] from the [ResultViewModel].
+     * */
     private fun initObservers() {
         viewModel.disableHelpTextViews.observe(viewLifecycleOwner, { disable ->
             if (disable) {
@@ -107,10 +113,30 @@ class ResultFragment : Fragment() {
                 binding.resultPersonalTextView.visibility = View.GONE
             }
         })
+        showMessageObserver(viewModel.hasEnthusiasm, binding.resultEnthusiasmTextView)
+        showMessageObserver(
+            viewModel.isEmotionalVulnerable,
+            binding.resultEmotionalVulnerabilityTextView
+        )
+        showMessageObserver(viewModel.hasSelfDoubt, binding.resultSelfDoubtTextView)
+        showMessageObserver(viewModel.hasWorldPain, binding.resultWorldPainTextView)
+        showMessageObserver(viewModel.hasLingeringEmotions, binding.resultLingeringEmotionsTextView)
+        showMessageObserver(viewModel.isSuffering, binding.sufferingMessageTextView)
+        showMessageObserver(viewModel.hasWorkplaceProblem, binding.resultWorkplaceTextView)
+    }
 
-        viewModel.isSuffering.observe(viewLifecycleOwner, { isSuffering ->
-            if (isSuffering) {
-                binding.sufferingMessageTextView.visibility = View.VISIBLE
+
+    /**
+     * Generic function to add an [Observer] to a given [LiveData] of [Boolean] type, that makes
+     * a given [TextView] visible if true.
+     *
+     * @param liveData is the [LiveData] the [Observer] is added to
+     * @param textView is the [TextView] that is set to visible if observed LiveData is set to true
+     * */
+    private fun showMessageObserver(liveData: LiveData<Boolean>, textView: TextView) {
+        liveData.observe(viewLifecycleOwner, { isTrue ->
+            if (isTrue) {
+                textView.visibility = View.VISIBLE
             }
         })
     }
