@@ -5,16 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.database.DatabaseHandler
-import name.herbers.android.highsenso.database.PersonalData
+import name.herbers.android.highsenso.database.UserProfile
 import timber.log.Timber
 
 /**
  * This [AndroidViewModel] belongs to the [MainActivity] and can therefore be accessed by
  * every Fragment of this App under this activity.
- * It is used to provide a [DatabaseHandler] and [PersonalData] to the Fragments and their
+ * It is used to provide a [DatabaseHandler] and [UserProfile] to the Fragments and their
  * corresponding ViewModels.
  * The [databaseHandler] is used to handle every database access/manipulation.
- * The [personalData] stores user data that is not permanently stored on the device while the App
+ * The [userProfile] stores user data that is not permanently stored on the device while the App
  * is alive.
  *
  * @project HighSenso
@@ -23,7 +23,7 @@ import timber.log.Timber
  * */
 class SharedViewModel(
     val databaseHandler: DatabaseHandler,
-    val personalData: PersonalData
+    val userProfile: UserProfile
 ) : ViewModel() {
     var backFromResult: Boolean = false
 
@@ -42,6 +42,10 @@ class SharedViewModel(
     private val _startLoginDialog = MutableLiveData(false)
     val startLoginDialog: LiveData<Boolean>
         get() = _startLoginDialog
+
+    private val _isLoggedIn = MutableLiveData(false)
+    val isLoggedIn: LiveData<Boolean>
+        get() = _isLoggedIn
 
     private val _errorSendingData = MutableLiveData("")
     val errorSendingData: LiveData<String>
@@ -84,6 +88,14 @@ class SharedViewModel(
     fun handleLoginButtonClick() {
         _startLoginDialog.value = true
         _startLoginDialog.value = false
+    }
+
+    fun handleLogoutButtonClick(){
+
+    }
+
+    fun changeLoginStatus(status: Boolean){
+        _isLoggedIn.value = status
     }
 
     fun startGatherSensorData(){

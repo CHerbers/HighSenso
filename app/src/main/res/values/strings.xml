@@ -3,16 +3,18 @@
     <string name="app_name">HighSenso</string>
 
     <!--    keys-->
-    <string name="privacy_setting_first_call_key">name_highSenso_privacy_setting_first_call_key</string>
-    <string name="privacy_setting_send_general_data_key">name_highSenso_privacy_setting_send_general_data_key</string>
-    <string name="privacy_setting_send_sensor_data_key">name_highSenso_privacy_setting_send_sensor_data_key</string>
-    <string name="login_data_username_key">name_highSenso_login_data_username_key</string>
-    <string name="login_data_token">name_highSenso_login_data_token_key</string>
+    <string name="privacy_setting_first_call_key">name_herbers_android_highSenso_privacy_setting_first_call_key</string>
+    <string name="privacy_setting_send_general_data_key">name_herbers_android_highSenso_privacy_setting_send_general_data_key</string>
+    <string name="privacy_setting_send_sensor_data_key">name_herbers_android_highSenso_privacy_setting_send_sensor_data_key</string>
+    <string name="login_data_username_key">name_herbers_android_highSenso_login_data_username_key</string>
+    <string name="login_data_pw_key">name_herbers_android_highSenso_login_data_pw_key</string>
+    <string name="login_data_token">name_herbers_android_highSenso_login_data_token_key</string>
+    <string name="login_data_token_expiration_date">name_herbers_android_highSenso_login_data_token_expiration_date</string>
 
     <!--    location keys-->
-    <string name="location_option_home_key">name_highSenso_location_option_home_key</string>
-    <string name="location_option_work_key">name_highSenso_location_option_work_key</string>
-    <string name="location_option_outside_key">name_highSenso_location_option_outside_key</string>
+    <string name="location_option_home_key">name_herbers_android_highSenso_location_option_home_key</string>
+    <string name="location_option_work_key">name_herbers_android_highSenso_location_option_work_key</string>
+    <string name="location_option_outside_key">name_herbers_android_highSenso_location_option_outside_key</string>
 
     <!--    start-->
     <string name="start_fragment_login_button"><b>Einloggen</b></string>

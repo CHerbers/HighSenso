@@ -89,7 +89,8 @@ class RegisterDialogFragment(
             if (noErrorMessageActive()) {
                 //TODO Send Registration (Username, Mail, Password, Country)
                 // if successful -> navigate
-                // else show error
+                // else show error and enable button again
+                binding.registerDialogRegisterButton.isEnabled = false //TODO maybe change color
             } else {
                 Toast.makeText(context, invalidInputToast, Toast.LENGTH_SHORT).show()
             }

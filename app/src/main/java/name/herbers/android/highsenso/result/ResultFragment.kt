@@ -62,7 +62,6 @@ class ResultFragment : Fragment() {
         initObservers()
         binding.linkListTextView.movementMethod = LinkMovementMethod.getInstance()
 
-
 //        binding.resultHspInfoTextView.visibility = View.GONE
 //        setHasOptionsMenu(true)
 
@@ -109,8 +108,8 @@ class ResultFragment : Fragment() {
         viewModel.disableHelpTextViews.observe(viewLifecycleOwner, { disable ->
             if (disable) {
                 Timber.i("User negative! TextViews visibility set to 'gone'!")
-                binding.resultConditionalTextView.visibility = View.GONE
-                binding.resultPersonalTextView.visibility = View.GONE
+//                binding.resultConditionalTextView.visibility = View.GONE
+//                binding.resultPersonalTextView.visibility = View.GONE
             }
         })
         showMessageObserver(viewModel.hasEnthusiasm, binding.resultEnthusiasmTextView)

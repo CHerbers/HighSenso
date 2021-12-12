@@ -10,9 +10,9 @@
 
     <!--    general-->
     <color name="fragment_background_color">#E7F5FE</color>
-    <color name="caution_red_background_color">#F4DBDC</color>
-    <color name="highlighted_light_blue_background_color">#CAE3F3</color>
-    <color name="highlighted_light_green_background_color">#BBCEA8</color>
+    <color name="caution_red_background_color">#EFDEDF</color>
+    <color name="highlighted_light_blue_background_color">#D3E8F6</color>
+    <color name="highlighted_light_green_background_color">#C1D6C0</color>
     <color name="link_text_color">#3F51B5</color>
     <!--    start fragment-->
     <color name="start_login_buttons_color">#0277BD</color>

@@ -97,6 +97,9 @@ class LoginDialogFragment(
                 loginViewModel.inputPasswordValidation(password)
             ) {
                 sharedViewModel.sendLogin(username, password)
+                binding.loginDialogLoginButton.isEnabled = false
+                //TODO change color maybe
+                //TODO enable button again if login request was denied by server (for whatever reason)
             } else {
                 Toast.makeText(context, invalidInputToast, Toast.LENGTH_SHORT).show()
             }

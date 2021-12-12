@@ -82,6 +82,7 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:background="@color/highlighted_light_blue_background_color"
                     android:text="@{resultViewModel.resultGeneralHspContent}"
                     tools:text="@string/dummy_text" />
 
@@ -97,29 +98,29 @@
                     android:visibility="gone"
                     tools:text="@string/dummy_text" />
 
-                <TextView
-                    android:id="@+id/result_personal_textView"
-                    style="@style/result_content_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/result_content_spacing"
-                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:text="@{resultViewModel.resultPersonalContent}"
-                    tools:text="@string/dummy_text" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/result_personal_textView"-->
+                <!--                    style="@style/result_content_textView"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginTop="@dimen/result_content_spacing"-->
+                <!--                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:text="@{resultViewModel.resultPersonalContent}"-->
+                <!--                    tools:text="@string/dummy_text" />-->
 
-                <TextView
-                    android:id="@+id/result_conditional_textView"
-                    style="@style/result_content_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/result_content_spacing"
-                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:text="@{resultViewModel.resultConditionalContent}"
-                    tools:text="@string/dummy_text" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/result_conditional_textView"-->
+                <!--                    style="@style/result_content_textView"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginTop="@dimen/result_content_spacing"-->
+                <!--                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"-->
+                <!--                    android:text="@{resultViewModel.resultConditionalContent}"-->
+                <!--                    tools:text="@string/dummy_text" />-->
 
                 <TextView
                     android:id="@+id/result_enthusiasm_textView"
@@ -130,8 +131,9 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:visibility="gone"
-                    android:text="@string/enthusiasm_message" />
+                    android:background="@color/highlighted_light_green_background_color"
+                    android:text="@string/enthusiasm_message"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/result_emotional_vulnerability_textView"
@@ -142,8 +144,9 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:visibility="gone"
-                    android:text="@string/emotional_vulnerability_message" />
+                    android:background="@color/highlighted_light_green_background_color"
+                    android:text="@string/emotional_vulnerability_message"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/result_self_doubt_textView"
@@ -154,8 +157,9 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:visibility="gone"
-                    android:text="@string/self_doubt_message" />
+                    android:background="@color/highlighted_light_green_background_color"
+                    android:text="@string/self_doubt_message"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/result_world_pain_textView"
@@ -166,8 +170,9 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:visibility="gone"
-                    android:text="@string/world_pain_message"/>
+                    android:background="@color/highlighted_light_green_background_color"
+                    android:text="@string/world_pain_message"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/result_lingering_emotions_textView"
@@ -178,8 +183,9 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:visibility="gone"
-                    android:text="@string/lingering_emotions_message" />
+                    android:background="@color/highlighted_light_green_background_color"
+                    android:text="@string/lingering_emotions_message"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/result_workplace_textView"
@@ -190,8 +196,9 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-                    android:visibility="gone"
-                    android:text="@string/workplace_message" />
+                    android:background="@color/highlighted_light_green_background_color"
+                    android:text="@string/workplace_message"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/link_list_textView"
@@ -200,6 +207,7 @@
                     android:layout_marginTop="@dimen/result_content_spacing"
                     android:layout_marginEnd="@dimen/standard_textView_layout_margin"
                     android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:background="@color/highlighted_light_blue_background_color"
                     android:text="@string/list_of_hsp_links"
                     android:textColorLink="@color/link_text_color" />
             </LinearLayout>

@@ -59,6 +59,7 @@ class QuestioningFragment : Fragment() {
 
         //reset backFromPersonalQuestioning
         sharedViewModel.backFromResult = false
+        sharedViewModel.startGatherSensorData()
 
         //init QuestioningViewModel
         val viewModelFactory =
@@ -77,7 +78,7 @@ class QuestioningFragment : Fragment() {
         setHasOptionsMenu(true)
 
         //add Observers
-        addLiveDataObservers()
+        addLiveDataObservers(sharedViewModel)
 
         //set Listeners
         setListeners()
@@ -104,9 +105,9 @@ class QuestioningFragment : Fragment() {
     /**
      * Calls functions that add Observers to the LiveData.
      * */
-    private fun addLiveDataObservers() {
-        addBackToStartObserver()
-        addIsFinishedObserver()
+    private fun addLiveDataObservers(sharedViewModel: SharedViewModel) {
+        addBackToStartObserver(sharedViewModel)
+        addIsFinishedObserver(sharedViewModel)
         addIsLastQuestion()
     }
 
@@ -115,9 +116,10 @@ class QuestioningFragment : Fragment() {
      * If isFirstQuestion is false after backButton is clicked, the Fragment changes
      * to [StartFragment].
      * */
-    private fun addBackToStartObserver() {
+    private fun addBackToStartObserver(sharedViewModel: SharedViewModel) {
         viewModel.navBackToStartFrag.observe(viewLifecycleOwner, { isFirstQuestion ->
             if (isFirstQuestion) {
+                sharedViewModel.stopGatherSensorData()
                 findNavController(this)
                     .navigate(R.id.action_questioning_to_start)
             }
@@ -129,9 +131,10 @@ class QuestioningFragment : Fragment() {
      * was shown.
      * If isFinished is true, Fragment changes to [PersonalQuestioningFragment]
      * */
-    private fun addIsFinishedObserver() {
+    private fun addIsFinishedObserver(sharedViewModel: SharedViewModel) {
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
+                sharedViewModel.stopGatherSensorData()
                 findNavController(this)
                     .navigate(R.id.action_questioning_destination_to_result_destination)
             }

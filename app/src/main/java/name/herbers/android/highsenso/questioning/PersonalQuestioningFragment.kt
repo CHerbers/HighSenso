@@ -17,7 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
-import name.herbers.android.highsenso.database.PersonalData
+import name.herbers.android.highsenso.database.UserProfile
 import name.herbers.android.highsenso.databinding.FragmentPersonalQuestioningBinding
 import name.herbers.android.highsenso.result.ResultFragment
 import timber.log.Timber
@@ -31,7 +31,7 @@ class PersonalQuestioningFragment : Fragment() {
 
     private lateinit var binding: FragmentPersonalQuestioningBinding
     private lateinit var viewModel: PersonalQuestioningViewModel
-    private lateinit var personalData: PersonalData
+    private lateinit var userProfile: UserProfile
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +56,7 @@ class PersonalQuestioningFragment : Fragment() {
         binding.personalQuestioningViewModel = viewModel
         binding.lifecycleOwner = this
 
-        personalData = sharedViewModel.personalData
+        userProfile = sharedViewModel.userProfile
 
         //set title
         val actionBar = (activity as AppCompatActivity).supportActionBar
@@ -117,29 +117,29 @@ class PersonalQuestioningFragment : Fragment() {
         initSpinner(
             binding.genderSpinner,
             R.array.gender_array,
-            personalData.gender
+            userProfile.gender
         )
         initSpinner(
             binding.martialStatusSpinner,
             R.array.marital_Status_array,
-            personalData.martialStatus
+            userProfile.martialStatus
         )
         initSpinner(
             binding.educationSpinner,
             R.array.education_array,
-            personalData.education
+            userProfile.education
         )
         initSpinner(
             binding.professionTypeSpinner,
             R.array.professionType_array,
-            personalData.professionType
+            userProfile.professionType
         )
     }
 
     /**
      * Fills a [Spinner] with data from a string-array given in [res].
      * Sets the current selection position of the Spinner to given [selection].
-     * Adds an [AdapterView.OnItemSelectedListener] to the Spinner which changes the [personalData]
+     * Adds an [AdapterView.OnItemSelectedListener] to the Spinner which changes the [userProfile]
      * depending on the new selection position.
      * @param spinner is the Spinner that is manipulated
      * @param res is the id of a string-array
@@ -164,20 +164,20 @@ class PersonalQuestioningFragment : Fragment() {
             ) {
                 when (spinner) {
                     binding.genderSpinner -> {
-                        personalData.gender = position
-                        Timber.i("Gender was changed to '${personalData.genderString}'!")
+                        userProfile.gender = position
+                        Timber.i("Gender was changed to '${userProfile.genderString}'!")
                     }
                     binding.martialStatusSpinner -> {
-                        personalData.martialStatus = position
-                        Timber.i("Martial status was changed to '${personalData.martialStatusString}'!")
+                        userProfile.martialStatus = position
+                        Timber.i("Martial status was changed to '${userProfile.martialStatusString}'!")
                     }
                     binding.educationSpinner -> {
-                        personalData.education = position
-                        Timber.i("Education was changed to '${personalData.educationString}'!")
+                        userProfile.education = position
+                        Timber.i("Education was changed to '${userProfile.educationString}'!")
                     }
                     binding.professionTypeSpinner ->{
-                        personalData.professionType = position
-                        Timber.i("ProfessionType was changed to '${personalData.professionTypeString}'")
+                        userProfile.professionType = position
+                        Timber.i("ProfessionType was changed to '${userProfile.professionTypeString}'")
                     }
                 }
             }
@@ -192,9 +192,9 @@ class PersonalQuestioningFragment : Fragment() {
      * Calls [initEditText] for every of the three [EditText]s.
      * */
     private fun initAllEditTexts() {
-        initEditText(binding.ageEditText, personalData.age.toString())
-        initEditText(binding.childrenEditText, personalData.children.toString())
-        initEditText(binding.professionEditText, personalData.profession)
+        initEditText(binding.ageEditText, userProfile.dateOfBirth.toString())
+        initEditText(binding.childrenEditText, userProfile.children.toString())
+        initEditText(binding.professionEditText, userProfile.profession)
     }
 
     /**
@@ -238,9 +238,9 @@ class PersonalQuestioningFragment : Fragment() {
                 }else if (s.toString() != ""){
                     /* the personalData gets updated if the changed text is not invalid nor empty */
                     when(editText){
-                        ageEditText -> personalData.age = Integer.parseInt(s.toString())
-                        childrenEditText -> personalData.children = Integer.parseInt(s.toString())
-                        professionEditText -> personalData.profession = s.toString()
+                        ageEditText -> userProfile.dateOfBirth = Integer.parseInt(s.toString())
+                        childrenEditText -> userProfile.children = Integer.parseInt(s.toString())
+                        professionEditText -> userProfile.profession = s.toString()
                     }
                 }
             }

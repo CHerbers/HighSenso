@@ -81,7 +81,7 @@ class LocationDialogFragment(
         val workButton = binding.locationDialogOptionWorkButton
         val outsideButton = binding.locationDialogOptionOutsideButton
         val elseButton = binding.locationDialogOptionElseButton
-        var currentLocation = sharedViewModel.personalData.currentLocation
+        var currentLocation = sharedViewModel.userProfile.currentLocation
 
         val listener = View.OnClickListener { view ->
             when (view) {

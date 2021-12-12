@@ -122,7 +122,7 @@ class ResultViewModel(
         if (checkSuffering()) {
             Timber.i("User seems to suffer!")
             _isSuffering.value = true
-            _resultConditionalContent.value =
+            _sufferingMessageContent.value =
                 if (ratingSum < limitPositive) appRes.getString(R.string.detected_suffering_negative_hsp_message)
                 else appRes.getString(R.string.detected_suffering_positive_hsp_message)
         }
@@ -242,6 +242,9 @@ class ResultViewModel(
             R.string.general_HSP_part_1_score,
             rating
         )
+        resultString +=
+            if (isNegative) appRes.getString(R.string.negative_HSP_message)
+            else appRes.getString(R.string.positive_HSP_message)
         return resultString
     }
 

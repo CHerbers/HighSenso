@@ -55,7 +55,8 @@
     <string name="start_sensitivity_definition">
         Hochsensibilität ist <b>keine Krankheit</b>!
         \n
-        Vielmehr ist sie eine Eigenschaft, die jeder Mensch in einem gewissen Maße besitzt.
+        Vielmehr ist sie eine wissenschaftlich belegbare Eigenschaft, die jeder Mensch in einem
+        gewissen Maße besitzt.
         Dabei geht man momentan davon aus, dass etwa 30% aller Menschen wenig oder fast nicht,
         um die 40% mittelmäßig und rund 30% sehr ausgeprägt hochsensibel sind.
         Hochsensibilität kann sich bei Menschen unterschiedlich äußern,
@@ -70,7 +71,6 @@
         Darum gibt die HighSenso App Dir nach der Befragung auch Tipps, wie Du mit der jeweiligen
         Ausprägung Deiner Hochsensibilität umgehen kannst.
     </string>
-
 
     <!--    questioning fragment content-->
     <string name="question_title">This is a question title</string>
