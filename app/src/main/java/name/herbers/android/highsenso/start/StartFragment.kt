@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.databinding.FragmentStartBinding
+import name.herbers.android.highsenso.dialogs.ConfirmationMailSentDialog
 import name.herbers.android.highsenso.dialogs.LocationDialogFragment
 import name.herbers.android.highsenso.dialogs.PrivacyDialogFragment
 import name.herbers.android.highsenso.dialogs.ResetDialogFragment
@@ -191,6 +192,7 @@ class StartFragment : Fragment() {
         setLoginButtonsObserver(sharedViewModel)
         setStartRegisterDialogObserver(sharedViewModel)
         setStartLoginDialogObserver(sharedViewModel)
+        setStartMailSentDialogObserver(sharedViewModel)
         setLocationDialogObserver(sharedViewModel)
     }
 
@@ -251,7 +253,7 @@ class StartFragment : Fragment() {
             if (startDialog) {
                 RegisterDialogFragment(sharedViewModel, loginViewModel = LoginViewModel()).show(
                     childFragmentManager,
-                    "RegisterDialog"
+                    RegisterDialogFragment.TAG
                 )
             }
         })
@@ -271,10 +273,21 @@ class StartFragment : Fragment() {
         })
     }
 
+    private fun setStartMailSentDialogObserver(sharedViewModel: SharedViewModel) {
+        sharedViewModel.startSentMailDialog.observe(viewLifecycleOwner, { startDialog ->
+            if (startDialog) {
+                ConfirmationMailSentDialog().show(
+                    childFragmentManager,
+                    ConfirmationMailSentDialog.TAG
+                )
+            }
+        })
+    }
+
     private fun showLoginDialog(sharedViewModel: SharedViewModel) {
         LoginDialogFragment(sharedViewModel, loginViewModel = LoginViewModel()).show(
             childFragmentManager,
-            "LoginDialog"
+            LoginDialogFragment.TAG
         )
     }
 
@@ -297,6 +310,7 @@ class StartFragment : Fragment() {
      * [ResetDialogFragment] is called to check if the user really wants to reset all ratings.
      * */
     private fun handleResetQuestions(): Boolean {
+        //TODO delete this
         ResetDialogFragment(startViewModel).show(childFragmentManager, ResetDialogFragment.TAG)
         return true
     }

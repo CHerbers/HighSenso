@@ -8,13 +8,17 @@ import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.RegistrationRequest
+import name.herbers.android.highsenso.data.Settings
 import name.herbers.android.highsenso.databinding.DialogRegisterBinding
+import timber.log.Timber
 import java.text.Collator
 import java.util.*
 
@@ -27,10 +31,17 @@ class RegisterDialogFragment(
     val sharedViewModel: SharedViewModel,
     val loginViewModel: LoginViewModel
 ) : DialogFragment() {
+    private lateinit var dialog: AlertDialog
     private lateinit var binding: DialogRegisterBinding
     private lateinit var editTextList: List<EditText>
 
     private val invalidInputToast = R.string.login_dialog_invalid_input_toast_message
+    private val nameAlreadyUsedToast = R.string.register_dialog_name_already_used_toast
+    private val emailAlreadyUsedToast = R.string.register_dialog_email_already_used_toast
+
+    companion object {
+        const val TAG = "RegisterDialog"
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -43,6 +54,7 @@ class RegisterDialogFragment(
 
             builder.setTitle(R.string.register_dialog_title)
             editTextList = createEditTextList()
+            addObservers()
             addAllEditTextListeners()
             setAllButtonListeners()
             initCountrySpinner()
@@ -51,9 +63,36 @@ class RegisterDialogFragment(
 
             binding.registerDialogCountrySpinner
 
-            val dialog = builder.create()
+            dialog = builder.create()
             dialog
         }
+    }
+
+    private fun addObservers() {
+        sharedViewModel.errorSendingRegisterData.observe(this, { errorMessage ->
+            if (errorMessage != "")
+                handleNegativeLoginResponse(errorMessage)
+        })
+        sharedViewModel.serverRegisterResponse.observe(this, { success ->
+            when (success) {
+                1 -> {
+                    sharedViewModel.callMailSentDialog()
+                    dismiss()
+                }
+                2 -> handleNegativeLoginResponse(getString(nameAlreadyUsedToast))
+                3 -> handleNegativeLoginResponse(getString(emailAlreadyUsedToast))
+            }
+        })
+    }
+
+
+    private fun handleNegativeLoginResponse(toastMessage: String) {
+        elementsAreEnabled(true)
+        Toast.makeText(
+            context,
+            toastMessage,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     /**
@@ -86,15 +125,54 @@ class RegisterDialogFragment(
      * */
     private fun setRegisterButtonListener() {
         binding.registerDialogRegisterButton.setOnClickListener {
-            if (noErrorMessageActive()) {
-                //TODO Send Registration (Username, Mail, Password, Country)
-                // if successful -> navigate
-                // else show error and enable button again
-                binding.registerDialogRegisterButton.isEnabled = false //TODO maybe change color
+            if (noErrorMessageActive() && binding.registerDialogPrivacyCheckBox.isChecked) {
+
+                sharedViewModel.sendRegister(
+                    RegistrationRequest(
+                        binding.registerDialogUsernameEditText.text.toString(),
+                        binding.registerDialogMailEditText.text.toString(),
+                        binding.registerDialogPasswordEditText.text.toString(),
+                        binding.registerDialogPasswordRepeatEditText.text.toString(),
+                        Settings(getSelectedCountryId())
+                    )
+                )
+                elementsAreEnabled(false)
             } else {
                 Toast.makeText(context, invalidInputToast, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    /**
+     * This function enables or disables all [Button]s as well as the possibility
+     * to dismiss this [AlertDialog] by touching outside of it.
+     * It also changes the color of the login button.
+     *
+     * @param isEnabled if true, elements are enabled, if false, elements are disabled
+     * */
+    private fun elementsAreEnabled(isEnabled: Boolean) {
+        binding.registerDialogRegisterButton.isEnabled = isEnabled
+        binding.registerDialogToLoginButton.isEnabled = isEnabled
+        dialog.setCanceledOnTouchOutside(isEnabled)
+        val backgroundColor =
+            if (isEnabled) R.color.register_dialog_button_register_color else R.color.register_dialog_disabled_button_color
+        binding.registerDialogRegisterButton.setBackgroundColor(
+            requireContext().getColor(
+                backgroundColor
+            )
+        )
+        binding.registerDialogRegisterButton.isEnabled = isEnabled
+    }
+
+    private fun getSelectedCountryId(): String {
+        val item: Any = binding.registerDialogCountrySpinner.selectedItem
+        Locale.getAvailableLocales().forEach { locale ->
+            val localeString = locale.getDisplayCountry(Locale.GERMAN)
+            if (localeString == item.toString()) {
+                return locale.toLanguageTag().split("-")[1].lowercase()
+            }
+        }
+        return ""
     }
 
     /**
@@ -110,16 +188,17 @@ class RegisterDialogFragment(
     }
 
     /**
-     * This method checks if there is an error message on any of the [EditText]s in [editTextList].
+     * This method checks if there is an error message on any of the [EditText]s in [editTextList]
+     * and if any of the EditTexts is empty.
      *
-     * @return true if there is an error message somewhere, false if not
+     * @return true if there is not an error message on any [EditText], nor empty EditTexts, false otherwise
      * */
     private fun noErrorMessageActive(): Boolean {
-        var isMessageActive = false
         editTextList.forEach { editText ->
-            isMessageActive = isMessageActive || editText.error != ""
+            if (editText.error != null || editText.text.isEmpty()) return false
         }
-        return isMessageActive
+        Timber.i("No error message active!")
+        return true
     }
 
     /**
@@ -220,6 +299,8 @@ class RegisterDialogFragment(
                 }
                 if (errorMessage != "") {
                     editText.error = errorMessage
+                } else {
+                    editText.error = null
                 }
             }
 
@@ -227,5 +308,10 @@ class RegisterDialogFragment(
                 //not needed
             }
         })
+    }
+
+    override fun onDestroy() {
+        Timber.i("RegisterDialog destroyed!")
+        super.onDestroy()
     }
 }

@@ -4,6 +4,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import name.herbers.android.highsenso.connection.ServerCommunicationHandler
+import name.herbers.android.highsenso.data.RegistrationRequest
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.UserProfile
 import timber.log.Timber
@@ -23,7 +25,8 @@ import timber.log.Timber
  * */
 class SharedViewModel(
     val databaseHandler: DatabaseHandler,
-    val userProfile: UserProfile
+    val userProfile: UserProfile,
+    val communicationHandler: ServerCommunicationHandler
 ) : ViewModel() {
     var backFromResult: Boolean = false
 
@@ -43,17 +46,29 @@ class SharedViewModel(
     val startLoginDialog: LiveData<Boolean>
         get() = _startLoginDialog
 
+    private val _startSentMailDialog = MutableLiveData(false)
+    val startSentMailDialog: LiveData<Boolean>
+        get() = _startSentMailDialog
+
     private val _isLoggedIn = MutableLiveData(false)
     val isLoggedIn: LiveData<Boolean>
         get() = _isLoggedIn
 
-    private val _errorSendingData = MutableLiveData("")
+    private val _errorSendingLoginData = MutableLiveData("")
     val errorSendingData: LiveData<String>
-        get() = _errorSendingData
+        get() = _errorSendingLoginData
+
+    private val _errorSendingRegisterData = MutableLiveData("")
+    val errorSendingRegisterData: LiveData<String>
+        get() = _errorSendingRegisterData
 
     private val _serverLoginResponse = MutableLiveData(-1)
     val serverLoginResponse: LiveData<Int>
         get() = _serverLoginResponse
+
+    private val _serverRegisterResponse = MutableLiveData(-1)
+    val serverRegisterResponse: LiveData<Int>
+        get() = _serverRegisterResponse
 
     init {
         Timber.i("SharedViewModel created!")
@@ -66,14 +81,22 @@ class SharedViewModel(
      * This is done after the [name.herbers.android.highsenso.dialogs.LocationDialogFragment] is
      * dismissed.
      * */
-    fun dialogGetsDismissed() {
+    fun locationDialogGetsDismissed() {
         _locationDialogDismiss.value = true
         _locationDialogDismiss.value = false
     }
 
+    fun callMailSentDialog(){
+        _startSentMailDialog.value = true
+        _startSentMailDialog.value = false
+    }
+
     fun sendLogin(username: String, password: String) {
-        //TODO hash password
         // call handler
+    }
+
+    fun sendRegister(registrationRequest: RegistrationRequest) {
+        communicationHandler.sendRegisterRequest(registrationRequest)
     }
 
     fun handleRegisterButtonClick() {
@@ -90,19 +113,19 @@ class SharedViewModel(
         _startLoginDialog.value = false
     }
 
-    fun handleLogoutButtonClick(){
+    fun handleLogoutButtonClick() {
 
     }
 
-    fun changeLoginStatus(status: Boolean){
+    fun changeLoginStatus(status: Boolean) {
         _isLoggedIn.value = status
     }
 
-    fun startGatherSensorData(){
+    fun startGatherSensorData() {
         _gatherSensorData.value = true
     }
 
-    fun stopGatherSensorData(){
+    fun stopGatherSensorData() {
         _gatherSensorData.value = false
     }
 

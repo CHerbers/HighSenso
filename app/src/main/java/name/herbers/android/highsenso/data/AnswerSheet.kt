@@ -1,17 +1,14 @@
 package name.herbers.android.highsenso.data
 
-import java.util.*
-
 /**
  *
  *@project HighSenso
  *@author Herbers
  */
 data class AnswerSheet(
-    val collected_at: Int,
+    val collected_at: Long,
     val locale: String,
-    val answers: Array<Objects>,
-    val sensordata: Array<Objects>
-) {
-
-}
+    val answers: List<Answer>,
+    val sensorData: List<SensorData>,
+    val client: Client
+)

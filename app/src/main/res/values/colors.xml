@@ -34,5 +34,6 @@
     <!--    register/login dialog-->
     <color name="register_dialog_button_register_color">#154F30</color>
     <color name="register_dialog_button_to_login_color">#333333</color>
+    <color name="register_dialog_disabled_button_color">#888888</color>
     <color name="login_dialog_forgotPW_text_color">#FF018786</color>
 </resources>

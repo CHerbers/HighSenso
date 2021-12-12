@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/register_dialog_mail_editText_default"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:maxLength="@integer/mail_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/register_dialog_mail_repeat_editText_default"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:maxLength="@integer/mail_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
         </com.google.android.material.textfield.TextInputLayout>

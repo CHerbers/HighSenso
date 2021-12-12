@@ -49,7 +49,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var mSensorManager: SensorManager
     private lateinit var sensorList: List<Sensor>
 
-    private val audioSensorMeasuringDuration = 8
+    companion object{
+        private const val SERVER_URL = "https://www.google.com"
+        private const val AUDIO_SENSOR_MEASURING_DURATION = 8
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,19 +77,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             res.getStringArray(R.array.professionType_array).toList()
         )
 
+        /* HTTP Connection */
+        val serverCommunicationHandler = ServerCommunicationHandler(SERVER_URL, this)
+
         //init sharedViewModel
         val sharedViewModelFactory =
-            SharedViewModelFactory(databaseHandler, personalData)
+            SharedViewModelFactory(databaseHandler, personalData, serverCommunicationHandler)
         sharedViewModel = ViewModelProvider(
             this,
             sharedViewModelFactory
         ).get(SharedViewModel::class.java)
 
         repTaskHandler = Handler()
-
-        /* HTTP Connection */
-        val serverCommunicationHandler = ServerCommunicationHandler("https://www.google.com", this)
-//        httpConnection.sendGETRequest()
 
         /* Login check and load questions and answerSheets if logged in */
         val token = preferences.getString(getString(R.string.login_data_token), null)
@@ -232,7 +234,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Timber.i("Permission to record Audio granted! Recorder will be started!")
             val ambientAudioRecorder = AmbientAudioRecorder()
             val recordedAudio =
-                ambientAudioRecorder.getAverageAmbientAudio(audioSensorMeasuringDuration)
+                ambientAudioRecorder.getAverageAmbientAudio(AUDIO_SENSOR_MEASURING_DURATION)
             //TODO save recorded audio in list
         } else {
             requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)

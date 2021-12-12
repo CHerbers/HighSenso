@@ -10,45 +10,107 @@ import androidx.lifecycle.ViewModel
  *@project HighSenso
  *@author Herbers
  */
-class LoginViewModel: ViewModel() {
+class LoginViewModel : ViewModel() {
 
-
-    fun getUsernameErrorMessage(input: String): String{
-        var errorMessage = ""
-
-        return errorMessage
+    companion object {
+        private const val INVALID_USERNAME_MESSAGE = "Ungültiger Name!"
+        private const val INVALID_MAIL_MESSAGE = "Ungültige E-Mail!"
+        private const val INVALID_REPEAT_MAIL_MESSAGE = "Nicht-identische E-Mail-Adressen!"
+        private const val INVALID_PASSWORD_MESSAGE = "Passwort zu kurz!"
+        private const val INVALID_REPEAT_PASSWORD_MESSAGE = "Nicht-identische Passwörter!"
     }
 
-    fun getMailErrorMessage(input: String): String{
-        var errorMessage = ""
-        return errorMessage
+    /**
+     * Creates an error message for a given username, depending on its validity.
+     *
+     * @param name the username the error message is created for
+     * @return an error message if invalid, an empty string otherwise
+     * */
+    fun getUsernameErrorMessage(name: String): String {
+        return if (inputUsernameValidation(name)) ""
+        else INVALID_USERNAME_MESSAGE
     }
 
-    fun getMailRepeatErrorMessage(input: String, reference: String): String{
-        var errorMessage = ""
-        return errorMessage
+    /**
+     * Creates an error message for a given email address, depending on its validity.
+     *
+     * @param mail the email the error message is created for
+     * @return an error message if invalid, an empty string otherwise
+     * */
+    fun getMailErrorMessage(mail: String): String {
+        return if (inputMailValidation(mail)) ""
+        else INVALID_MAIL_MESSAGE
     }
 
-    fun getPasswordErrorMessage(input: String): String{
-        var errorMessage = ""
-        return errorMessage
+    /**
+     * Creates an error message for a given email, depending if its identical to the reference email.
+     *
+     * @param mail the email the error message is created for
+     * @param reference the reference email to check for identity
+     * @return an error message if not identical, an empty string otherwise
+     * */
+    fun getMailRepeatErrorMessage(mail: String, reference: String): String {
+        return if (mail == reference) ""
+        else INVALID_REPEAT_MAIL_MESSAGE
     }
 
-    fun getPasswordRepeatErrorMessage(input: String, reference: String): String{
-        var errorMessage = ""
-        return errorMessage
+    /**
+     * Creates an error message for a given password, depending on its validity.
+     *
+     * @param password the password the error message is created for
+     * @return an error message if invalid, an empty string otherwise
+     * */
+    fun getPasswordErrorMessage(password: String): String {
+        return if (inputPasswordValidation(password)) ""
+        else INVALID_PASSWORD_MESSAGE
     }
 
+    /**
+     * Creates an error message for a given password, depending if its identical to the reference password.
+     *
+     * @param password the password the error message is created for
+     * @param reference the reference password to check for identity
+     * @return an error message if not identical, an empty string otherwise
+     * */
+    fun getPasswordRepeatErrorMessage(password: String, reference: String): String {
+        return if (password == reference) ""
+        else INVALID_REPEAT_PASSWORD_MESSAGE
+    }
+
+    /**
+     * This function checks if the given username is a valid one.
+     *
+     * @param username the username to check
+     * @return true if the username is valid, false otherwise
+     * */
     fun inputUsernameValidation(username: String): Boolean {
+        //TODO validate name
         return true
     }
 
-    fun inputMailValidation(mail: String): Boolean{
-        return true
+    /**
+     * This function checks if the given email is a valid one.
+     *
+     * @param email the email to check
+     * @return true if the email is valid, false otherwise
+     * */
+    fun inputMailValidation(email: String): Boolean {
+        if (email.contains('@')) {
+            val domain = email.split("@")[1]
+            if (domain.contains('.'))
+                return domain.split(".")[1].length > 1
+        }
+        return false
     }
 
+    /**
+     * This function checks if the given password is a valid one.
+     *
+     * @param password the password to check
+     * @return true if the password is valid, false otherwise
+     * */
     fun inputPasswordValidation(password: String): Boolean {
-        return true
+        //TODO missing validation?
+        return password.length > 5
     }
-
 }

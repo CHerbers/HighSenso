@@ -91,7 +91,7 @@ class LocationDialogFragment(
                 elseButton -> currentLocation = 3
             }
             Timber.i("Current location is: $currentLocation")
-            sharedViewModel.dialogGetsDismissed()
+            sharedViewModel.locationDialogGetsDismissed()
             dismiss()
         }
         homeButton.setOnClickListener(listener)

@@ -12,6 +12,17 @@
     <string name="reset_dialog_message">Do you really want to reset all of your question ratings?</string>
     <string name="reset_dialog_toast_message">Questions have been reset!</string>
 
+<!--    confirmation mail sent dialog-->
+    <string name="confirmation_mail_sent_dialog_title">E-Mail bestätigen</string>
+    <string name="confirmation_mail_sent_dialog_message">
+        An Deine E-Mail-Adresse wurde eine Bestätigungs-Mail gesendet.
+        \n
+        Öffne den Link in der Mail um die Registrierung abzuschließen.
+        \n
+        Im Anschluss kannst Du Dich einloggen.
+    </string>
+    <string name="confirmation_mail_sent_dialog_button">OK</string>
+
     <!--    privacy dialog-->
     <string name="privacy_dialog_title">Privatsphäre-Einstellungen</string>
     <string name="privacy_dialog_message">
@@ -76,6 +87,8 @@
         Indem du dich registrierst, stimmst du den <a href="http://www.google.com">Datenschutzrichtlinien</a> zu.
     </string>
     <string name="register_dialog_register_button">Registrieren</string>
+    <string name="register_dialog_name_already_used_toast">Name wird bereits verwendet.</string>
+    <string name="register_dialog_email_already_used_toast">E-Mail wird bereits verwendet.</string>
     <string name="register_dialog_to_login_button">
         Bereits registriert?
         \n

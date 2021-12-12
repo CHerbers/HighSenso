@@ -2,6 +2,7 @@ package name.herbers.android.highsenso
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.UserProfile
 
@@ -17,12 +18,13 @@ import name.herbers.android.highsenso.database.UserProfile
  * */
 class SharedViewModelFactory(
     private val databaseHandler: DatabaseHandler,
-    private val userProfile: UserProfile
+    private val userProfile: UserProfile,
+    private val communicationHandler: ServerCommunicationHandler
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SharedViewModel::class.java)) {
-            return SharedViewModel(databaseHandler, userProfile) as T
+            return SharedViewModel(databaseHandler, userProfile, communicationHandler) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

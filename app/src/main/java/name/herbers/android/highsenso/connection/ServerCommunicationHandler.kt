@@ -7,6 +7,9 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
 import name.herbers.android.highsenso.data.AnswerSheet
+import name.herbers.android.highsenso.data.Data
+import name.herbers.android.highsenso.data.RegistrationRequest
+import name.herbers.android.highsenso.data.RequestData
 import org.json.JSONException
 import timber.log.Timber
 import java.util.*
@@ -45,8 +48,9 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    fun sendRegisterRequest(requestBody: Objects) {
+    fun sendRegisterRequest(registrationRequest: RegistrationRequest) {
         val url = serverURL
+        val request = RequestData(Data("users", registrationRequest))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
             url,
@@ -59,7 +63,8 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
                 //TODO Error handling
             }) {
             override fun getBody(): ByteArray {
-                val bodyJSON = gson.toJson(requestBody)
+                val bodyJSON = gson.toJson(request)
+                Timber.i("Request: $bodyJSON")
                 return bodyJSON.toString().toByteArray()
             }
 

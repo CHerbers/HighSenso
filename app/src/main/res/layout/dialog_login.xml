@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/login_dialog_username_editText_default"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
         </com.google.android.material.textfield.TextInputLayout>
 
