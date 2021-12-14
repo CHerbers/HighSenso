@@ -1,5 +1,7 @@
 package name.herbers.android.highsenso.database
 
+import name.herbers.android.highsenso.data.AnswerSheet
+
 /**
  *
  *@project HighSenso
@@ -20,7 +22,8 @@ data class UserProfile(
     var children: Int = 0,
     var education: Int = 0,
     var professionType: Int = 0,
-    var profession: String = ""
+    var profession: String = "",
+    var hspScalaSheet: AnswerSheet? = null
 ) {
     val currentLocationString: String
         get() {
@@ -52,7 +55,7 @@ data class UserProfile(
 
     val professionTypeString: String
         get() {
-            return if(professionType >= 0 && professionTypeList.size > professionType)
+            return if (professionType >= 0 && professionTypeList.size > professionType)
                 professionTypeList[professionType]
             else ""
         }

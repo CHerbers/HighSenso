@@ -59,7 +59,7 @@ class StartViewModelTest {
     @Test
     fun handleResetQuestions() = coroutinesRule.testDispatcher.runBlockingTest {
         //reset questions (fun to test)
-        startViewModel.handleResetQuestions()
+        startViewModel.handleResetPassword()
 
         //test -> load questions from database and check if rating equals -1
         questionDao.getAllQuestions().forEach { question ->

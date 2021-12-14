@@ -8,11 +8,16 @@
     <string name="decline_all_button">Alles Ablehnen</string>
 
     <!--    reset dialog-->
-    <string name="reset_dialog_title">Reset Questions</string>
-    <string name="reset_dialog_message">Do you really want to reset all of your question ratings?</string>
-    <string name="reset_dialog_toast_message">Questions have been reset!</string>
+    <string name="reset_dialog_title">Passwort zurücksetzen</string>
+    <string name="reset_dialog_message">
+        Möchtest Du Dein Passwort zurücksetzten?\n
+        Trage hier Deine E-Mail-Adresse ein, mit der Du Dich registriert hast. Wir schicken Dir
+        daraufhin einen Link, mit dem Du Dein Passwort zurückzusetzen kannst.
+    </string>
+    <string name="reset_dialog_toast_message">Link wurde gesendet</string>
+    <string name="reset_dialog_accept_button">Passwort \n zurücksetzen</string>
 
-<!--    confirmation mail sent dialog-->
+    <!--    confirmation mail sent dialog-->
     <string name="confirmation_mail_sent_dialog_title">E-Mail bestätigen</string>
     <string name="confirmation_mail_sent_dialog_message">
         An Deine E-Mail-Adresse wurde eine Bestätigungs-Mail gesendet.

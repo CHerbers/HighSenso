@@ -1,7 +1,5 @@
 package name.herbers.android.highsenso.start
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
@@ -20,9 +18,7 @@ class StartViewModel(
     val databaseHandler: DatabaseHandler
 ) : ViewModel() {
 
-    private val _resetDone = MutableLiveData(false)
-    val resetDone: LiveData<Boolean>
-        get() = _resetDone
+
 
     init {
         Timber.i("StartViewModel created!")
@@ -33,15 +29,13 @@ class StartViewModel(
      * default (unrated) rating (-1).
      * After changing rating [_resetDone] is set to true to trigger its observer in [StartFragment].
      * */
-    fun handleResetQuestions() {
+    //TODO delete this
+    fun resetAllQuestionRatings(){
         //set questions rating to default value (-1)
         databaseHandler.questions.forEach { question ->
             question.rating = false
             databaseHandler.updateDatabase(question)
         }
-        //trigger Toast message on StartFragment
-        _resetDone.value = true
-        _resetDone.value = false
     }
 
     override fun onCleared() {

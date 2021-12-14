@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.LoginRequest
 import name.herbers.android.highsenso.databinding.DialogLoginBinding
 import timber.log.Timber
 
@@ -117,7 +118,7 @@ class LoginDialogFragment(
                         loginViewModel.inputMailValidation(username)) &&
                 loginViewModel.inputPasswordValidation(password)
             ) {
-                sharedViewModel.sendLogin(username, password)
+                sharedViewModel.sendLogin(LoginRequest(username, password))
                 elementsAreEnabled(false)
             } else {
                 Toast.makeText(context, invalidInputToast, Toast.LENGTH_SHORT).show()

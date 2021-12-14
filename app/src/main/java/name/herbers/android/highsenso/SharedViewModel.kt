@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
+import name.herbers.android.highsenso.data.LoginRequest
 import name.herbers.android.highsenso.data.RegistrationRequest
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.UserProfile
@@ -46,6 +47,10 @@ class SharedViewModel(
     val startLoginDialog: LiveData<Boolean>
         get() = _startLoginDialog
 
+    private val _startResetPasswordDialog = MutableLiveData(false)
+    val startResetPasswordDialog: LiveData<Boolean>
+        get() = _startResetPasswordDialog
+
     private val _startSentMailDialog = MutableLiveData(false)
     val startSentMailDialog: LiveData<Boolean>
         get() = _startSentMailDialog
@@ -53,6 +58,10 @@ class SharedViewModel(
     private val _isLoggedIn = MutableLiveData(false)
     val isLoggedIn: LiveData<Boolean>
         get() = _isLoggedIn
+
+    private val _resetPasswordSent = MutableLiveData(false)
+    val resetPasswordSent: LiveData<Boolean>
+        get() = _resetPasswordSent
 
     private val _errorSendingLoginData = MutableLiveData("")
     val errorSendingData: LiveData<String>
@@ -91,12 +100,12 @@ class SharedViewModel(
         _startSentMailDialog.value = false
     }
 
-    fun sendLogin(username: String, password: String) {
-        // call handler
+    fun sendLogin(loginRequest: LoginRequest) {
+        communicationHandler.sendLoginRequest(loginRequest)
     }
 
     fun sendRegister(registrationRequest: RegistrationRequest) {
-        communicationHandler.sendRegisterRequest(registrationRequest)
+        communicationHandler.sendRegistrationRequest(registrationRequest)
     }
 
     fun handleRegisterButtonClick() {
@@ -105,7 +114,8 @@ class SharedViewModel(
     }
 
     fun handleForgotPasswordClick() {
-        //TODO reset password
+        _startResetPasswordDialog.value = true
+        _startResetPasswordDialog.value = false
     }
 
     fun handleLoginButtonClick() {
@@ -127,6 +137,10 @@ class SharedViewModel(
 
     fun stopGatherSensorData() {
         _gatherSensorData.value = false
+    }
+
+    fun handleResetPassword(email: String) {
+        communicationHandler.sendResetPasswordRequest(email)
     }
 
     override fun onCleared() {

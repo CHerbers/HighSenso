@@ -6,14 +6,9 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
-import name.herbers.android.highsenso.data.AnswerSheet
-import name.herbers.android.highsenso.data.Data
-import name.herbers.android.highsenso.data.RegistrationRequest
-import name.herbers.android.highsenso.data.RequestData
+import name.herbers.android.highsenso.data.*
 import org.json.JSONException
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  *
@@ -48,14 +43,14 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    fun sendRegisterRequest(registrationRequest: RegistrationRequest) {
+    fun sendRegistrationRequest(registrationRequest: RegistrationRequest) {
         val url = serverURL
         val request = RequestData(Data("users", registrationRequest))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
             url,
             { response ->
-                Timber.i("Received response to send register request is: $response")
+                Timber.i("Received response to send register request: $response")
                 //TODO show Dialog "U got Mail -> OK"
             },
             { error ->
@@ -64,7 +59,7 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
             }) {
             override fun getBody(): ByteArray {
                 val bodyJSON = gson.toJson(request)
-                Timber.i("Request: $bodyJSON")
+                Timber.i("Registration request sent: $bodyJSON")
                 return bodyJSON.toString().toByteArray()
             }
 
@@ -78,13 +73,14 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    fun sendLoginRequest(requestBody: Objects) {
+    fun sendLoginRequest(loginRequest: LoginRequest) {
         val url = serverURL
+        val request = RequestData(Data("users", loginRequest))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
             url,
             { response ->
-                Timber.i("Received response to send login request is: $response")
+                Timber.i("Received response to send login request: $response")
                 //TODO save the received token
                 // send GET to get the questions into send GET to get all sheets
             },
@@ -92,15 +88,13 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
                 Timber.i("Received error after registerRequest: $error")
             }) {
             override fun getBody(): ByteArray {
-                val bodyJSON = gson.toJson(requestBody)
+                val bodyJSON = gson.toJson(request)
+                Timber.i("Login request sent: $bodyJSON")
                 return bodyJSON.toString().toByteArray()
             }
-
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Content-Type"] = "application/json"
-                return headers
+                return addHeader(contentHeader = true, languageHeader = true)
             }
         }
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
@@ -109,49 +103,49 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
     fun sendAnswerSheet(token: String, answerSheet: AnswerSheet) {
         val url =
             serverURL + questionnairesURLString + answerSheetURLString + tokenURLString + token
+        val request = RequestData(Data("questionnaires", answerSheet))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
             url,
             { response ->
-                Timber.i("Received response to send answerSheet (POST) is: $response")
+                Timber.i("Received response to send answerSheet (POST): $response")
             },
             { error ->
                 Timber.i("Received error after registerRequest: $error")
 
             }) {
             override fun getBody(): ByteArray {
-                val bodyJSON = gson.toJson(answerSheet)
+                val bodyJSON = gson.toJson(request)
+                Timber.i("AnswerSheet sent: $bodyJSON")
                 return bodyJSON.toString().toByteArray()
             }
-
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Content-Type"] = "application/json"
-                return headers
+                return addHeader(contentHeader = true, languageHeader = true)
             }
         }
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    fun sendResetPasswordRequest() {}
+    fun sendResetPasswordRequest(email: String) {}
 
-    fun getQuestionnaire(token: String){}
+    fun getQuestionnaire(token: String) {}
 
     fun getAllAnswerSheets(token: String) {
         val url = serverURL + questionnairesURLString + tokenURLString + token
         val answerSheets: Array<AnswerSheet>
-        val jsonObjectRequest: JsonObjectRequest = JsonObjectRequest(
+        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
             Request.Method.GET,
-            serverURL,
+            url,
             null,
             { response ->
                 Timber.i("Received response to get AnswerSheets request is: $response")
                 try {
-                    val data = response.getJSONArray("data")
-                    for (i in 0 until data.length()) {
-                        answerSheetList.add(data.get(i) as AnswerSheet)
-                    }
+
+//                    val data = response.getJSONObject("data").getJSONObject("answerSheets")
+//                    for (i in 0 until data.length()) {
+//                        answerSheetList.add(data.get(i) as AnswerSheet)
+//                    }
                     //TODO save answerSheets in ViewModel?
                 } catch (e: JSONException) {
 
@@ -159,7 +153,19 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
             },
             { error ->
                 Timber.i("Received error after get AnswerSheets request: $error")
-            })
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                return addHeader(contentHeader = false, languageHeader = true)
+            }
+        }
         RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
+    }
+
+    private fun addHeader(contentHeader: Boolean, languageHeader: Boolean): Map<String, String> {
+        val headers = HashMap<String, String>()
+        if (contentHeader) headers["Content-Type"] = "application/json"
+        if (languageHeader) headers["Accept-Language"] = "de"
+        return headers
     }
 }

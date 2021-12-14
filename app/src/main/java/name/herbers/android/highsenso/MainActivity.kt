@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         preferences = this.getPreferences(Context.MODE_PRIVATE)
 
         //init personalData with string-arrays as param
-        val personalData = UserProfile(
+        val userProfile = UserProfile(
             locationList(),
             res.getStringArray(R.array.gender_array).toList(),
             res.getStringArray(R.array.marital_Status_array).toList(),
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         //init sharedViewModel
         val sharedViewModelFactory =
-            SharedViewModelFactory(databaseHandler, personalData, serverCommunicationHandler)
+            SharedViewModelFactory(databaseHandler, userProfile, serverCommunicationHandler)
         sharedViewModel = ViewModelProvider(
             this,
             sharedViewModelFactory

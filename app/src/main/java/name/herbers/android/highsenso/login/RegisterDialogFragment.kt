@@ -44,7 +44,6 @@ class RegisterDialogFragment(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         return activity.let {
             binding = DataBindingUtil.inflate(
                 LayoutInflater.from(context), R.layout.dialog_register, null, false

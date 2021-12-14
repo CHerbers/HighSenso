@@ -112,7 +112,7 @@ class ResultViewModel(
         Timber.i("Total rating sum: $ratingSum!")
 
         /* General check if user is a HSP and generating message */
-        _resultGeneralHspContent.value = buildGeneralResultString(ratingSum)
+        _resultGeneralHspContent.value = buildGeneralResultString(ratingSum, 1) //TODO implement iteration count
 
         /* checks the influence questions (besides suffering and workplace) and triggers actions to
         * show their specific messages onscreen */
@@ -146,7 +146,7 @@ class ResultViewModel(
         for (i in 27..31) {
             val currentQuestion = questions[i]
             if (currentQuestion.rating) {
-                Timber.i(currentQuestion.toString())
+                Timber.i(currentQuestion.toString()) //TODO check for question.value instead of the id
                 when (currentQuestion.id) {
                     28 -> _hasEnthusiasm.value = true
                     29 -> _isEmotionalVulnerable.value = true
@@ -220,7 +220,7 @@ class ResultViewModel(
      * HSP-Scala-Score.
      * */
     @SuppressLint("StringFormatMatches")
-    fun buildGeneralResultString(rating: Int): String {
+    fun buildGeneralResultString(rating: Int, iteration: Int): String {
         var resultString: String
         val isNegative = rating < limitPositive
 
@@ -245,6 +245,7 @@ class ResultViewModel(
         resultString +=
             if (isNegative) appRes.getString(R.string.negative_HSP_message)
             else appRes.getString(R.string.positive_HSP_message)
+        resultString += appRes.getString(R.string.general_HSP_part_2_iteration, iteration)
         return resultString
     }
 

@@ -22,7 +22,7 @@ import name.herbers.android.highsenso.databinding.FragmentStartBinding
 import name.herbers.android.highsenso.dialogs.ConfirmationMailSentDialog
 import name.herbers.android.highsenso.dialogs.LocationDialogFragment
 import name.herbers.android.highsenso.dialogs.PrivacyDialogFragment
-import name.herbers.android.highsenso.dialogs.ResetDialogFragment
+import name.herbers.android.highsenso.dialogs.ResetPasswordDialogFragment
 import name.herbers.android.highsenso.login.LoginDialogFragment
 import name.herbers.android.highsenso.login.LoginViewModel
 import name.herbers.android.highsenso.login.RegisterDialogFragment
@@ -49,6 +49,7 @@ class StartFragment : Fragment() {
     private lateinit var startViewModel: StartViewModel
     private lateinit var binding: FragmentStartBinding
     private lateinit var preferences: SharedPreferences
+    private val loginViewModel = LoginViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,7 +107,7 @@ class StartFragment : Fragment() {
         Timber.i("Menu Item \"${item.title}\" was selected!")
         return when (item.itemId) {
             //reset question ratings
-            R.id.reset_rating_destination -> handleResetQuestions()
+//            R.id.reset_rating_destination -> handleResetQuestions()
             //navigate to AboutFragment
             R.id.about_destination -> NavigationUI.onNavDestinationSelected(
                 item,
@@ -188,10 +189,11 @@ class StartFragment : Fragment() {
      * */
     private fun setAllObservers() {
         val sharedViewModel: SharedViewModel by activityViewModels()
-        setResetObserver()
+        setResetObserver(sharedViewModel)
         setLoginButtonsObserver(sharedViewModel)
         setStartRegisterDialogObserver(sharedViewModel)
         setStartLoginDialogObserver(sharedViewModel)
+        setStartResetPasswordDialogObserver(sharedViewModel)
         setStartMailSentDialogObserver(sharedViewModel)
         setLocationDialogObserver(sharedViewModel)
     }
@@ -230,14 +232,31 @@ class StartFragment : Fragment() {
      * Sets an Observer to [StartViewModel.resetDone]. Shows a [Toast] message onscreen if true.
      * Message tells user that the reset is done.
      * */
-    private fun setResetObserver() {
-        startViewModel.resetDone.observe(viewLifecycleOwner, { resetDone ->
+    private fun setResetObserver(sharedViewModel: SharedViewModel) {
+        sharedViewModel.resetPasswordSent.observe(viewLifecycleOwner, { resetDone ->
             if (resetDone) {
                 Toast.makeText(
                     context,
                     R.string.reset_dialog_toast_message,
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        })
+    }
+
+    /**
+     * Sets an Observer to [StartViewModel.startResetPasswordDialog]. Starts the [ResetPasswordDialogFragment]
+     * if true.
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
+     * */
+    private fun setStartResetPasswordDialogObserver(sharedViewModel: SharedViewModel) {
+        sharedViewModel.startResetPasswordDialog.observe(viewLifecycleOwner, { startDialog ->
+            if (startDialog) {
+                ResetPasswordDialogFragment(sharedViewModel, loginViewModel).show(
+                    childFragmentManager,
+                    ResetPasswordDialogFragment.TAG
+                )
             }
         })
     }
@@ -251,7 +270,7 @@ class StartFragment : Fragment() {
     private fun setStartRegisterDialogObserver(sharedViewModel: SharedViewModel) {
         sharedViewModel.startRegisterDialog.observe(viewLifecycleOwner, { startDialog ->
             if (startDialog) {
-                RegisterDialogFragment(sharedViewModel, loginViewModel = LoginViewModel()).show(
+                RegisterDialogFragment(sharedViewModel, loginViewModel).show(
                     childFragmentManager,
                     RegisterDialogFragment.TAG
                 )
@@ -285,7 +304,7 @@ class StartFragment : Fragment() {
     }
 
     private fun showLoginDialog(sharedViewModel: SharedViewModel) {
-        LoginDialogFragment(sharedViewModel, loginViewModel = LoginViewModel()).show(
+        LoginDialogFragment(sharedViewModel, loginViewModel).show(
             childFragmentManager,
             LoginDialogFragment.TAG
         )
@@ -307,13 +326,12 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * [ResetDialogFragment] is called to check if the user really wants to reset all ratings.
+     * [ResetPasswordDialogFragment] is called to check if the user really wants to reset all ratings.
      * */
-    private fun handleResetQuestions(): Boolean {
-        //TODO delete this
-        ResetDialogFragment(startViewModel).show(childFragmentManager, ResetDialogFragment.TAG)
-        return true
-    }
+//    private fun handleResetQuestions(sharedViewModel: SharedViewModel): Boolean {
+//        ResetPasswordDialogFragment(sharedViewModel, loginViewModel).show(childFragmentManager, ResetPasswordDialogFragment.TAG)
+//        return true
+//    }
 
     /**
      * This function is checking if its the first start of the App. If so the [PrivacyDialogFragment]

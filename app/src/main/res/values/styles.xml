@@ -88,6 +88,13 @@
     <style name="about_fragment_textView" parent="general_textView">
         <item name="android:textAlignment">viewStart</item>
     </style>
+
+<!--    reset password dialog-->
+    <style name="reset_password_dialog_button" parent="general_button">
+        <item name="android:textSize">@dimen/reset_password_dialog_button_textSize</item>
+        <item name="android:layout_height">@dimen/reset_password_dialog_button_height</item>
+    </style>
+
     <!--    location dialog-->
     <style name="location_dialog_button" parent="standard_text">
         <item name="android:textSize">@dimen/location_dialog_button_textSize</item>
