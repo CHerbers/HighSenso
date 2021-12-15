@@ -87,7 +87,7 @@ class PrivacyDialogFragment(private val preferences: SharedPreferences) : Dialog
         ).apply()
         Timber.i("General privacy setting set to ${questioningCheckBox}!")
         preferences.edit().putBoolean(
-            getString(R.string.privacy_setting_send_sensor_data_key),
+            getString(R.string.privacy_setting_gather_sensor_data_key),
             sensorDataCheckBox
         ).apply()
         Timber.i("Sensor data privacy setting set to ${sensorDataCheckBox}!")

@@ -14,6 +14,11 @@
         Impressum: \n
         Christoph Herbers (christoph@herbers.name)
     </string>
+    <!--    profile fragment-->
+    <string name="profile_title">Mein Profil</string>
+    <string name="profile_fragment_message">
+        Hier kannst Du Dein Profil einsehen.
+    </string>
     <!--    privacy fragment-->
     <string name="privacy_content_general">
         Highsenso Privatsphäre TODO

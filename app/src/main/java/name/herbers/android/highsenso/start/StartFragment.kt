@@ -106,6 +106,11 @@ class StartFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.i("Menu Item \"${item.title}\" was selected!")
         return when (item.itemId) {
+            //user profile
+            R.id.profile_destination -> NavigationUI.onNavDestinationSelected(
+                item,
+                requireView().findNavController()
+            )
             //reset question ratings
 //            R.id.reset_rating_destination -> handleResetQuestions()
             //navigate to AboutFragment
@@ -137,11 +142,12 @@ class StartFragment : Fragment() {
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
-                if (preferences.getBoolean(
-                        getString(R.string.privacy_setting_send_general_data_key),
-                        true
-                    )
-                ) {
+//                if (preferences.getBoolean(
+//                        getString(R.string.privacy_setting_send_general_data_key),
+//                        true
+//                    )
+//                )
+                if (profileDataComplete()) {
                     LocationDialogFragment(preferences, sharedViewModel).show(
                         childFragmentManager,
                         "LocationDialog"
@@ -154,6 +160,15 @@ class StartFragment : Fragment() {
                 showLoginDialog(sharedViewModel)
             }
         }
+    }
+
+    /**
+     * Checks if the profile data is complete.
+     *
+     * */
+    private fun profileDataComplete(): Boolean {
+        //TODO check profile data
+        return false
     }
 
     /**
@@ -350,7 +365,7 @@ class StartFragment : Fragment() {
             ).apply()
             Timber.i("General privacy setting set to false!")
             preferences.edit().putBoolean(
-                getString(R.string.privacy_setting_send_sensor_data_key),
+                getString(R.string.privacy_setting_gather_sensor_data_key),
                 false
             ).apply()
             Timber.i("Sensor data privacy setting set to false!")

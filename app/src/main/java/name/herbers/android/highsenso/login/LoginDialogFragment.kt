@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
-import name.herbers.android.highsenso.data.LoginRequest
 import name.herbers.android.highsenso.databinding.DialogLoginBinding
 import timber.log.Timber
 
@@ -68,7 +67,7 @@ class LoginDialogFragment(
                 handleNegativeLoginResponse(errorMessage)
         })
 
-        sharedViewModel.serverLoginResponse.observe(this, { success ->
+        sharedViewModel.loginResponse.observe(this, { success ->
             when (success) {
                 1 -> dismiss()
                 0 -> handleNegativeLoginResponse(getString(badCombinationToast))
@@ -118,7 +117,7 @@ class LoginDialogFragment(
                         loginViewModel.inputMailValidation(username)) &&
                 loginViewModel.inputPasswordValidation(password)
             ) {
-                sharedViewModel.sendLogin(LoginRequest(username, password))
+                sharedViewModel.sendLoginRequest(username, password)
                 elementsAreEnabled(false)
             } else {
                 Toast.makeText(context, invalidInputToast, Toast.LENGTH_SHORT).show()

@@ -5,7 +5,7 @@
     <!--    keys-->
     <string name="privacy_setting_first_call_key">name_herbers_android_highSenso_privacy_setting_first_call_key</string>
     <string name="privacy_setting_send_general_data_key">name_herbers_android_highSenso_privacy_setting_send_general_data_key</string>
-    <string name="privacy_setting_send_sensor_data_key">name_herbers_android_highSenso_privacy_setting_send_sensor_data_key</string>
+    <string name="privacy_setting_gather_sensor_data_key">name_herbers_android_highSenso_privacy_setting_gather_sensor_data_key</string>
     <string name="login_data_username_key">name_herbers_android_highSenso_login_data_username_key</string>
     <string name="login_data_pw_key">name_herbers_android_highSenso_login_data_pw_key</string>
     <string name="login_data_token">name_herbers_android_highSenso_login_data_token_key</string>

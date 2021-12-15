@@ -33,8 +33,7 @@ abstract class QuestionDatabase : RoomDatabase() {
 
     companion object {
         //path of the pre-populated database (questions_database.db) in assets
-        private const val DB_PATH = "database/questions_database.db"
-
+//        private const val DB_PATH = "database/questions_database.db"
         //create a File from an existing question_database
         private val roomDbPath =
             Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/databases/questions_database"
@@ -42,7 +41,7 @@ abstract class QuestionDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: QuestionDatabase? = null
-        fun getInstance(context: Context): QuestionDatabase {
+        fun getInstance(context: Context): QuestionDatabase? {
             synchronized(this) {
                 var instance = INSTANCE
 
@@ -68,23 +67,23 @@ abstract class QuestionDatabase : RoomDatabase() {
 
                         INSTANCE = instance
                     }
-                } else {
-                    Timber.i(
-                        "questions_database did not already exist on this device! " +
-                                "A new one will be initiated based on the questions_database.db from assets!"
-                    )
-                    if (instance == null) {
-                        instance = Room.databaseBuilder(
-                            context.applicationContext,
-                            QuestionDatabase::class.java,
-                            "questions_database"
-                        )
-                            .createFromAsset(DB_PATH)
-                            .fallbackToDestructiveMigration()
-                            .build()
-
-                        INSTANCE = instance
-                    }
+//                } else {
+//                    Timber.i(
+//                        "questions_database did not already exist on this device! " +
+//                                "A new one will be initiated based on the questions_database.db from assets!"
+//                    )
+//                    if (instance == null) {
+//                        instance = Room.databaseBuilder(
+//                            context.applicationContext,
+//                            QuestionDatabase::class.java,
+//                            "questions_database"
+//                        )
+//                            .createFromAsset(DB_PATH)
+//                            .fallbackToDestructiveMigration()
+//                            .build()
+//
+//                        INSTANCE = instance
+//                    }
                 }
                 Timber.i("Database initialized!")
                 return instance

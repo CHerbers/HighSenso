@@ -29,7 +29,7 @@
     <string name="confirmation_mail_sent_dialog_button">OK</string>
 
     <!--    privacy dialog-->
-    <string name="privacy_dialog_title">Privatsphäre-Einstellungen</string>
+    <string name="privacy_dialog_title">Datenschutzbestimmungen</string>
     <string name="privacy_dialog_message">
         HighSenso ist ein Projekt im Rahmen der <b>Erforschung von Hochsensibilität</b>.
         \n

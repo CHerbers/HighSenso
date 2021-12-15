@@ -72,10 +72,9 @@ class RegisterDialogFragment(
             if (errorMessage != "")
                 handleNegativeLoginResponse(errorMessage)
         })
-        sharedViewModel.serverRegisterResponse.observe(this, { success ->
+        sharedViewModel.registerResponse.observe(this, { success ->
             when (success) {
                 1 -> {
-                    sharedViewModel.callMailSentDialog()
                     dismiss()
                 }
                 2 -> handleNegativeLoginResponse(getString(nameAlreadyUsedToast))
@@ -126,7 +125,7 @@ class RegisterDialogFragment(
         binding.registerDialogRegisterButton.setOnClickListener {
             if (noErrorMessageActive() && binding.registerDialogPrivacyCheckBox.isChecked) {
 
-                sharedViewModel.sendRegister(
+                sharedViewModel.sendRegistrationRequest(
                     RegistrationRequest(
                         binding.registerDialogUsernameEditText.text.toString(),
                         binding.registerDialogMailEditText.text.toString(),

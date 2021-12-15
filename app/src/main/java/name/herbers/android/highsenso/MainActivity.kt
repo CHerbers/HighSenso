@@ -35,6 +35,7 @@ import java.util.*
  * */
 class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var preferences: SharedPreferences
+    private var askPermission = true
 
     //ViewModel shared with ResetDialogFragment and StartFragment
     private lateinit var sharedViewModel: SharedViewModel
@@ -49,8 +50,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var mSensorManager: SensorManager
     private lateinit var sensorList: List<Sensor>
 
-    companion object{
-        private const val SERVER_URL = "https://www.google.com"
+    companion object {
+        private const val SERVER_URL = "https://www.google.com" //TODO insert right URL
         private const val AUDIO_SENSOR_MEASURING_DURATION = 8
     }
 
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val application = requireNotNull(this).application
 //        deleteDatabaseInAppData()             //development only
 //        resetFirstCallPreferencesKey()        //development only
-        database = QuestionDatabase.getInstance(application)
+        database = QuestionDatabase.getInstance(application)!!
         val dataSource = database.questionDatabaseDao
         val databaseHandler = DatabaseHandler(dataSource)
         val res = applicationContext.resources
@@ -78,11 +79,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         )
 
         /* HTTP Connection */
-        val serverCommunicationHandler = ServerCommunicationHandler(SERVER_URL, this)
+        val serverCommunicationHandler =
+            ServerCommunicationHandler(SERVER_URL, this)
 
-        //init sharedViewModel
+        //init sharedViewModel TODO maybe look for saved questionnaires/ answerSheets
         val sharedViewModelFactory =
-            SharedViewModelFactory(databaseHandler, userProfile, serverCommunicationHandler)
+            SharedViewModelFactory(
+                databaseHandler,
+                userProfile,
+                null,
+                null,
+                preferences,
+                application,
+                serverCommunicationHandler
+            )
         sharedViewModel = ViewModelProvider(
             this,
             sharedViewModelFactory
@@ -92,15 +102,25 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         /* Login check and load questions and answerSheets if logged in */
         val token = preferences.getString(getString(R.string.login_data_token), null)
+        val username = preferences.getString(getString(R.string.login_data_username_key), null)
+        val password = preferences.getString(getString(R.string.login_data_pw_key), null)
         when {
-            tokenIsValid() && token != null -> {
-                serverCommunicationHandler.getQuestionnaire(token)
+            sharedViewModel.tokenIsValid() && token != null -> {
+                sharedViewModel.changeLoginStatus(true)
+                serverCommunicationHandler.getAllQuestionnaires(token, sharedViewModel)
             }
-            loginDataAvailable() -> {
-                sendLoginFromKeyData()
+            username != null && password != null -> {
+                Timber.i("Login data is available! Login Request will be sent!")
+                sharedViewModel.changeLoginStatus(false)
+                serverCommunicationHandler.sendLoginRequest(
+                    username,
+                    password,
+                    sharedViewModel,
+                    null
+                )
             }
             else -> {
-                sharedViewModel.changeLoginStatus(false)
+                sharedViewModel.changeLoginStatus(true) //TODO set to false!
             }
         }
 
@@ -116,40 +136,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 }
             }
 
-
-
-
-
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorList = getSensors()
-//        for (sensor in sensorList) {
-//            mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
-//        }
         addGatheringSensorDataObserver()
 
         Timber.i("onCreate called!")
-    }
-
-    private fun tokenIsValid(): Boolean {
-        val tokenExpirationDate =
-            preferences.getLong(getString(R.string.login_data_token_expiration_date), 0)
-        val isValid = tokenExpirationDate != 0L && Date().before(Date(tokenExpirationDate))
-        Timber.i("Token is valid: $isValid")
-        sharedViewModel.changeLoginStatus(isValid)
-        return isValid
-    }
-
-    private fun loginDataAvailable(): Boolean {
-        val username = preferences.getString(getString(R.string.login_data_username_key), null)
-        val password = preferences.getString(getString(R.string.login_data_pw_key), null)
-        val dataAvailable = username != null && password != null
-        Timber.i("Login data is available: $dataAvailable")
-        sharedViewModel.changeLoginStatus(false)
-        return dataAvailable
-    }
-
-    private fun sendLoginFromKeyData() {
-        //TODO create the http request body from key data and call serverCommunicationHandler
     }
 
     private val gatherAudioPeriodically = object : Runnable {
@@ -227,20 +218,34 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         )
     }
 
+    /**
+     * Checks permission for recording audio with the microphone.
+     * If permission is already granted, start the [AmbientAudioRecorder].
+     * Else, start the [ActivityResultLauncher] to ask for recording permission
+     * */
     private fun audioRecording() {
         val permissionToRecord =
             ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
         if (permissionToRecord == PackageManager.PERMISSION_GRANTED) {
-            Timber.i("Permission to record Audio granted! Recorder will be started!")
+            Timber.i("Permission to record audio granted! Recorder will be started!")
             val ambientAudioRecorder = AmbientAudioRecorder()
             val recordedAudio =
                 ambientAudioRecorder.getAverageAmbientAudio(AUDIO_SENSOR_MEASURING_DURATION)
             //TODO save recorded audio in list
         } else {
-            requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+            if (askPermission) {
+                requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+                askPermission = false
+            }
         }
     }
 
+    /**
+     * Creates a [List] of needed [Sensor]s.
+     * That is the temperature and the light sensor.
+     *
+     * @return a [List] of [Sensor]s
+     * */
     private fun getSensors(): List<Sensor> {
         return listOf<Sensor>(
             mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE),
@@ -248,6 +253,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         )
     }
 
+    /**
+     * Adds an [Observer] to [SharedViewModel.gatherSensorData].
+     * If changed to true, starts gathering of sensor data.
+     * Else, stops gathering of sensor data.
+     * */
     private fun addGatheringSensorDataObserver() {
         sharedViewModel.gatherSensorData.observe(this, { toStart ->
             if (toStart) {
@@ -260,12 +270,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         })
     }
 
+    /**
+     * Register sensor listener in [sensorList].
+     * */
     private fun registerSensorListeners() {
         for (sensor in sensorList) {
             mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
+    /**
+     * Unregister sensor listener in [sensorList].
+     * */
     private fun unregisterSensorListeners() {
         for (sensor in sensorList) {
             mSensorManager.unregisterListener(this)
@@ -313,8 +329,4 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         database.close()
         stopGatherAudioPeriodically()
     }
-
-
-    //TODO: Datenschutzerklärung (inkl. Abfrage nach Datensammlung bei erstem Appstart + speichern in einer config datei)
-    //TODO: Weiterführende Links zum Thema HSP
 }

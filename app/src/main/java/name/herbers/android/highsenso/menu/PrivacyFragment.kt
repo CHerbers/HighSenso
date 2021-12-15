@@ -65,7 +65,7 @@ class PrivacyFragment : Fragment() {
      * */
     private fun initSwitches() {
         val generalPrivacyKey = getString(R.string.privacy_setting_send_general_data_key)
-        val sensorDataPrivacyKey = getString(R.string.privacy_setting_send_sensor_data_key)
+        val sensorDataPrivacyKey = getString(R.string.privacy_setting_gather_sensor_data_key)
         val preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
 
         binding.privacyGeneralSwitch.isChecked =

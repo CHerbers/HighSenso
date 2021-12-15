@@ -45,6 +45,8 @@
     <dimen name="question_textView_layout_padding">24sp</dimen>
     <dimen name="question_textSize">24sp</dimen>
     <dimen name="question_next_button_textSize">24sp</dimen>
+    <dimen name="question_radioButton_textSize">48sp</dimen>
+    <dimen name="question_radioButton_horizontal_margin">16dp</dimen>
     <dimen name="chip_spacing">32dp</dimen>
     <dimen name="chip_width">160dp</dimen>
     <dimen name="chip_height">64dp</dimen>

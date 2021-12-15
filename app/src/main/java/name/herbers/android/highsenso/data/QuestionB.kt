@@ -1,8 +1,26 @@
 package name.herbers.android.highsenso.data
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
  *
  *@project HighSenso
  *@author Herbers
  */
-data class QuestionB(val questiontype: String, val min: Int?, val max: Int?, val step: Float?, val required: Boolean, val variable: String)
+@Entity(tableName = "questions_table")
+data class QuestionB(
+    @ColumnInfo
+    val questiontype: String,
+    @ColumnInfo
+    val min: Int?,
+    @ColumnInfo
+    val max: Int?,
+    @ColumnInfo
+    val step: Double?,
+    @ColumnInfo
+    val required: Boolean,
+    @PrimaryKey
+    val variable: String
+)

@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.google.android.material.chip.Chip
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.Question
@@ -68,7 +67,7 @@ class QuestioningFragment : Fragment() {
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
 
-        //set actionBar (title and button)
+        /* Set actionBar (title and button) */
         val actionBar = (activity as AppCompatActivity).supportActionBar
         if (actionBar != null) {
             actionBar.title =
@@ -82,6 +81,9 @@ class QuestioningFragment : Fragment() {
 
         //set Listeners
         setListeners()
+
+        enableAnswerButton(false)
+        //TODO if question is already rated -> check specific radioButton -> enableAnswerButton(true)
 
         Timber.i("QuestionFragment created!")
         return binding.root
@@ -108,7 +110,7 @@ class QuestioningFragment : Fragment() {
     private fun addLiveDataObservers(sharedViewModel: SharedViewModel) {
         addBackToStartObserver(sharedViewModel)
         addIsFinishedObserver(sharedViewModel)
-        addIsLastQuestion()
+        addIsLastQuestionObserver()
     }
 
     /**
@@ -135,6 +137,7 @@ class QuestioningFragment : Fragment() {
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
                 sharedViewModel.stopGatherSensorData()
+                sharedViewModel.createAndSendAnswerSheets()
                 findNavController(this)
                     .navigate(R.id.action_questioning_destination_to_result_destination)
             }
@@ -146,7 +149,7 @@ class QuestioningFragment : Fragment() {
      * isFinished becomes false if the current question is not the last question.
      * Depending if isFinished is true or false, another text is shown on the nextButton.
      * */
-    private fun addIsLastQuestion() {
+    private fun addIsLastQuestionObserver() {
         viewModel.isLastQuestion.observe(viewLifecycleOwner, { isLastQuestion ->
             if (isLastQuestion) binding.questionNextButton.text =
                 resources.getString(R.string.confirm_and_move_to_result)
@@ -159,8 +162,8 @@ class QuestioningFragment : Fragment() {
      * */
     private fun setListeners() {
         addAnswerButtonListener()
-        addChipListener(binding.questionPositiveChip)
-        addChipListener(binding.questionNegativeChip)
+        addChipListener(binding.questioningPositiveRadioButton)
+        addChipListener(binding.questioningNegativeRadioButton)
     }
 
     /**
@@ -170,22 +173,31 @@ class QuestioningFragment : Fragment() {
     private fun addAnswerButtonListener() {
         binding.questionNextButton.setOnClickListener {
             Timber.i("NextButton was clicked!")
-            viewModel.handleNextButtonClick(binding.questionPositiveChip.isChecked)
+            viewModel.handleNextButtonClick(binding.questioningPositiveRadioButton.isChecked)
             //reset checked status on both chips
-            binding.questionPositiveChip.isChecked = false
-            binding.questionNegativeChip.isChecked = false
+            binding.questioningPositiveRadioButton.isChecked = false
+            binding.questioningNegativeRadioButton.isChecked = false
+            enableAnswerButton(false)
         }
     }
 
-    private fun addChipListener(chip: Chip) {
-        chip.setOnCheckedChangeListener { _, isChecked ->
-            Timber.i("Chip was clicked! ${chip.isChecked}")
+    private fun enableAnswerButton(toEnable: Boolean) {
+        binding.questionNextButton.isEnabled = toEnable
+        val backgroundColor =
+            if (toEnable) R.color.question_answerButton_default_color else R.color.question_answerButton_disabled_color
+        binding.questionNextButton.setBackgroundColor(requireContext().getColor(backgroundColor))
+    }
+
+    private fun addChipListener(radioButton: RadioButton) {
+        radioButton.setOnCheckedChangeListener { _, isChecked ->
+            Timber.i("RadioButton was clicked!")
             if (isChecked) {
-                chip.setChipBackgroundColorResource(R.color.question_chip_selected_color)
-                chip.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+                enableAnswerButton(true)
+//                radioButton.tint(R.color.question_radioButton_selected_color)
+//                chip.setTextColor(ContextCompat.getColor(context!!, R.color.white))
             } else {
-                chip.setChipBackgroundColorResource(R.color.question_chip_unselected_color)
-                chip.setTextColor(ContextCompat.getColor(context!!, R.color.black))
+//                chip.setChipBackgroundColorResource(R.color.question_radioButton_unselected_color)
+//                chip.setTextColor(ContextCompat.getColor(context!!, R.color.black))
             }
         }
     }

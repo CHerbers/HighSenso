@@ -18,8 +18,11 @@
     <color name="start_login_buttons_color">#0277BD</color>
     <!--    questioning fragment-->
     <color name="questionCount_text_color">#808080</color>
-    <color name="question_chip_selected_color">#154F30</color>
-    <color name="question_chip_unselected_color">#D2D2D2</color>
+    <color name="question_radioButton_selected_color">#154F30</color>
+    <color name="question_radioButton_unselected_color">#505050</color>
+    <color name="question_answerButton_default_color">#FF018786</color>
+    <color name="question_answerButton_disabled_color">#333333</color>
+
     <!--    seek bar-->
     <color name="seek_bar_background">#2891E6</color>
     <color name="seek_bar_secondary_progress">#0C5FA2</color>
