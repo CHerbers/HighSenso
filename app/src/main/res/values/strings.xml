@@ -36,11 +36,11 @@
     <!--    menu-->
     <string name="about_menu_item_title">Über HighSenso / Impressum</string>
     <string name="reset_menu_item_title">Bewertung zurücksetzen</string>
-    <string name="privacy_menu_item_title">Privatsphäre-Einstellungen</string>
+    <string name="privacy_menu_item_title">Datenschutz</string>
 
     <!--    menu fragments-->
     <string name="about_actionBar_title">Über HighSenso</string>
-    <string name="privacy_actionBar_title">Privatsphäre</string>
+    <string name="privacy_actionBar_title">Datenschutzbestimmungen</string>
 
     <!--    questioning-->
     <string name="questioning_actionBar_title">Befragung</string>

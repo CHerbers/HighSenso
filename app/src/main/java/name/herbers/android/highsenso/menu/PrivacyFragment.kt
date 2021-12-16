@@ -1,6 +1,5 @@
 package name.herbers.android.highsenso.menu
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -51,36 +49,8 @@ class PrivacyFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        //init switches (value and Listeners)
-        initSwitches()
-
-        Timber.i("AboutFragment created!")
+        Timber.i("PrivacyFragment created!")
         return binding.root
-    }
-
-    /**
-     * Initializes the two privacy [SwitchCompat]es. Set their starting isChecked value and
-     * adds OnCheckedChangeListeners which set the corresponding [SharedPreferences] key
-     * to the specific switch value.
-     * */
-    private fun initSwitches() {
-        val generalPrivacyKey = getString(R.string.privacy_setting_send_general_data_key)
-        val sensorDataPrivacyKey = getString(R.string.privacy_setting_gather_sensor_data_key)
-        val preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
-
-        binding.privacyGeneralSwitch.isChecked =
-            preferences.getBoolean(generalPrivacyKey, false)
-        binding.privacyGeneralSwitch.setOnCheckedChangeListener { _, isChecked ->
-            preferences.edit().putBoolean(generalPrivacyKey, isChecked).apply()
-            Timber.i("General privacy setting set to ${isChecked}!")
-        }
-
-        binding.privacySensorDataSwitch.isChecked =
-            preferences.getBoolean(sensorDataPrivacyKey, false)
-        binding.privacySensorDataSwitch.setOnCheckedChangeListener { _, isChecked ->
-            preferences.edit().putBoolean(sensorDataPrivacyKey, isChecked).apply()
-            Timber.i("Sensor data privacy setting set to ${isChecked}!")
-        }
     }
 
     /**

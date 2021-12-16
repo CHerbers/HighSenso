@@ -47,7 +47,7 @@ class ResultFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val sharedViewModel: SharedViewModel by activityViewModels()
         val databaseHandler = sharedViewModel.databaseHandler
-        val viewModelFactory = ResultViewModelFactory(databaseHandler, application)
+        val viewModelFactory = ResultViewModelFactory(sharedViewModel, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ResultViewModel::class.java)
         binding.resultViewModel = viewModel
         binding.lifecycleOwner = this

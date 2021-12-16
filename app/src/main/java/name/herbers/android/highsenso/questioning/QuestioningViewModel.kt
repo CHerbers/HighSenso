@@ -3,6 +3,7 @@ package name.herbers.android.highsenso.questioning
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.result.ResultFragment
@@ -53,6 +54,11 @@ class QuestioningViewModel(
     val isLastQuestion: LiveData<Boolean>
         get() = _isLastQuestion
 
+    companion object {
+        private const val HSP_QUESTIONNAIRE = "HSPScala"
+        private const val DEAL_WITH_HS_QUESTIONNAIRE = "DealWithHS"
+    }
+
     init {
         //load questions from database
         updateLiveData(startingQuestionPos)
@@ -79,8 +85,13 @@ class QuestioningViewModel(
      * gets changed to the previous one or a fragment change to the [ResultFragment] is initiated
      * @param newRating the new rating the update function is called with
      * */
-    fun handleNextButtonClick(newRating: Boolean) {
-        updateRatingFromSeekBar(newRating)
+    fun handleNextButtonClick(newRating: Int, sharedViewModel: SharedViewModel) {
+
+//        when(sharedViewModel.questionnaireName){
+//            HSP_QUESTIONNAIRE -> sharedViewModel.currentAnswersHSP.add(Answer( "",Date().time, )) //TODO label and object - not "add", but "set" at specific position
+//            DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.currentAnswersDWHS.add(Answer())
+//        }
+        updateRatingFromSeekBar(newRating == 1)
         _navBackToStartFrag.value = false
         //check if this is the last question
 

@@ -1,5 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources
+    [<!ENTITY imprint "
+    Christoph Herbers (christoph.herbers@uni-ulm.de)
+    \n
+
+    ">]>
 <resources>
+
     <!--    menu content-->
     <!--    about fragment-->
     <string name="about_text">
@@ -11,8 +17,9 @@
         Du auf diesen Text klickst.
     </string>
     <string name="about_imprint">
-        Impressum: \n
-        Christoph Herbers (christoph@herbers.name)
+        Impressum:
+        \n
+        &imprint;
     </string>
     <!--    profile fragment-->
     <string name="profile_title">Mein Profil</string>
@@ -21,7 +28,65 @@
     </string>
     <!--    privacy fragment-->
     <string name="privacy_content_general">
-        Highsenso Privatsphäre TODO
+        <u><b>Datenschutzerklärung</b></u>
+        \n
+        \n
+        \n
+        <b>1. Allgemein</b>
+        \n
+        \n
+        Wir nehmen den Schutz Deiner personenbezogenen Daten sehr ernst.
+        \n
+        HighSenso erfasst eine Reihe von personenbezogenen Daten. Diese Daten werden erst erhoben,
+        nachdem Du Dich in der HighSenso App registriert und eingeloggt hast.
+        \n
+        Für eine erfolgreiche Registrierung musst Du den Datenschutzbestimmungen zustimmen.
+        \n
+        Die Zustimmung zur Erhebung von Sensordaten erfolgt gesondert vom Betriebssystem selber und
+        kann in den Geräteeinstellungen jederzeit geändert werden. Diese Zustimmung ist optional zur
+        Benutzung der App.
+        \n
+        \n
+        <b>2. Gesammelte Daten</b>
+        \n
+        \n
+        <u>Persönliche Angaben</u>
+        \n
+        HighSenso sammelt personenbezogene Daten. Welche dies sind ergibt sich aus den Eingabemasken
+        bei der Registrierung, sowie dem Inhalt der zu beantwortenden Fragebögen während Nutzung der
+        App.
+        \n
+        \n
+        <u>Allgemeine Informationen</u>
+        \n
+        HighSenso sammelt Metadaten über Dein Gerät. Diese sind (1) der Modellname des Geräts,
+        sowie (2) das aktuelle OS.
+        \n
+        \n
+        <u>Sensordaten</u>
+        \n
+        HighSenso sammelt Sensordaten während der Beantwortung von Fragebögen. Diese Daten umfassen
+        (1) die durchschnittliche Umgebungstemperatur,
+        (2) die durchschnittliche Umgebungshelligkeit und
+        (3) die durchschnittliche Umgebungslautstärke.
+        Diese Daten werden benötigt, um den Umwelteinflüsse auf die Beantwortung von Fragebögen zu
+        berücktichtigen.
+        \n
+        \n
+        <b>3. Kontaktmöglichkeit</b>
+        \n
+        Verantworlich für die Datenverarbeitung ist:
+        \n
+        \n &imprint;
+        \n
+        \n
+        <b>4. Rechte der betroffenen Person</b>
+        \n
+        \n
+        (1) Es besteht jederzeit das Recht gegebe Datenschutzerklärungen zur Datenerhebung und
+        Datenverarbeitung zu widerrufen.
+        \n
+        (2) Es besteht das Recht
     </string>
 
     <!--    start fragment content-->

@@ -6,6 +6,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
+import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.data.*
 import org.json.JSONArray
@@ -20,9 +21,45 @@ import kotlin.collections.HashMap
  *@project HighSenso
  *@author Herbers
  */
-class ServerCommunicationHandler(private val serverURL: String, private val context: Context) {
+class ServerCommunicationHandler(private val serverURL: String, val context: Context) {
     private val answerSheetList = mutableListOf<AnswerSheet>()
     val gson = Gson()
+
+    /* data string fields */
+    //general
+    private val nameField = context.getString(R.string.name_field)
+    private val valueField = context.getString(R.string.value_field)
+    private val collectedAtField = context.getString(R.string.collected_at_field)
+    private val labelField = context.getString(R.string.label_field)
+    private val idField = context.getString(R.string.id_field)
+    //question
+    private val minField = context.getString(R.string.min_field)
+    private val maxField = context.getString(R.string.max_field)
+    private val stepField = context.getString(R.string.step_field)
+    private val requiredField = context.getString(R.string.required_field)
+    private val variableField = context.getString(R.string.variable_field)
+    private val localeField = context.getString(R.string.locale_field)
+    private val answerField = context.getString(R.string.answers_field)
+    private val sensorDataField = context.getString(R.string.sensor_data_field)
+    private val clientField = context.getString(R.string.client_field)
+    private val questionTypeField = context.getString(R.string.question_type_field)
+    private val questionField = context.getString(R.string.questions_field)
+    //sensorData
+    private val ambientAudioSDField = context.getString(R.string.ambient_audio_sd_field)
+    private val ambientTempSDField = context.getString(R.string.ambient_temp_sd_field)
+    private val ambientLightSDField = context.getString(R.string.ambient_light_sd_field)
+    private val amplitudeField = context.getString(R.string.amplitude_field)
+    private val luxField = context.getString(R.string.lux_field)
+    private val degreesField = context.getString(R.string.degrees_field)
+    //client
+    private val deviceField = context.getString(R.string.degrees_field)
+    private val osField = context.getString(R.string.os_field)
+
+    /* header fields */
+    private val contentTypeHeader = context.getString(R.string.content_type_header)
+    private val contentTypeApplication = context.getString(R.string.content_type_application)
+    private val acceptLanguageHeader = context.getString(R.string.accept_language_header)
+    private val acceptLanguageDE = context.getString(R.string.accept_language_de)
 
     companion object {
         // URL constants
@@ -277,8 +314,8 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
 
     private fun addHeader(contentHeader: Boolean, languageHeader: Boolean): Map<String, String> {
         val headers = HashMap<String, String>()
-        if (contentHeader) headers["Content-Type"] = "application/json"
-        if (languageHeader) headers["Accept-Language"] = "de"
+        if (contentHeader) headers[contentTypeHeader] = contentTypeApplication
+        if (languageHeader) headers[acceptLanguageHeader] = acceptLanguageDE
         return headers
     }
 
@@ -289,9 +326,9 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
             val questionnaire = array.getJSONObject(i)
             questionnaireList.add(
                 Questionnaire(
-                    questionnaire.getInt("id"),
-                    questionnaire.getString("name"),
-                    getQuestionListFromJSONArray(questionnaire.getJSONArray("questions"))
+                    questionnaire.getInt(idField),
+                    questionnaire.getString(nameField),
+                    getQuestionListFromJSONArray(questionnaire.getJSONArray(questionField))
                 )
             )
         }
@@ -305,12 +342,12 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
             val question = array.getJSONObject(i)
             questionList.add(
                 QuestionB(
-                    question.getString("questiontype"),
-                    question.getInt("min"),
-                    question.getInt("max"),
-                    question.getDouble("step"),
-                    question.getBoolean("required"),
-                    question.getString("variable")
+                    question.getString(questionTypeField),
+                    question.getInt(minField),
+                    question.getInt(maxField),
+                    question.getDouble(stepField),
+                    question.getBoolean(requiredField),
+                    question.getString(variableField)
                 )
             )
         }
@@ -324,11 +361,11 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
             val answerSheet = array.getJSONObject(i)
             answerSheetList.add(
                 AnswerSheet(
-                    answerSheet.getLong("collectedAt"),
-                    answerSheet.getString("locale"),
-                    getAnswersListFromJSONArray(answerSheet.getJSONArray("answers")),
-                    getSensorDataListFromJSONArray(answerSheet.getJSONArray("sensorData")),
-                    getClientFromJSONObject(answerSheet.getJSONObject("client"))
+                    answerSheet.getLong(collectedAtField),
+                    answerSheet.getString(localeField),
+                    getAnswersListFromJSONArray(answerSheet.getJSONArray(answerField)),
+                    getSensorDataListFromJSONArray(answerSheet.getJSONArray(sensorDataField)),
+                    getClientFromJSONObject(answerSheet.getJSONObject(clientField))
                 )
             )
         }
@@ -342,9 +379,9 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
             val answer = array.getJSONObject(i)
             answerList.add(
                 Answer(
-                    answer.getString("label"),
-                    answer.getLong("collectedAt"),
-                    answer.get("value") as Objects //TODO fix this
+                    answer.getString(labelField),
+                    answer.getLong(collectedAtField),
+                    answer.get(valueField) as Objects //TODO fix this
                 )
             )
         }
@@ -356,26 +393,26 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
 
         for (i in 0 until array.length()) {
             val sensorData = array.getJSONObject(i)
-            when (val sensorType = sensorData.getString("name")) {
-                "ambientAudioSensorData" -> questionList.add(
+            when (val sensorType = sensorData.getString(nameField)) {
+                ambientAudioSDField -> questionList.add(
                     AmbientAudioSensorData(
                         sensorType,
-                        sensorData.getLong("collectedAt"),
-                        sensorData.getDouble("amplitude").toFloat()
+                        sensorData.getLong(collectedAtField),
+                        sensorData.getDouble(amplitudeField).toFloat()
                     )
                 )
-                "ambientLightSensorData" -> questionList.add(
+                ambientLightSDField -> questionList.add(
                     AmbientLightSensorData(
                         sensorType,
-                        sensorData.getLong("collectedAt"),
-                        sensorData.getDouble("lux").toFloat()
+                        sensorData.getLong(collectedAtField),
+                        sensorData.getDouble(luxField).toFloat()
                     )
                 )
-                "ambientTemperatureSensorData" -> questionList.add(
+                ambientTempSDField -> questionList.add(
                     AmbientTemperatureSensorData(
                         sensorType,
-                        sensorData.getLong("collectedAt"),
-                        sensorData.getDouble("degreesCelsius").toFloat()
+                        sensorData.getLong(collectedAtField),
+                        sensorData.getDouble(degreesField).toFloat()
                     )
                 )
             }
@@ -385,9 +422,9 @@ class ServerCommunicationHandler(private val serverURL: String, private val cont
 
     private fun getClientFromJSONObject(jsonObject: JSONObject): Client {
         return Client(
-            jsonObject.getString("name"),
-            jsonObject.getString("device"),
-            jsonObject.getString("os")
+            jsonObject.getString(nameField),
+            jsonObject.getString(deviceField),
+            jsonObject.getString(osField)
         )
     }
 }

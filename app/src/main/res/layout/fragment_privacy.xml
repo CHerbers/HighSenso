@@ -15,36 +15,30 @@
         android:layout_height="match_parent"
         android:background="@color/fragment_background_color">
 
-        <TextView
-            android:id="@+id/privacy_fragment_content_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_content_general"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/start_textView_spacing"
+            android:layout_margin="@dimen/standard_textView_layout_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.131"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.034" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/privacy_general_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_dialog_questioning_setting_checkBox"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/privacy_fragment_content_textView" />
+            <TextView
+                android:id="@+id/privacy_fragment_content_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/privacy_content_general"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.131"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.034" />
+        </ScrollView>
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/privacy_sensor_data_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_dialog_sensor_data_setting_checkBox"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/privacy_general_switch" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

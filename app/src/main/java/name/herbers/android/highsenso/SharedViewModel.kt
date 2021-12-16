@@ -7,10 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
-import name.herbers.android.highsenso.data.AnswerSheet
-import name.herbers.android.highsenso.data.Client
-import name.herbers.android.highsenso.data.Questionnaire
-import name.herbers.android.highsenso.data.RegistrationRequest
+import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.UserProfile
 import timber.log.Timber
@@ -40,11 +37,20 @@ class SharedViewModel(
 ) : ViewModel() {
     var backFromResult: Boolean = false
 
+    val currentAnswersHSP: MutableList<Answer> = mutableListOf()
+    val currentAnswersDWHS: MutableList<Answer> = mutableListOf()
+    val sensorDataHSP: MutableList<SensorData> = mutableListOf()
+    val sensorDataDWHS: MutableList<SensorData> = mutableListOf()
+
     private val appRes = application.resources
 
     private val _gatherSensorData = MutableLiveData(false)
     val gatherSensorData: LiveData<Boolean>
         get() = _gatherSensorData
+
+    private val _questionnaireName = MutableLiveData("") //TODO LiveData needed?
+    val questionnaireName: LiveData<String>
+        get() = _questionnaireName
 
     private val _locationDialogDismiss = MutableLiveData(false)
     val locationDialogDismiss: LiveData<Boolean>
@@ -151,9 +157,9 @@ class SharedViewModel(
 
     fun handleLogoutButtonClick() {
         /* If the token is valid, send a LogoutRequest, else there is no need to send it */
-        if (tokenIsValid()){
-            val token = preferences.getString(appRes.getString(R.string.login_data_token),"")
-            if (token != null && token != ""){
+        if (tokenIsValid()) {
+            val token = preferences.getString(appRes.getString(R.string.login_data_token), "")
+            if (token != null && token != "") {
                 communicationHandler.sendLogoutRequest(token)
             }
         }
@@ -253,27 +259,24 @@ class SharedViewModel(
     }
 
     fun createAndSendAnswerSheets() {
+        val client = Client(
+            android.os.Build.MODEL,
+            android.os.Build.DEVICE,
+            android.os.Build.VERSION.RELEASE
+        )
         val answerSheetHSP = AnswerSheet(
             Date().time,
             LOCALE,
-            listOf(), //TODO insert real list
-            listOf(),
-            Client(
-                android.os.Build.MODEL,
-                android.os.Build.DEVICE,
-                android.os.Build.VERSION.RELEASE
+            currentAnswersHSP,
+            sensorDataHSP,
+            client
             )
-        )
         val answerSheetDWHS = AnswerSheet(
             Date().time,
             LOCALE,
-            listOf(),
-            listOf(),
-            Client(
-                android.os.Build.MODEL,
-                android.os.Build.DEVICE,
-                android.os.Build.VERSION.RELEASE
-            )
+            currentAnswersDWHS,
+            sensorDataDWHS,
+            client
         )
         sendAnswerSheets(listOf(answerSheetHSP, answerSheetDWHS))
     }

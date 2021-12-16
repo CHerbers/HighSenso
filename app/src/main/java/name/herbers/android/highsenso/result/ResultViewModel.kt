@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import name.herbers.android.highsenso.R
-import name.herbers.android.highsenso.database.DatabaseHandler
+import name.herbers.android.highsenso.SharedViewModel
 import timber.log.Timber
 
 /**
@@ -17,14 +17,17 @@ import timber.log.Timber
  * @since 1.0
  * */
 class ResultViewModel(
-    val databaseHandler: DatabaseHandler,
+    val sharedViewModel: SharedViewModel,
     application: Application
 ) : AndroidViewModel(application) {
 
-    /* some constants */
     private val appRes = application.applicationContext.resources
-    private val questions = databaseHandler.questions
-    private val limitPositive = appRes.getInteger(R.integer.hsp_positive_limit)
+    private val questions = sharedViewModel.databaseHandler.questions
+
+    /* some constants */
+    companion object{
+        private const val HSP_POSITIVE_LIMIT = 14
+    }
 
     //error messages
     private val errorInvalidInput =
@@ -104,7 +107,7 @@ class ResultViewModel(
     private fun calculateResult() {
         /* Calculate the HSP-Scala-Score */
         var ratingSum = 0
-        databaseHandler.questions.forEach { question ->
+        sharedViewModel.databaseHandler.questions.forEach { question ->
             if (question.itemQuestion)
                 if (question.rating)
                     ratingSum++
@@ -112,7 +115,7 @@ class ResultViewModel(
         Timber.i("Total rating sum: $ratingSum!")
 
         /* General check if user is a HSP and generating message */
-        _resultGeneralHspContent.value = buildGeneralResultString(ratingSum, 1) //TODO implement iteration count
+        _resultGeneralHspContent.value = buildGeneralResultString(ratingSum)
 
         /* checks the influence questions (besides suffering and workplace) and triggers actions to
         * show their specific messages onscreen */
@@ -123,7 +126,7 @@ class ResultViewModel(
             Timber.i("User seems to suffer!")
             _isSuffering.value = true
             _sufferingMessageContent.value =
-                if (ratingSum < limitPositive) appRes.getString(R.string.detected_suffering_negative_hsp_message)
+                if (ratingSum < HSP_POSITIVE_LIMIT) appRes.getString(R.string.detected_suffering_negative_hsp_message)
                 else appRes.getString(R.string.detected_suffering_positive_hsp_message)
         }
 
@@ -220,13 +223,18 @@ class ResultViewModel(
      * HSP-Scala-Score.
      * */
     @SuppressLint("StringFormatMatches")
-    fun buildGeneralResultString(rating: Int, iteration: Int): String {
+    fun buildGeneralResultString(rating: Int): String {
         var resultString: String
-        val isNegative = rating < limitPositive
+        val isNegative = rating < HSP_POSITIVE_LIMIT
+        var iteration = 1
+        val answerSheets = sharedViewModel.answerSheets
+        if (answerSheets != null){
+            iteration += answerSheets.size
+        }
 
         val probabilityArray = appRes.getStringArray(R.array.general_HSP_result_probability_array)
         val resultPositivity =
-            if (rating > limitPositive * 1.5 || rating < limitPositive * 0.5)
+            if (rating > HSP_POSITIVE_LIMIT * 1.5 || rating < HSP_POSITIVE_LIMIT * 0.5)
                 probabilityArray[0]
             else probabilityArray[1]
 

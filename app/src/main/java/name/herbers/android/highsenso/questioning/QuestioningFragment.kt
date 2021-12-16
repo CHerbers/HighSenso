@@ -80,7 +80,7 @@ class QuestioningFragment : Fragment() {
         addLiveDataObservers(sharedViewModel)
 
         //set Listeners
-        setListeners()
+        setListeners(sharedViewModel)
 
         enableAnswerButton(false)
         //TODO if question is already rated -> check specific radioButton -> enableAnswerButton(true)
@@ -160,8 +160,8 @@ class QuestioningFragment : Fragment() {
     /**
      * Calls functions that add Listeners to the backButton, nextButton and seekBar.
      * */
-    private fun setListeners() {
-        addAnswerButtonListener()
+    private fun setListeners(sharedViewModel: SharedViewModel) {
+        addAnswerButtonListener(sharedViewModel)
         addChipListener(binding.questioningPositiveRadioButton)
         addChipListener(binding.questioningNegativeRadioButton)
     }
@@ -170,10 +170,10 @@ class QuestioningFragment : Fragment() {
      * Adds a Click Listener to the nextButton, which progresses to next [Question] or
      * to [ResultFragment].
      * */
-    private fun addAnswerButtonListener() {
+    private fun addAnswerButtonListener(sharedViewModel: SharedViewModel) {
         binding.questionNextButton.setOnClickListener {
             Timber.i("NextButton was clicked!")
-            viewModel.handleNextButtonClick(binding.questioningPositiveRadioButton.isChecked)
+            viewModel.handleNextButtonClick(if (binding.questioningPositiveRadioButton.isChecked) 1 else 0, sharedViewModel)
             //reset checked status on both chips
             binding.questioningPositiveRadioButton.isChecked = false
             binding.questioningNegativeRadioButton.isChecked = false
