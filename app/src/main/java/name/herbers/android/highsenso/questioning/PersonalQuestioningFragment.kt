@@ -1,25 +1,26 @@
 package name.herbers.android.highsenso.questioning
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.UserProfile
 import name.herbers.android.highsenso.databinding.FragmentPersonalQuestioningBinding
-import name.herbers.android.highsenso.result.ResultFragment
+import name.herbers.android.highsenso.dialogs.LocationDialogFragment
 import timber.log.Timber
 
 /**
@@ -56,6 +57,8 @@ class PersonalQuestioningFragment : Fragment() {
         binding.personalQuestioningViewModel = viewModel
         binding.lifecycleOwner = this
 
+        val preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+
         userProfile = sharedViewModel.userProfile
 
         //set title
@@ -65,6 +68,9 @@ class PersonalQuestioningFragment : Fragment() {
                 resources.getString(R.string.questioning_actionBar_title)
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
+        setHasOptionsMenu(true)
+
+        setLocationDialogObserver(sharedViewModel)
 
         //init spinners (dropdown selections)
         initAllSpinners()
@@ -75,39 +81,42 @@ class PersonalQuestioningFragment : Fragment() {
         //next button
         binding.questionNextButton.setOnClickListener {
             Timber.i("nextButton was clicked!")
-            viewModel.handleNextButtonClick()
+//            viewModel.handleNextButtonClick()
+            if (dataComplete()) {
+                LocationDialogFragment(preferences, sharedViewModel).show(
+                    childFragmentManager,
+                    "LocationDialog"
+                )
+//                NavHostFragment.findNavController(this)
+//                    .navigate(R.id.action_personalQuestioning_destination_to_questioning_destination)
+            } else {
+                Toast.makeText(context, "Bitte alle Felder ausfüllen", Toast.LENGTH_SHORT).show()
+            }
         }
-
-        //back button
-//        binding.backButton.setOnClickListener {
-//            Timber.i("backButton was clicked!")
-//            viewModel.handleBackButtonClick()
-//            sharedViewModel.backFromResult = true
-//            NavHostFragment.findNavController(this)
-//                .navigate(R.id.action_personalQuestioning_to_questioning)
-//        }
-
-        //add Observer to navigate to ResultFragment
-//        setIsFinishedObserver()
-
 
         Timber.i("PersonalQuestionFragment created!")
         return binding.root
     }
 
+    private fun dataComplete(): Boolean {
+        return binding.ageEditText.text.toString() != "" && binding.childrenEditText.text.toString() != "" && binding.professionEditText.text.toString() != ""
+    }
+
     /**
-     * Observed isFinished becomes true after the nextButton is clicked while the last question
-     * was shown.
-     * If isFinished is true, Fragment changes to [ResultFragment]
+     * Override fun to define an action when actionBar back button is clicked.
+     * If clicked a fun in the [QuestioningViewModel] is called to handle the click.
      * */
-//    private fun setIsFinishedObserver(){
-//        viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
-//            if (isFinished) {
-//                NavHostFragment.findNavController(this)
-//                    .navigate(R.id.action_personalQuestioningFragment_to_result_destination)
-//            }
-//        })
-//    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                Timber.i("actionBar back button clicked!")
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_personalQuestioning_destination_to_start_destination)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     /**
      * Calls [initSpinner] for every of the four [Spinner]s with its corresponding string-array
@@ -175,7 +184,7 @@ class PersonalQuestioningFragment : Fragment() {
                         userProfile.education = position
                         Timber.i("Education was changed to '${userProfile.educationString}'!")
                     }
-                    binding.professionTypeSpinner ->{
+                    binding.professionTypeSpinner -> {
                         userProfile.professionType = position
                         Timber.i("ProfessionType was changed to '${userProfile.professionTypeString}'")
                     }
@@ -192,9 +201,24 @@ class PersonalQuestioningFragment : Fragment() {
      * Calls [initEditText] for every of the three [EditText]s.
      * */
     private fun initAllEditTexts() {
-        initEditText(binding.ageEditText, userProfile.dateOfBirth.toString())
-        initEditText(binding.childrenEditText, userProfile.children.toString())
-        initEditText(binding.professionEditText, userProfile.profession)
+        initEditText(binding.ageEditText)
+        initEditText(binding.childrenEditText)
+        initEditText(binding.professionEditText)
+    }
+
+    /**
+     * Sets an Observer to [SharedViewModel.localDialogDismiss]. Navigates to [QuestioningFragment]
+     * if true.
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
+     * */
+    private fun setLocationDialogObserver(sharedViewModel: SharedViewModel) {
+        sharedViewModel.locationDialogDismiss.observe(viewLifecycleOwner, { dismissed ->
+            if (dismissed) {
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_personalQuestioning_destination_to_questioning_destination)
+            }
+        })
     }
 
     /**
@@ -204,13 +228,10 @@ class PersonalQuestioningFragment : Fragment() {
      * @param editText the [EditText] that shall be initialized
      * @param hint the hint that should be shown in the [editText]
      * */
-    private fun initEditText(editText: EditText, hint: String) {
+    private fun initEditText(editText: EditText) {
         val ageEditText = binding.ageEditText
         val childrenEditText = binding.childrenEditText
         val professionEditText = binding.professionEditText
-
-        //sets hint to the given hint
-        editText.hint = hint
 
         /* EditText shows realtime error if input is invalid */
         editText.addTextChangedListener(object : TextWatcher {
@@ -232,12 +253,11 @@ class PersonalQuestioningFragment : Fragment() {
                     professionEditText -> viewModel.getProfessionErrorMessage(s.toString())
                     else -> ""
                 }
-
                 if (errorMessage != "") {
                     editText.error = errorMessage
-                }else if (s.toString() != ""){
+                } else if (s.toString() != "") {
                     /* the personalData gets updated if the changed text is not invalid nor empty */
-                    when(editText){
+                    when (editText) {
                         ageEditText -> userProfile.dateOfBirth = Integer.parseInt(s.toString())
                         childrenEditText -> userProfile.children = Integer.parseInt(s.toString())
                         professionEditText -> userProfile.profession = s.toString()

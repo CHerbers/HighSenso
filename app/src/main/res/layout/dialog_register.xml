@@ -122,13 +122,30 @@
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
             android:paddingVertical="@dimen/editText_padding_top_bot" />
 
-        <CheckBox
-            android:id="@+id/register_dialog_privacy_checkBox"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
-            android:linksClickable="true"
-            android:text="@string/register_dialog_privacy_textView" />
+            android:gravity="start">
+
+            <CheckBox
+                android:id="@+id/register_dialog_privacy_checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:linksClickable="true"
+                android:text="@string/register_dialog_privacy_checkBox" />
+
+            <TextView
+                android:id="@+id/register_dialog_privacy_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/register_dialog_privacy_textView"
+                android:textColor="@color/login_dialog_forgotPW_text_color"
+                android:layout_marginBottom="@dimen/standard_textView_layout_margin"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/register_dialog_register_button"

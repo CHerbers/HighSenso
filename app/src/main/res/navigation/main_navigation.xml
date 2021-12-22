@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_startFragment_to_questioningFragment"
             app:destination="@id/questioning_destination" />
+        <action
+            android:id="@+id/action_start_destination_to_privacy_destination"
+            app:destination="@id/privacy_destination" />
+        <action
+            android:id="@+id/action_start_destination_to_personalQuestioning_destination"
+            app:destination="@id/personalQuestioning_destination" />
     </fragment>
     <fragment
         android:id="@+id/questioning_destination"
@@ -57,6 +63,9 @@
         android:id="@+id/personalQuestioning_destination"
         android:name="name.herbers.android.highsenso.questioning.PersonalQuestioningFragment"
         android:label="PersonalQuestioningFragment" >
+        <action
+            android:id="@+id/action_personalQuestioning_destination_to_questioning_destination"
+            app:destination="@id/questioning_destination" />
         <action
             android:id="@+id/action_personalQuestioning_destination_to_start_destination"
             app:destination="@id/start_destination" />

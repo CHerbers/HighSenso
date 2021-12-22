@@ -19,10 +19,7 @@ import androidx.navigation.ui.NavigationUI
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.databinding.FragmentStartBinding
-import name.herbers.android.highsenso.dialogs.ConfirmationMailSentDialog
-import name.herbers.android.highsenso.dialogs.LocationDialogFragment
-import name.herbers.android.highsenso.dialogs.PrivacyDialogFragment
-import name.herbers.android.highsenso.dialogs.ResetPasswordDialogFragment
+import name.herbers.android.highsenso.dialogs.*
 import name.herbers.android.highsenso.login.LoginDialogFragment
 import name.herbers.android.highsenso.login.LoginViewModel
 import name.herbers.android.highsenso.login.RegisterDialogFragment
@@ -142,19 +139,16 @@ class StartFragment : Fragment() {
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
-//                if (preferences.getBoolean(
-//                        getString(R.string.privacy_setting_send_general_data_key),
-//                        true
-//                    )
-//                )
-                if (profileDataComplete()) {
+                if (profileDataAvailable()) {
                     LocationDialogFragment(preferences, sharedViewModel).show(
                         childFragmentManager,
                         "LocationDialog"
                     )
                 } else {
                     Navigation.findNavController(view)
-                        .navigate(R.id.action_startFragment_to_questioningFragment)
+                        .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
+//                    Navigation.findNavController(view)
+//                        .navigate(R.id.action_startFragment_to_questioningFragment)
                 }
             } else {
                 showLoginDialog(sharedViewModel)
@@ -166,7 +160,7 @@ class StartFragment : Fragment() {
      * Checks if the profile data is complete.
      *
      * */
-    private fun profileDataComplete(): Boolean {
+    private fun profileDataAvailable(): Boolean {
         //TODO check profile data
         return false
     }
@@ -180,7 +174,10 @@ class StartFragment : Fragment() {
         binding.startFragmentLoginButton.setOnClickListener {
             Timber.i("loginButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
-                sharedViewModel.handleLogoutButtonClick()
+                LogoutDialog(sharedViewModel).show(
+                    childFragmentManager,
+                    LogoutDialog.TAG
+                )
             } else {
                 sharedViewModel.handleLoginButtonClick()
             }
@@ -211,6 +208,7 @@ class StartFragment : Fragment() {
         setStartResetPasswordDialogObserver(sharedViewModel)
         setStartMailSentDialogObserver(sharedViewModel)
         setLocationDialogObserver(sharedViewModel)
+        setStartPrivacyFragmentObserver(sharedViewModel)
     }
 
     /**
@@ -229,10 +227,8 @@ class StartFragment : Fragment() {
                 binding.startFragmentLoginButton.text =
                     getString(R.string.start_fragment_logout_button)
                 binding.startFragmentRegisterButton.visibility = View.INVISIBLE
-                val username =
-                    preferences.getString(getString(R.string.login_data_username_key), "")
                 binding.startTitleTextView.text =
-                    getString(R.string.start_welcome_username_text, username)
+                    getString(R.string.start_welcome_username_text)
             } else {
                 binding.startFragmentLoginButton.text =
                     getString(R.string.start_fragment_login_button)
@@ -336,6 +332,16 @@ class StartFragment : Fragment() {
             if (dismissed) {
                 NavHostFragment.findNavController(this)
                     .navigate(R.id.action_startFragment_to_questioningFragment)
+            }
+        })
+    }
+
+
+    private fun setStartPrivacyFragmentObserver(sharedViewModel: SharedViewModel) {
+        sharedViewModel.startPrivacyFragment.observe(viewLifecycleOwner, { toStart ->
+            if (toStart) {
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_start_destination_to_privacy_destination)
             }
         })
     }

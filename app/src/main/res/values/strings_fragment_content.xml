@@ -156,14 +156,14 @@
     </string>
     <string name="gender">Geschlecht:</string>
     <string name="age">Alter:</string>
-    <string name="age_editText_default">Alter</string>
+    <string name="age_editText_default">Wie Alt bist Du?</string>
     <string name="marital_Status">Familienstand:</string>
     <string name="children">Kinder:</string>
-    <string name="children_editText_default">Kinder</string>
+    <string name="children_editText_default">Wie viele Kinder hast Du?</string>
     <string name="educationalQualification">Höchster Bildungsabschluss:</string>
     <string name="professionType">Berufsverhältnis:</string>
     <string name="profession">Beruf:</string>
-    <string name="profession_editText_default">Beruf</string>
+    <string name="profession_editText_default">Welchen Beruf übst Du aus?</string>
 
     <!--    result fragment content-->
     <string name="result_title">Ergebnis</string>

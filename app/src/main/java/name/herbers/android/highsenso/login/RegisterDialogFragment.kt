@@ -35,12 +35,12 @@ class RegisterDialogFragment(
     private lateinit var binding: DialogRegisterBinding
     private lateinit var editTextList: List<EditText>
 
-    private val invalidInputToast = R.string.login_dialog_invalid_input_toast_message
-    private val nameAlreadyUsedToast = R.string.register_dialog_name_already_used_toast
-    private val emailAlreadyUsedToast = R.string.register_dialog_email_already_used_toast
-
     companion object {
         const val TAG = "RegisterDialog"
+
+        const val INVALID_INPUT_TOAST = R.string.login_dialog_invalid_input_toast_message
+        const val NAME_ALREADY_USED_TOAST = R.string.register_dialog_name_already_used_toast
+        const val EMAIL_ALREADY_USED_TOAST = R.string.register_dialog_email_already_used_toast
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -54,16 +54,29 @@ class RegisterDialogFragment(
             builder.setTitle(R.string.register_dialog_title)
             editTextList = createEditTextList()
             addObservers()
+            fillEditTextsFromBackup()
             addAllEditTextListeners()
+            setPrivacyTextViewListener()
             setAllButtonListeners()
             initCountrySpinner()
 
             binding.registerDialogPrivacyCheckBox.movementMethod = LinkMovementMethod.getInstance()
 
+            binding.registerDialogPrivacyCheckBox.setOnClickListener { }
+
             binding.registerDialogCountrySpinner
 
             dialog = builder.create()
             dialog
+        }
+    }
+
+    private fun setPrivacyTextViewListener() {
+        binding.registerDialogPrivacyTextView.setOnClickListener {
+            Timber.i("Privacy TextView clicked!")
+            backUpEditTexts()
+            sharedViewModel.handleRegisterDialogPrivacyClick()
+            dismiss()
         }
     }
 
@@ -77,8 +90,8 @@ class RegisterDialogFragment(
                 1 -> {
                     dismiss()
                 }
-                2 -> handleNegativeLoginResponse(getString(nameAlreadyUsedToast))
-                3 -> handleNegativeLoginResponse(getString(emailAlreadyUsedToast))
+                2 -> handleNegativeLoginResponse(getString(NAME_ALREADY_USED_TOAST))
+                3 -> handleNegativeLoginResponse(getString(EMAIL_ALREADY_USED_TOAST))
             }
         })
     }
@@ -136,7 +149,7 @@ class RegisterDialogFragment(
                 )
                 elementsAreEnabled(false)
             } else {
-                Toast.makeText(context, invalidInputToast, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, INVALID_INPUT_TOAST, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -181,6 +194,7 @@ class RegisterDialogFragment(
     private fun setLoginButtonListener() {
         binding.registerDialogToLoginButton.setOnClickListener {
             sharedViewModel.handleLoginButtonClick()
+            backUpEditTexts()
             dismiss()
         }
     }
@@ -306,6 +320,35 @@ class RegisterDialogFragment(
                 //not needed
             }
         })
+    }
+
+    private fun fillEditTextsFromBackup() {
+        val map = sharedViewModel.registerDialogBackupMap
+        val username = map["username"]
+        val email = map["email"]
+        val emailRepeat = map["emailRepeat"]
+        val password = map["password"]
+        val passwordRepeat = map["passwordRepeat"]
+        if (username != null)
+            binding.registerDialogUsernameEditText.setText(username)
+        if (email != null)
+            binding.registerDialogMailEditText.setText(email)
+        if (emailRepeat != null)
+            binding.registerDialogMailRepeatEditText.setText(emailRepeat)
+        if (password != null)
+            binding.registerDialogPasswordEditText.setText(password)
+        if (passwordRepeat != null)
+            binding.registerDialogPasswordRepeatEditText.setText(passwordRepeat)
+    }
+
+    private fun backUpEditTexts(){
+        sharedViewModel.updateBackupMap(
+            binding.registerDialogUsernameEditText.text.toString(),
+            binding.registerDialogMailEditText.text.toString(),
+            binding.registerDialogMailRepeatEditText.text.toString(),
+            binding.registerDialogPasswordEditText.text.toString(),
+            binding.registerDialogPasswordRepeatEditText.text.toString()
+        )
     }
 
     override fun onDestroy() {

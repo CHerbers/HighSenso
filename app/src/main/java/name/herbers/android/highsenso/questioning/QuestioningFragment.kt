@@ -131,7 +131,7 @@ class QuestioningFragment : Fragment() {
     /**
      * Observed isFinished becomes true after the nextButton is clicked while the last question
      * was shown.
-     * If isFinished is true, Fragment changes to [PersonalQuestioningFragment]
+     * If isFinished is true, Fragment changes to [ResultFragment]
      * */
     private fun addIsFinishedObserver(sharedViewModel: SharedViewModel) {
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
@@ -162,8 +162,8 @@ class QuestioningFragment : Fragment() {
      * */
     private fun setListeners(sharedViewModel: SharedViewModel) {
         addAnswerButtonListener(sharedViewModel)
-        addChipListener(binding.questioningPositiveRadioButton)
-        addChipListener(binding.questioningNegativeRadioButton)
+        addRadioButtonListener(binding.questioningPositiveRadioButton)
+        addRadioButtonListener(binding.questioningNegativeRadioButton)
     }
 
     /**
@@ -173,10 +173,15 @@ class QuestioningFragment : Fragment() {
     private fun addAnswerButtonListener(sharedViewModel: SharedViewModel) {
         binding.questionNextButton.setOnClickListener {
             Timber.i("NextButton was clicked!")
-            viewModel.handleNextButtonClick(if (binding.questioningPositiveRadioButton.isChecked) 1 else 0, sharedViewModel)
-            //reset checked status on both chips
+            viewModel.handleNextButtonClick(
+                if (binding.questioningPositiveRadioButton.isChecked) 1 else 0,
+                sharedViewModel
+            )
+            //reset checked status on both radioButtons
             binding.questioningPositiveRadioButton.isChecked = false
+            binding.questioningPositiveRadioButton.isSelected = false
             binding.questioningNegativeRadioButton.isChecked = false
+            binding.questioningNegativeRadioButton.isSelected = false
             enableAnswerButton(false)
         }
     }
@@ -188,16 +193,12 @@ class QuestioningFragment : Fragment() {
         binding.questionNextButton.setBackgroundColor(requireContext().getColor(backgroundColor))
     }
 
-    private fun addChipListener(radioButton: RadioButton) {
+    private fun addRadioButtonListener(radioButton: RadioButton) {
         radioButton.setOnCheckedChangeListener { _, isChecked ->
             Timber.i("RadioButton was clicked!")
             if (isChecked) {
+                radioButton.isSelected = true
                 enableAnswerButton(true)
-//                radioButton.tint(R.color.question_radioButton_selected_color)
-//                chip.setTextColor(ContextCompat.getColor(context!!, R.color.white))
-            } else {
-//                chip.setChipBackgroundColorResource(R.color.question_radioButton_unselected_color)
-//                chip.setTextColor(ContextCompat.getColor(context!!, R.color.black))
             }
         }
     }

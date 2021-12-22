@@ -42,6 +42,8 @@ class SharedViewModel(
     val sensorDataHSP: MutableList<SensorData> = mutableListOf()
     val sensorDataDWHS: MutableList<SensorData> = mutableListOf()
 
+    val registerDialogBackupMap = initRegisterDialogBackupMap()
+
     private val appRes = application.resources
 
     private val _gatherSensorData = MutableLiveData(false)
@@ -63,6 +65,10 @@ class SharedViewModel(
     private val _startLoginDialog = MutableLiveData(false)
     val startLoginDialog: LiveData<Boolean>
         get() = _startLoginDialog
+
+    private val _startPrivacyFragment = MutableLiveData(false)
+    val startPrivacyFragment: LiveData<Boolean>
+        get() = _startPrivacyFragment
 
     private val _startResetPasswordDialog = MutableLiveData(false)
     val startResetPasswordDialog: LiveData<Boolean>
@@ -153,6 +159,11 @@ class SharedViewModel(
     fun handleLoginButtonClick() {
         _startLoginDialog.value = true
         _startLoginDialog.value = false
+    }
+
+    fun handleRegisterDialogPrivacyClick() {
+        _startPrivacyFragment.value = true
+        _startPrivacyFragment.value = false
     }
 
     fun handleLogoutButtonClick() {
@@ -270,7 +281,7 @@ class SharedViewModel(
             currentAnswersHSP,
             sensorDataHSP,
             client
-            )
+        )
         val answerSheetDWHS = AnswerSheet(
             Date().time,
             LOCALE,
@@ -297,6 +308,24 @@ class SharedViewModel(
         answerSheets.forEach { answerSheet ->
             communicationHandler.sendAnswerSheet(token, answerSheet)
         }
+    }
+
+    private fun initRegisterDialogBackupMap(): MutableMap<String, String?> {
+        val map = mutableMapOf<String, String?>()
+        map["username"]
+        map["email"]
+        map["emailRepeat"]
+        map["password"]
+        map["passwordRepeat"]
+        return map
+    }
+
+    fun updateBackupMap(username: String?, email: String?, emailRepeat: String?, password: String?, passwordRepeat: String?){
+        registerDialogBackupMap["username"] = username
+        registerDialogBackupMap["email"] = email
+        registerDialogBackupMap["emailRepeat"] = emailRepeat
+        registerDialogBackupMap["password"] = password
+        registerDialogBackupMap["passwordRepeat"] = passwordRepeat
     }
 
     override fun onCleared() {

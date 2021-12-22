@@ -59,7 +59,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     companion object {
         private const val SERVER_URL = "https://www.google.com" //TODO insert right URL
         private const val AUDIO_SENSOR_MEASURING_DURATION = 8
-        private const val SENSOR_MEASURING_INTERVAL = 10000L
+        private const val SENSOR_MEASURING_INTERVAL_NANOS =
+            5000000000L    //Interval between two sensor measurements in nanoseconds
         private const val HSP_QUESTIONNAIRE = "HSPScala"
         private const val DEAL_WITH_HS_QUESTIONNAIRE = "DealWithHS"
     }
@@ -155,7 +156,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val gatherAudioPeriodically = object : Runnable {
         override fun run() {
             audioRecording()
-            repTaskHandler.postDelayed(this, 5000)
+            val sensorMeasuringIntervalMillis = SENSOR_MEASURING_INTERVAL_NANOS / 1000000L
+            repTaskHandler.postDelayed(this, sensorMeasuringIntervalMillis)
         }
     }
 
@@ -327,33 +329,28 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        val currentTime = Date().time
-
-        if (event != null) {
-            when (event.sensor) {
-                mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) -> {
-                    val measuredTemp = event.values[0]
-                    if (lastTempSensorMeasurement == 0L) {
-                        saveTempSensorData(measuredTemp, currentTime)
-                    } else if (currentTime > lastTempSensorMeasurement + SENSOR_MEASURING_INTERVAL) {
-                        saveTempSensorData(measuredTemp, currentTime)
-                    }
+        //null check
+        val eventTime = event?.timestamp ?: return
+        when (event.sensor) {
+            mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) -> {
+                val measuredTemp = event.values[0]
+                if (lastTempSensorMeasurement == 0L || eventTime > lastTempSensorMeasurement + SENSOR_MEASURING_INTERVAL_NANOS) {
+                    Timber.i("eventTime: $eventTime; last: $lastTempSensorMeasurement")
+                    saveTempSensorData(measuredTemp, eventTime)
                 }
-                mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) -> {
-                    val measuredLight = event.values[0]
-                    if (lastLightSensorMeasurement == 0L) {
-                        saveLightSensorData(measuredLight, currentTime)
-                    } else if (currentTime > lastLightSensorMeasurement + SENSOR_MEASURING_INTERVAL) {
-                        saveLightSensorData(measuredLight, currentTime)
-                    }
+            }
+            mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) -> {
+                val measuredLight = event.values[0]
+                if (lastLightSensorMeasurement == 0L || eventTime > lastLightSensorMeasurement + SENSOR_MEASURING_INTERVAL_NANOS) {
+                    saveLightSensorData(measuredLight, eventTime)
                 }
             }
         }
     }
 
-    private fun saveTempSensorData(measuredTemp: Float, currentTime: Long) {
+    private fun saveTempSensorData(measuredTemp: Float, eventTime: Long) {
         Timber.i("Event on ambient temperature sensor: $measuredTemp °C")
-        lastTempSensorMeasurement = currentTime
+        lastTempSensorMeasurement = eventTime
         val tempData = AmbientTemperatureSensorData(
             getString(R.string.ambient_temp_sd_field),
             Date().time,
@@ -365,9 +362,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    private fun saveLightSensorData(measuredLight: Float, currentTime: Long) {
+    private fun saveLightSensorData(measuredLight: Float, eventTime: Long) {
         Timber.i("Event on light sensor: $measuredLight lux")
-        lastLightSensorMeasurement = currentTime
+        lastLightSensorMeasurement = eventTime
         val lightData = AmbientLightSensorData(
             getString(R.string.ambient_light_sd_field),
             Date().time,

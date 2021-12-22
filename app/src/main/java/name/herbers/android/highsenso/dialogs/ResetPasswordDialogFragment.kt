@@ -47,7 +47,7 @@ class ResetPasswordDialogFragment(
             val builder = AlertDialog.Builder(it)
             builder.setView(binding.root)
             builder.setTitle(R.string.reset_dialog_title)
-            builder.setPositiveButton(R.string.reset_dialog_accept_button) { _, _ ->
+            builder.setPositiveButton(R.string.positive_button) { _, _ ->
                 val mailEditText = binding.resetPasswordDialogMailEditText
                 if (mailEditText.error == null && mailEditText.text.isNotEmpty()) {
                     sharedViewModel.handleResetPassword(mailEditText.text.toString())

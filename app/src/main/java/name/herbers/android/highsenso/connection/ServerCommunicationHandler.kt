@@ -23,6 +23,8 @@ import kotlin.collections.HashMap
  */
 class ServerCommunicationHandler(private val serverURL: String, val context: Context) {
     private val answerSheetList = mutableListOf<AnswerSheet>()
+//    private val builder = GsonBuilder()
+//    val gson: Gson = builder.create()
     val gson = Gson()
 
     /* data string fields */
@@ -263,6 +265,74 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
     }
 
+    //TODO test his gson stuff
+    fun getAllQuestionnairesALT1(token: String, sharedViewModel: SharedViewModel) {
+        val url = serverURL //TODO url
+        val questionnaires = mutableListOf<Questionnaire>()
+        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
+            Method.GET,
+            url,
+            null,
+            { response ->
+                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
+                try {
+                    val dataJSON: JSONObject = response.getJSONObject("data")
+                    val attributes = dataJSON.getJSONArray("attributes")
+                    for (i in 0 until attributes.length()){
+                        questionnaires.add(gson.fromJson(attributes[i].toString(), Questionnaire::class.java))
+                    }
+                    sharedViewModel.questionnaires = questionnaires
+                    Timber.i(SUCCESSFULLY_PARSED)
+                } catch (e: JSONException) {
+                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
+                }
+            },
+            { error ->
+                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                return addHeader(contentHeader = false, languageHeader = true)
+            }
+        }
+        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
+    }
+
+    //TODO test this gson stuff too
+    fun getAllQuestionnairesALT2(token: String, sharedViewModel: SharedViewModel) {
+        val url = serverURL //TODO url
+        val questionnaires: List<Questionnaire>
+        val jsonObjectRequest: StringRequest = object : StringRequest(
+            Method.GET,
+            url,
+            { response ->
+                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
+                try {
+                    val data = gson.fromJson(response, Data::class.java)
+                    if (data.attributes is List<*>){
+                        if (data.attributes is Questionnaire){
+                            sharedViewModel.questionnaires = data.attributes as List<Questionnaire>?
+                        }
+                    }
+//                    val dataJSON: JSONObject = response.getJSONObject("data")
+//                    sharedViewModel.questionnaires =
+//                        getQuestionnaireListFromJSONArray(dataJSON.getJSONArray("attributes"))
+                    Timber.i(SUCCESSFULLY_PARSED)
+                } catch (e: JSONException) {
+                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
+                }
+            },
+            { error ->
+                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                return addHeader(contentHeader = false, languageHeader = true)
+            }
+        }
+        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
+    }
+
     fun getAllAnswerSheets(token: String, sharedViewModel: SharedViewModel) {
         val url = serverURL + QUESTIONNAIRES_URL + TOKEN_URL + token
         val answerSheets: List<AnswerSheet>
@@ -298,10 +368,10 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             Method.DELETE,
             url,
             { response ->
-                Timber.i(RECEIVED_RESPONSE + "sendAnswerSheet (POST): $response")
+                Timber.i(RECEIVED_RESPONSE + "logout request: $response")
             },
             { error ->
-                Timber.i(RECEIVED_ERROR + "sendAnswerSheet: $error")
+                Timber.i(RECEIVED_ERROR + "logout request: $error")
 
             }) {
             @Throws(AuthFailureError::class)

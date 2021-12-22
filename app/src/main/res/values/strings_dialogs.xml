@@ -10,9 +10,11 @@
     <!--    reset dialog-->
     <string name="reset_dialog_title">Passwort zurücksetzen</string>
     <string name="reset_dialog_message">
-        Möchtest Du Dein Passwort zurücksetzten?\n
-        Trage hier Deine E-Mail-Adresse ein, mit der Du Dich registriert hast. Wir schicken Dir
-        daraufhin einen Link, mit dem Du Dein Passwort zurückzusetzen kannst.
+        Möchtest Du Dein Passwort zurücksetzten?
+        \n
+        Trage hier Deine E-Mail-Adresse ein, mit der Du Dich registriert hast.
+        \n
+        Wir schicken Dir daraufhin einen Link, mit dem Du Dein Passwort zurückzusetzen kannst.
     </string>
     <string name="reset_dialog_toast_message">Link wurde gesendet</string>
     <string name="reset_dialog_accept_button">Passwort \n zurücksetzen</string>
@@ -27,6 +29,13 @@
         Im Anschluss kannst Du Dich einloggen.
     </string>
     <string name="confirmation_mail_sent_dialog_button">OK</string>
+
+    <!--    logout dialog-->
+    <string name="logout_dialog_title">Logout</string>
+    <string name="logout_dialog_message">
+        Möchtest Du Dich wirklich Ausloggen?
+    </string>
+    <string name="logout_dialog_toast_message">Du wurdest ausgeloggt</string>
 
     <!--    privacy dialog-->
     <string name="privacy_dialog_title">Datenschutzbestimmungen</string>
@@ -66,7 +75,7 @@
 
     <!--    login dialog-->
     <string name="login_dialog_title">Login</string>
-    <string name="login_dialog_message">Melde dich an, um die App zu nutzen.</string>
+    <string name="login_dialog_message">Melde Dich an, um die App zu nutzen.</string>
     <string name="login_dialog_username_editText_default">Username / E-Mail</string>
     <string name="login_dialog_password_editText_default">Passwort</string>
     <string name="login_dialog_login_button">Login</string>
@@ -81,19 +90,20 @@
 
     <!--    register dialog-->
     <string name="register_dialog_title">Registrieren</string>
-    <string name="register_dialog_message">Registriere dich, um die App zu nutzen.</string>
+    <string name="register_dialog_message">Registriere Dich, um die App zu nutzen.</string>
     <string name="register_dialog_username_editText_default">Benutzer*innenname</string>
     <string name="register_dialog_password_editText_default">Passwort</string>
     <string name="register_dialog_password_repeat_editText_default">Passwort (Wiederholung)</string>
     <string name="register_dialog_mail_editText_default">E-Mail Adresse</string>
     <string name="register_dialog_mail_repeat_editText_default">E-Mail Adresse (Wiederholung)</string>
     <string name="register_dialog_country_editText_default">Heimatland</string>
-    <string name="register_dialog_privacy_textView">
-        Indem du dich registrierst, stimmst du den <a href="http://www.google.com">Datenschutzrichtlinien</a> zu.
+    <string name="register_dialog_privacy_checkBox">
+        Hiermit akzeptiere ich die
     </string>
+    <string name="register_dialog_privacy_textView"><b><u>Datenschutzbestimmungen</u></b></string>
     <string name="register_dialog_register_button">Registrieren</string>
-    <string name="register_dialog_name_already_used_toast">Name wird bereits verwendet.</string>
-    <string name="register_dialog_email_already_used_toast">E-Mail wird bereits verwendet.</string>
+    <string name="register_dialog_name_already_used_toast">Name wird bereits verwendet</string>
+    <string name="register_dialog_email_already_used_toast">E-Mail wird bereits verwendet</string>
     <string name="register_dialog_to_login_button">
         Bereits registriert?
         \n
@@ -102,15 +112,15 @@
 
     <!--    send dialog-->
     <string name="send_dialog_title">Send Result Anonymously</string>
-    <string name="send_dialog_message">Send Result</string>
-    <string name="send_dialog_age_edit_text_hint">Age</string>
+    <string name="send_dialog_message">Ergebnis senden</string>
+    <string name="send_dialog_age_edit_text_hint">Alter</string>
     <string name="send_dialog_toast_message">Results have been sent!</string>
-    <string name="send_dialog_text_edit_error_invalid">Invalid input!</string>
-    <string name="send_dialog_text_edit_error_old">Too old!</string>
-    <string name="send_dialog_text_edit_error_young">Too young!</string>
+    <string name="send_dialog_text_edit_error_invalid">Ungültige Eingabe!</string>
+    <string name="send_dialog_text_edit_error_old">Zu alt!</string>
+    <string name="send_dialog_text_edit_error_young">Zu jung!</string>
     <!--    RadioButtons-->
-    <string name="gender_female_radioButton_text">female</string>
-    <string name="gender_male_radioButton_text">male</string>
-    <string name="gender_nonBinary_radioButton_text">non-binary</string>
-    <string name="send_dialog_gender_label_text">Gender</string>
+    <string name="gender_female_radioButton_text">weiblich</string>
+    <string name="gender_male_radioButton_text">männlich</string>
+    <string name="gender_nonBinary_radioButton_text">divers</string>
+    <string name="send_dialog_gender_label_text">Geschlecht</string>
 </resources>
