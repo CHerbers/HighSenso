@@ -3,6 +3,7 @@
     <!--    button texts-->
     <string name="positive_button">Ja</string>
     <string name="negative_button">Nein</string>
+    <string name="okay_button">OK</string>
     <string name="accept_button">Auswahl bestätigen</string>
     <string name="cancel_button">Abbrechen</string>
     <string name="decline_all_button">Alles Ablehnen</string>
@@ -108,6 +109,18 @@
         Bereits registriert?
         \n
         Zum Login
+    </string>
+
+    <!--    end questioning dialog-->
+    <string name="end_questioning_dialog_title">Befragung beenden</string>
+    <string name="end_questioning_dialog_message">Möchtest Du die Befragung beenden und Dir das Ergebnis ansehen?</string>
+
+    <!--    no questionnaire available dialog-->
+    <string name="no_questionnaires_available_dialog_title">Keine Fragebögen verfügbar</string>
+    <string name="no_questionnaires_available_dialog_message">
+        Es sind momentan keine Fragebögen für Dich verfügbar!
+        \n
+        Überprüfe, ob Du eine aktive Internetverbindung hast und versuche es erneut.
     </string>
 
     <!--    send dialog-->

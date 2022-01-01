@@ -6,8 +6,9 @@ package name.herbers.android.highsenso.data
  *@author Herbers
  */
 data class AnswerSheet(
+    val id: Int,
     val collected_at: Long,
-    val locale: String,
+    val locale: String = "de",
     val answers: List<Answer>,
     val sensorData: List<SensorData>,
     val client: Client

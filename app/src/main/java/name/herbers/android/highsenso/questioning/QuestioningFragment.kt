@@ -16,6 +16,7 @@ import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.databinding.FragmentQuestioningBinding
+import name.herbers.android.highsenso.dialogs.EndQuestioningDialog
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.result.ResultViewModel
 import name.herbers.android.highsenso.start.StartFragment
@@ -109,7 +110,8 @@ class QuestioningFragment : Fragment() {
      * */
     private fun addLiveDataObservers(sharedViewModel: SharedViewModel) {
         addBackToStartObserver(sharedViewModel)
-        addIsFinishedObserver(sharedViewModel)
+        addIsFinishedObserver()
+        addNavToResultFragmentObserver(sharedViewModel)
         addIsLastQuestionObserver()
     }
 
@@ -131,16 +133,33 @@ class QuestioningFragment : Fragment() {
     /**
      * Observed isFinished becomes true after the nextButton is clicked while the last question
      * was shown.
-     * If isFinished is true, Fragment changes to [ResultFragment]
+     * If isFinished is true, the [EndQuestioningDialog] is shown.
      * */
-    private fun addIsFinishedObserver(sharedViewModel: SharedViewModel) {
+    private fun addIsFinishedObserver() {
         viewModel.isFinished.observe(viewLifecycleOwner, { isFinished ->
             if (isFinished) {
+                EndQuestioningDialog(viewModel).show(
+                    childFragmentManager,
+                    EndQuestioningDialog.TAG
+                )
+            }
+        })
+    }
+
+    /**
+     * Observed NavBackToResultFragment becomes true after the [EndQuestioningDialog] was answered
+     * positive.
+     * If NavBackToResultFragment is true, Fragment changes to [ResultFragment]
+     * */
+    private fun addNavToResultFragmentObserver(sharedViewModel: SharedViewModel) {
+        viewModel.navToResultFrag.observe(viewLifecycleOwner, { toNav ->
+            if (toNav) {
                 sharedViewModel.stopGatherSensorData()
                 sharedViewModel.createAndSendAnswerSheets()
                 findNavController(this)
                     .navigate(R.id.action_questioning_destination_to_result_destination)
             }
+
         })
     }
 
@@ -178,10 +197,7 @@ class QuestioningFragment : Fragment() {
                 sharedViewModel
             )
             //reset checked status on both radioButtons
-            binding.questioningPositiveRadioButton.isChecked = false
-            binding.questioningPositiveRadioButton.isSelected = false
-            binding.questioningNegativeRadioButton.isChecked = false
-            binding.questioningNegativeRadioButton.isSelected = false
+            binding.questioningRadioGroup.clearCheck()
             enableAnswerButton(false)
         }
     }
@@ -189,7 +205,8 @@ class QuestioningFragment : Fragment() {
     private fun enableAnswerButton(toEnable: Boolean) {
         binding.questionNextButton.isEnabled = toEnable
         val backgroundColor =
-            if (toEnable) R.color.question_answerButton_default_color else R.color.question_answerButton_disabled_color
+            if (toEnable) R.color.question_answerButton_default_color
+            else R.color.question_answerButton_disabled_color
         binding.questionNextButton.setBackgroundColor(requireContext().getColor(backgroundColor))
     }
 
@@ -197,7 +214,6 @@ class QuestioningFragment : Fragment() {
         radioButton.setOnCheckedChangeListener { _, isChecked ->
             Timber.i("RadioButton was clicked!")
             if (isChecked) {
-                radioButton.isSelected = true
                 enableAnswerButton(true)
             }
         }

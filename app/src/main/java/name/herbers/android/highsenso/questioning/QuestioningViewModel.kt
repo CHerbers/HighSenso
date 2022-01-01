@@ -45,6 +45,11 @@ class QuestioningViewModel(
         get() = _navBackToStartFrag
 
     /* observed by QuestioningFragment, if true: navigation to ResultFragment */
+    private val _navToResultFrag = MutableLiveData(false)
+    val navToResultFrag: LiveData<Boolean>
+        get() = _navToResultFrag
+
+    /* observed by QuestioningFragment, if true: a dialog is shown  */
     private val _isFinished = MutableLiveData(false)
     val isFinished: LiveData<Boolean>
         get() = _isFinished
@@ -138,6 +143,11 @@ class QuestioningViewModel(
     private fun updateRatingFromSeekBar(rating: Boolean) {
         currentQuestion.rating = rating
         databaseHandler.updateDatabase(currentQuestion)
+    }
+
+    fun navigateToResultFragment(){
+        _navToResultFrag.value = true
+        _navToResultFrag.value = false
     }
 
     override fun onCleared() {

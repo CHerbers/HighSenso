@@ -16,6 +16,6 @@ data class Questionnaire(
     @ColumnInfo
     val name: String,
     @ColumnInfo
-    val questions: List<QuestionB>
+    val questions: List<Question>
 ) {
 }

@@ -13,8 +13,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  *
@@ -23,7 +21,8 @@ import kotlin.collections.HashMap
  */
 class ServerCommunicationHandler(private val serverURL: String, val context: Context) {
     private val answerSheetList = mutableListOf<AnswerSheet>()
-//    private val builder = GsonBuilder()
+
+    //    private val builder = GsonBuilder()
 //    val gson: Gson = builder.create()
     val gson = Gson()
 
@@ -34,6 +33,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     private val collectedAtField = context.getString(R.string.collected_at_field)
     private val labelField = context.getString(R.string.label_field)
     private val idField = context.getString(R.string.id_field)
+
     //question
     private val minField = context.getString(R.string.min_field)
     private val maxField = context.getString(R.string.max_field)
@@ -46,6 +46,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     private val clientField = context.getString(R.string.client_field)
     private val questionTypeField = context.getString(R.string.question_type_field)
     private val questionField = context.getString(R.string.questions_field)
+
     //sensorData
     private val ambientAudioSDField = context.getString(R.string.ambient_audio_sd_field)
     private val ambientTempSDField = context.getString(R.string.ambient_temp_sd_field)
@@ -53,6 +54,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     private val amplitudeField = context.getString(R.string.amplitude_field)
     private val luxField = context.getString(R.string.lux_field)
     private val degreesField = context.getString(R.string.degrees_field)
+
     //client
     private val deviceField = context.getString(R.string.degrees_field)
     private val osField = context.getString(R.string.os_field)
@@ -218,6 +220,8 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
     fun sendResetPasswordRequest(mail: String) {
         val url = serverURL //TODO complete URL
+        val resetPasswordRequest = ResetPasswordRequest(mail)
+        val request = RequestData(Data("users", resetPasswordRequest))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
             url,
@@ -232,13 +236,20 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             override fun getHeaders(): Map<String, String> {
                 return addHeader(contentHeader = true, languageHeader = true)
             }
+
+            override fun getBody(): ByteArray {
+                val bodyJSON = gson.toJson(request)
+                Timber.i("Login request sent: $bodyJSON")
+                return bodyJSON.toString().toByteArray()
+            }
         }
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    fun getAllQuestionnaires(token: String, sharedViewModel: SharedViewModel) {
+    //TODO test this
+    fun getAllQuestionnairesJSON(token: String, sharedViewModel: SharedViewModel) {
         val url = serverURL //TODO url
-        val questionnaires: List<Questionnaire>
+//        val questionnaires: List<Questionnaire>
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             url,
@@ -266,7 +277,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     }
 
     //TODO test his gson stuff
-    fun getAllQuestionnairesALT1(token: String, sharedViewModel: SharedViewModel) {
+    fun getAllQuestionnaires(token: String, sharedViewModel: SharedViewModel) {
         val url = serverURL //TODO url
         val questionnaires = mutableListOf<Questionnaire>()
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
@@ -278,8 +289,13 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 try {
                     val dataJSON: JSONObject = response.getJSONObject("data")
                     val attributes = dataJSON.getJSONArray("attributes")
-                    for (i in 0 until attributes.length()){
-                        questionnaires.add(gson.fromJson(attributes[i].toString(), Questionnaire::class.java))
+                    for (i in 0 until attributes.length()) {
+                        questionnaires.add(
+                            gson.fromJson(
+                                attributes[i].toString(),
+                                Questionnaire::class.java
+                            )
+                        )
                     }
                     sharedViewModel.questionnaires = questionnaires
                     Timber.i(SUCCESSFULLY_PARSED)
@@ -309,8 +325,8 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
                 try {
                     val data = gson.fromJson(response, Data::class.java)
-                    if (data.attributes is List<*>){
-                        if (data.attributes is Questionnaire){
+                    if (data.attributes is List<*>) {
+                        if (data.attributes is Questionnaire) {
                             sharedViewModel.questionnaires = data.attributes as List<Questionnaire>?
                         }
                     }
@@ -405,19 +421,23 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         return questionnaireList
     }
 
-    private fun getQuestionListFromJSONArray(array: JSONArray): List<QuestionB> {
-        val questionList = mutableListOf<QuestionB>()
+    private fun getQuestionListFromJSONArray(array: JSONArray): List<Question> {
+        val questionList = mutableListOf<Question>()
 
         for (i in 0 until array.length()) {
             val question = array.getJSONObject(i)
             questionList.add(
-                QuestionB(
-                    question.getString(questionTypeField),
-                    question.getInt(minField),
-                    question.getInt(maxField),
-                    question.getDouble(stepField),
+                Question(
+                    question.getInt("position"),
+                    question.getString("name"),
+                    question.getBoolean("is_active"),
+                    question.getString("elementtype"),
                     question.getBoolean(requiredField),
-                    question.getString(variableField)
+                    question.getString(questionTypeField),
+                    question.getString("label"),
+                    question.get("values"),
+                    question.getString("restricted_to"),
+                    listOf()    //TODO fix
                 )
             )
         }
@@ -431,6 +451,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             val answerSheet = array.getJSONObject(i)
             answerSheetList.add(
                 AnswerSheet(
+                    answerSheet.getInt("id"),
                     answerSheet.getLong(collectedAtField),
                     answerSheet.getString(localeField),
                     getAnswersListFromJSONArray(answerSheet.getJSONArray(answerField)),
@@ -451,7 +472,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 Answer(
                     answer.getString(labelField),
                     answer.getLong(collectedAtField),
-                    answer.get(valueField) as Objects //TODO fix this
+                    answer.getInt(valueField)
                 )
             )
         }
@@ -479,7 +500,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                     )
                 )
                 ambientTempSDField -> questionList.add(
-                    AmbientTemperatureSensorData(
+                    AmbientTempSensorData(
                         sensorType,
                         sensorData.getLong(collectedAtField),
                         sensorData.getDouble(degreesField).toFloat()

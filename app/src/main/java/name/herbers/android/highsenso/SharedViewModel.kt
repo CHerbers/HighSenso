@@ -276,6 +276,7 @@ class SharedViewModel(
             android.os.Build.VERSION.RELEASE
         )
         val answerSheetHSP = AnswerSheet(
+            2,
             Date().time,
             LOCALE,
             currentAnswersHSP,
@@ -283,6 +284,7 @@ class SharedViewModel(
             client
         )
         val answerSheetDWHS = AnswerSheet(
+            3,
             Date().time,
             LOCALE,
             currentAnswersDWHS,

@@ -139,16 +139,25 @@ class StartFragment : Fragment() {
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
-                if (profileDataAvailable()) {
-                    LocationDialogFragment(preferences, sharedViewModel).show(
+                if (sharedViewModel.questionnaires.isNullOrEmpty()) {
+                    /* this is true if no questionnaires could be loaded to this point.
+                    * Therefore questioning cannot be started and a message is shown instead */
+                    NoQuestionnairesAvailableDialog().show(
                         childFragmentManager,
-                        "LocationDialog"
+                        NoQuestionnairesAvailableDialog.TAG
                     )
                 } else {
-                    Navigation.findNavController(view)
-                        .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
+                    if (startViewModel.profileDataAvailable(sharedViewModel.answerSheets)) {
+                        LocationDialogFragment(preferences, sharedViewModel).show(
+                            childFragmentManager,
+                            "LocationDialog"
+                        )
+                    } else {
+                        Navigation.findNavController(view)
+                            .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
 //                    Navigation.findNavController(view)
 //                        .navigate(R.id.action_startFragment_to_questioningFragment)
+                    }
                 }
             } else {
                 showLoginDialog(sharedViewModel)
@@ -156,14 +165,6 @@ class StartFragment : Fragment() {
         }
     }
 
-    /**
-     * Checks if the profile data is complete.
-     *
-     * */
-    private fun profileDataAvailable(): Boolean {
-        //TODO check profile data
-        return false
-    }
 
     /**
      *
@@ -201,7 +202,7 @@ class StartFragment : Fragment() {
      * */
     private fun setAllObservers() {
         val sharedViewModel: SharedViewModel by activityViewModels()
-        setResetObserver(sharedViewModel)
+//        setResetObserver(sharedViewModel)
         setLoginButtonsObserver(sharedViewModel)
         setStartRegisterDialogObserver(sharedViewModel)
         setStartLoginDialogObserver(sharedViewModel)

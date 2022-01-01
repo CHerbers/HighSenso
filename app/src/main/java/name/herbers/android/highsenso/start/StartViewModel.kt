@@ -1,6 +1,7 @@
 package name.herbers.android.highsenso.start
 
 import androidx.lifecycle.ViewModel
+import name.herbers.android.highsenso.data.AnswerSheet
 import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
 
@@ -18,10 +19,25 @@ class StartViewModel(
     val databaseHandler: DatabaseHandler
 ) : ViewModel() {
 
-
+    companion object{
+        private const val BASELINE_ID = 1
+    }
 
     init {
         Timber.i("StartViewModel created!")
+    }
+
+    /**
+     * Checks if the profile data is complete.
+     *
+     * */
+    fun profileDataAvailable(answerSheets: List<AnswerSheet>?): Boolean {
+        var available = false
+        if (answerSheets == null) return available
+        for (answerSheet in answerSheets){
+            available = answerSheet.id == BASELINE_ID
+        }
+        return available
     }
 
     /**

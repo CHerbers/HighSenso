@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.AmbientAudioSensorData
 import name.herbers.android.highsenso.data.AmbientLightSensorData
-import name.herbers.android.highsenso.data.AmbientTemperatureSensorData
+import name.herbers.android.highsenso.data.AmbientTempSensorData
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.database.UserProfile
@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun saveTempSensorData(measuredTemp: Float, eventTime: Long) {
         Timber.i("Event on ambient temperature sensor: $measuredTemp °C")
         lastTempSensorMeasurement = eventTime
-        val tempData = AmbientTemperatureSensorData(
+        val tempData = AmbientTempSensorData(
             getString(R.string.ambient_temp_sd_field),
             Date().time,
             measuredTemp

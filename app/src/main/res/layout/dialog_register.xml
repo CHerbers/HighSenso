@@ -133,7 +133,6 @@
                 android:id="@+id/register_dialog_privacy_checkBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:linksClickable="true"
                 android:text="@string/register_dialog_privacy_checkBox" />
 
             <TextView
