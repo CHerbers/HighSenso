@@ -27,7 +27,7 @@
         verstehen zu lernen.
         \n
         Eine kurze Erklärung darüber, was Hochsensibilität ist, hast Du bereits auf der <b>Startseite</b>
-        gesehen. Wenn Du dich mehr dafür interessierst kannst Du Dir folgende Links zum Thema
+        gesehen. Wenn Du dich mehr dafür interessierst, kannst Du Dir folgende Links zum Thema
         Hochsensibilität ansehen:
     </string>
     <string name="positive_HSP_message">
@@ -39,13 +39,13 @@
         \n
         \n
         <b>Empathie:</b> Als hochsensible Person (HSP) bist du wahrscheinlich einfühlsamer und
-        empatischer als viele andere Menschen.
-        In zwischenmenschlichen Beziehungen kann diese Fähigkeit durchaus nützlich sein, sowohl in
-        persönlichen Beziehungen, als auch beim Umgang mit Arbeitskoleg*innen, Mitschüler*innen, etc.
+        empathischer als viele andere Menschen.
+        In zwischenmenschlichen Beziehungen kann diese Fähigkeit nützlich sein, sowohl in
+        persönlichen Beziehungen, als auch beim Umgang mit Arbeitskolleg*innen, Mitschüler*innen, etc.
         \n
         \n
         <b>Kreativität:</b> Ebenfalls liegt bei HSPs nicht selten ein erhöhtes Maß an Kreativität vor.
-        Sowohl am Arbeitsplatz, als auch für private Hobbies kann man diese Kreativität für sich nutzen.
+        Sowohl am Arbeitsplatz als auch für private Hobbies kann man diese Kreativität für sich nutzen.
         \n
         Dazu gehört auch, dass HSPs oftmals eine größere Freude an Musik und Kunst empfinden können,
         als es nicht-HSPs können.
@@ -55,23 +55,23 @@
         von nicht-HSPs. Viele HSPs empfinden daher den Druck sich an die Menschen in ihrem Umfeld
         anpassen zu müssen, obwohl sie sich dabei unwohl fühlen oder sich Stresssituationen aussetzen.
         \n
-        Hilfreich kann es hier sein, zu akzeptieren, dass man eine HSP ist und man andere Bedüfnisse
+        Hilfreich kann es hier sein, zu akzeptieren, dass man eine HSP ist und man andere Bedürfnisse
         hat als andere Menschen und dass das auch vollkommen in Ordnung ist. Anders sein bedeutet
-        nicht besser oder schlechter zu sein. Bringe Dich nicht in Stresssitutationen, wenn Du das
+        nicht besser oder schlechter zu sein. Bringe Dich nicht in Stresssituationen, wenn Du das
         eigentlich gar nicht möchtest.
     </string>
     <!--    message if enthusiasm question was answered positively-->
     <string name="enthusiasm_message">
-        Du bist sehr Begeisterungsfähig. Probiere doch öfter mal Neues aus. Seien es neue Themen, in
+        Du bist sehr begeisterungsfähig. Probiere doch öfter mal Neues aus. Seien es neue Themen, in
         die Du Dich zur Weiterbildung einlesen kannst oder neue Hobbies, wie zum Beispiel neue Sportarten.
         Durch Deine hohe Begeisterungsfähigkeit fällt es Dir einfacher neue Dinge zu lernen und
         Freude daran zu entwickeln.
     </string>
     <!--    message if user is emotional vulnerable-->
     <string name="emotional_vulnerability_message">
-        Als HSP fühlst Du intensiver. Das kann bei schönen Gefühlen wie Glück oder Freude toll sein.
+        Als HSP fühlst Du intensiver. Das kann bei schönen Gefühlen wie Glück oder Freude großartig sein.
         Allerdings wirken auch negative Gefühle intensiver. Diese Gefühle, im Guten, wie im Schlechten,
-        gehören zum Leben dazu, wichtig ist zu lernen wie man am besten mit ihnen umgehen kann.
+        gehören zum Leben dazu, wichtig ist zu lernen, wie man am besten mit ihnen umgehen kann.
         \n
         Fühlst Du Dich von jemandem emotional verletzt, dann versuche das Gefühl zu hinterfragen.
         Du bist empathisch, versuche Dich in die andere Person hineinzuversetzen.
@@ -81,7 +81,7 @@
         Wenn Du Dir diese Fragen stellst, kommst Du vielleicht zu dem Ergebnis, dass die andere
         Person Dich gar nicht verletzen wollte, dann versuche Dich mit ihr auszusprechen.
         \n
-        Natürlich wird es auch Menschen geben, die Dich nicht nur aus versehen verletzen.
+        Natürlich wird es auch Menschen geben, die Dich nicht nur aus Versehen verletzen.
         Das Gespräch mit vertrauten Personen, Freunden und Familie, kann Dir möglicherweise helfen
         mit emotionalen Verletzungen umzugehen.
         \n
@@ -94,7 +94,7 @@
         Warum belasten oder stressen mich Dinge, die anderen leicht von der Hand gehen?
         Die Erkenntnis in manchen Aspekten anders zu sein als Andere, kann dazu führen sich selbst
         zu hinterfragen. Stimmt mit mir etwas nicht?
-        Doch anders zu sein bedeutet nicht, schlechter zu sein. Es bedeutet auch nicht alleine damit
+        Doch anders zu sein bedeutet nicht, schlechter zu sein. Es bedeutet auch nicht allein damit
         zu sein. Eigenschaften, die mit einer Hochsensibilität zusammenhängen betreffen über eine
         Milliarde andere Menschen.
         \n
@@ -120,7 +120,8 @@
     <!--    message if user is detected to be suffering-->
     <string name="detected_suffering_positive_hsp_message">
         Du scheinst unter Aspekten Deiner Hochsensibilität stark zu leiden!
-        \n &visit_trained_personal; Zusätzlich können Dir die folgenden Tipps dabei helfen, mit Deiner Hochsensibilität umzugehen
+        \n
+        &visit_trained_personal; Zusätzlich können Dir die folgenden Tipps dabei helfen, mit Deiner Hochsensibilität umzugehen
         und sie vielleicht sogar zu nutzen.
     </string>
     <string name="detected_suffering_negative_hsp_message">
@@ -140,5 +141,6 @@
         <a href="https://www.hochsensibilitaet.ch">Hochsensibilitaet.ch (Informationen)</a> \n
         <a href="https://www.hochsensibel.org">Hochsensibel.org (Informationen und Forschung)</a> \n
         <a href="https://sensitivityresearch.com">Sensivity Research (Forschung (englisch))</a> \n
+        <a href="https://www.youtube.com/watch?v=TPR1P_D8zjY">Probleme von HSPs (Infovideo (englisch))</a> \n
     </string>
 </resources>

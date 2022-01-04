@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ import name.herbers.android.highsenso.data.AmbientAudioSensorData
 import name.herbers.android.highsenso.data.AmbientLightSensorData
 import name.herbers.android.highsenso.data.AmbientTempSensorData
 import name.herbers.android.highsenso.database.DatabaseHandler
+import name.herbers.android.highsenso.database.HighSensoDatabase
 import name.herbers.android.highsenso.database.QuestionDatabase
 import name.herbers.android.highsenso.database.UserProfile
 import name.herbers.android.highsenso.sensor.AmbientAudioRecorder
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     //ViewModel shared with ResetDialogFragment and StartFragment
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var database: QuestionDatabase
+    private lateinit var questionDatabase: QuestionDatabase
 
     //launcher to ask for mic permission
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
@@ -72,9 +74,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val application = requireNotNull(this).application
 //        deleteDatabaseInAppData()             //development only
 //        resetFirstCallPreferencesKey()        //development only
-        database = QuestionDatabase.getInstance(application)!!
-        val dataSource = database.questionDatabaseDao
-        val databaseHandler = DatabaseHandler(dataSource)
+        questionDatabase = QuestionDatabase.getInstance(application)!!
+        val dataSource = questionDatabase.questionDatabaseDao
+        val database: HighSensoDatabase? = HighSensoDatabase.getInstance(application)!!
+        val databaseHandler = DatabaseHandler(dataSource, database?.highSensoDatabaseDao)
         val res = applicationContext.resources
 
         preferences = this.getPreferences(Context.MODE_PRIVATE)
@@ -118,6 +121,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             sharedViewModel.tokenIsValid() && token != null -> {
                 sharedViewModel.changeLoginStatus(true)
                 serverCommunicationHandler.getAllQuestionnaires(token, sharedViewModel)
+                serverCommunicationHandler.getAllAnswerSheets(token, sharedViewModel)
             }
             username != null && password != null -> {
                 Timber.i("Login data is available! Login Request will be sent!")
@@ -148,7 +152,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorList = getSensors()
-        addGatheringSensorDataObserver()
+        addAllObservers()
 
         Timber.i("onCreate called!")
     }
@@ -280,6 +284,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     /**
+     * Calls methods to add all needed Observers.
+     * */
+    private fun addAllObservers(){
+        addGatheringSensorDataObserver()
+        addShowResetPasswordSuccessionToast()
+    }
+
+    /**
      * Adds an [Observer] to [SharedViewModel.gatherSensorData].
      * If changed to true, starts gathering of sensor data.
      * Else, stops gathering of sensor data.
@@ -292,6 +304,23 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             } else {
                 stopGatherAudioPeriodically()
                 unregisterSensorListeners()
+            }
+        })
+    }
+
+    /**
+     * Adds an [Observer] to [SharedViewModel.showResetPasswordSuccessionToast].
+     * If value changed to a not-empty string, a [Toast] is shown with the new value as message.
+     * Else, no Toast is shown
+     * */
+    private fun addShowResetPasswordSuccessionToast() {
+        sharedViewModel.showResetPasswordSuccessionToast.observe(this, { toastMessage ->
+            if (toastMessage != "") {
+                Toast.makeText(
+                    this,
+                    toastMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -382,7 +411,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        database.close()
+        questionDatabase.close()
         stopGatherAudioPeriodically()
     }
 }

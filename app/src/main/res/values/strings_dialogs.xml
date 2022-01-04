@@ -88,6 +88,9 @@
     <string name="login_dialog_invalid_input_toast_message">
         Bitte alle Felder korrekt ausfüllen!
     </string>
+    <string name="login_dialog_successful_login">
+        Du bist jetzt eingeloggt!
+    </string>
 
     <!--    register dialog-->
     <string name="register_dialog_title">Registrieren</string>
@@ -136,4 +139,29 @@
     <string name="gender_male_radioButton_text">männlich</string>
     <string name="gender_nonBinary_radioButton_text">divers</string>
     <string name="send_dialog_gender_label_text">Geschlecht</string>
+
+
+    <!--    error messages-->
+    <string name="anonymous_error">
+        Es ist ein Fehler aufgetreten. Bitte versuche es erneut!
+    </string>
+    <string name="auth_failure_error_token">
+        Die aktuelle Sitzung ist abgelaufen! Bitte logge Dich erneut ein!
+    </string>
+    <string name="network_error">
+        Es konnte keine Verbindung zum Server aufgebaut werden! Bitte überprüfe deine Internetverbindung!
+    </string>
+    <string name="parse_error">
+        Fehler beim parsen!
+    </string>
+    <string name="server_error">
+        Es ist ein Problem beim Server aufgetreten! Bitte versuche es später erneut!
+    </string>
+    <string name="timeout_error">
+        Es gab eine Zeitüberschreitung bei der Serververbindung!
+    </string>
+    <string name="reset_password_error">
+        Es ist ein Fehler aufgetreten! Das Passwort konnte nicht zurückgesetzt werden!
+    </string>
+
 </resources>

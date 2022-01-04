@@ -2,7 +2,6 @@ package name.herbers.android.highsenso.connection
 
 import android.content.Context
 import com.android.volley.AuthFailureError
-import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
@@ -21,9 +20,6 @@ import timber.log.Timber
  */
 class ServerCommunicationHandler(private val serverURL: String, val context: Context) {
     private val answerSheetList = mutableListOf<AnswerSheet>()
-
-    //    private val builder = GsonBuilder()
-//    val gson: Gson = builder.create()
     val gson = Gson()
 
     /* data string fields */
@@ -83,19 +79,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         Timber.i("ServerCommunicationHandler initialized!")
     }
 
-    fun sendGETRequest() {
-        val stringRequest = StringRequest(
-            Request.Method.GET,
-            serverURL,
-            { response ->
-                Timber.i(RECEIVED_RESPONSE + "GETRequest: $response")
-            },
-            { error ->
-                Timber.i(RECEIVED_ERROR + "GETRequest: $error")
-            })
-        RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
-    }
-
     fun sendRegistrationRequest(
         registrationRequest: RegistrationRequest,
         sharedViewModel: SharedViewModel
@@ -111,7 +94,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             },
             { error ->
                 Timber.i(RECEIVED_ERROR + "registrationRequest: $error")
-                //TODO Error handling
+                sharedViewModel.registerErrorReceived(error)
             }) {
             override fun getBody(): ByteArray {
                 val bodyJSON = gson.toJson(request)
@@ -146,6 +129,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 sharedViewModel.loginResponseReceived(response, username, password, answerSheets)
             },
             { error ->
+                sharedViewModel.loginErrorReceived(error)
                 Timber.i(RECEIVED_ERROR + "loginRequest: $error")
             }) {
             override fun getBody(): ByteArray {
@@ -192,7 +176,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
     fun sendAnswerSheet(token: String, answerSheet: AnswerSheet) {
         val url =
-            serverURL + QUESTIONNAIRES_URL + ANSWER_SHEETS_URL + TOKEN_URL + token
+            serverURL + QUESTIONNAIRES_URL + ANSWER_SHEETS_URL + TOKEN_URL + token //TODO check URL
         val request = RequestData(Data("questionnaires", answerSheet))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
@@ -202,7 +186,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             },
             { error ->
                 Timber.i(RECEIVED_ERROR + "sendAnswerSheet: $error")
-
             }) {
             override fun getBody(): ByteArray {
                 val bodyJSON = gson.toJson(request)
@@ -218,7 +201,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    fun sendResetPasswordRequest(mail: String) {
+    fun sendResetPasswordRequest(mail: String, sharedViewModel: SharedViewModel) {
         val url = serverURL //TODO complete URL
         val resetPasswordRequest = ResetPasswordRequest(mail)
         val request = RequestData(Data("users", resetPasswordRequest))
@@ -226,11 +209,12 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             Method.POST,
             url,
             { response ->
-                Timber.i(RECEIVED_RESPONSE + "sendAnswerSheet (POST): $response")
+                Timber.i(RECEIVED_RESPONSE + "sendResetPasswordRequest (POST): $response")
+                sharedViewModel.resetPasswordResponseReceived(true)
             },
             { error ->
-                Timber.i(RECEIVED_ERROR + "sendAnswerSheet: $error")
-
+                Timber.i(RECEIVED_ERROR + "sendResetPasswordRequest: $error")
+                sharedViewModel.resetPasswordResponseReceived(false)
             }) {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {

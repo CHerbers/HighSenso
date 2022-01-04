@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.android.volley.*
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.database.DatabaseHandler
@@ -43,8 +44,20 @@ class SharedViewModel(
     val sensorDataDWHS: MutableList<SensorData> = mutableListOf()
 
     val registerDialogBackupMap = initRegisterDialogBackupMap()
-
     private val appRes = application.resources
+
+    /* Error messages */
+    private val badLoginCombinationToast =
+        appRes.getString(R.string.login_dialog_bad_combination_toast_message)
+    private val authFailureErrorMessage = appRes.getString(R.string.auth_failure_error_token)
+    private val networkErrorMessage = appRes.getString(R.string.network_error)
+    private val parseErrorMessage = appRes.getString(R.string.parse_error)
+    private val serverErrorMessage = appRes.getString(R.string.server_error)
+    private val timeoutErrorMessage = appRes.getString(R.string.timeout_error)
+    private val anonymousErrorMessage = appRes.getString(R.string.anonymous_error)
+
+    /* Response messages */
+    private val resetPasswordLinkSendMessage = appRes.getString(R.string.reset_dialog_toast_message)
 
     private val _gatherSensorData = MutableLiveData(false)
     val gatherSensorData: LiveData<Boolean>
@@ -94,18 +107,23 @@ class SharedViewModel(
     val errorSendingRegisterData: LiveData<String>
         get() = _errorSendingRegisterData
 
-    private val _loginResponse = MutableLiveData(-1)
-    val loginResponse: LiveData<Int>
+    private val _loginResponse = MutableLiveData(false)
+    val loginResponse: LiveData<Boolean>
         get() = _loginResponse
 
     private val _registerResponse = MutableLiveData(-1)
     val registerResponse: LiveData<Int>
         get() = _registerResponse
 
+    private val _showResetPasswordSuccessionToast = MutableLiveData("")
+    val showResetPasswordSuccessionToast: LiveData<String>
+        get() = _showResetPasswordSuccessionToast
+
     companion object {
         private const val TOKEN_DURABILITY_TIME =
             10000L //TODO adjust durability to actual token durability
         private const val LOCALE = "DEU"
+
     }
 
     init {
@@ -209,13 +227,36 @@ class SharedViewModel(
     }
 
     fun handleResetPassword(email: String) {
-        communicationHandler.sendResetPasswordRequest(email)
+        communicationHandler.sendResetPasswordRequest(email, this)
     }
 
     fun registerResponseReceived(response: String) {
-//        _registerResponse.value = ... depending on response content
+        _registerResponse.value = 1
         callMailSentDialog()
-        _registerResponse.value = -1
+    }
+
+    fun registerErrorReceived(error: VolleyError) {
+        when (error) {
+            is AuthFailureError -> {
+                _errorSendingRegisterData.value = anonymousErrorMessage
+            }
+            is NetworkError -> {
+                _errorSendingRegisterData.value = networkErrorMessage
+            }
+            is ParseError -> {
+                _errorSendingRegisterData.value = anonymousErrorMessage
+            }
+            is ServerError -> {
+                _errorSendingRegisterData.value = serverErrorMessage
+            }
+            is TimeoutError -> {
+                _errorSendingRegisterData.value = timeoutErrorMessage
+            }
+            else -> {
+                _errorSendingRegisterData.value = anonymousErrorMessage
+            }
+        }
+        _errorSendingRegisterData.value = ""
     }
 
     fun loginResponseReceived(
@@ -224,49 +265,73 @@ class SharedViewModel(
         password: String,
         answerSheets: List<AnswerSheet>?
     ) {
-        /* Check if web server response was positive */
-        if (positiveResponse(response)) {
-            val token: String = "" //TODO extract token String
+        val token: String = "" //TODO extract token String
 
-            /* Adjust preferences for token, token_expiration, username and password */
-            preferences.edit().putString(
-                appRes.getString(R.string.login_data_token),
-                token
-            ).apply()
-            preferences.edit().putLong(
-                appRes.getString(R.string.login_data_token_expiration_date),
-                Date().time + TOKEN_DURABILITY_TIME
-            ).apply()
-            preferences.edit().putString(
-                appRes.getString(R.string.login_data_username_key),
-                username
-            ).apply()
-            preferences.edit().putString(
-                appRes.getString(R.string.login_data_pw_key),
-                password
-            ).apply()
+        /* Adjust preferences for token, token_expiration, username and password */
+        preferences.edit().putString(
+            appRes.getString(R.string.login_data_token),
+            token
+        ).apply()
+        preferences.edit().putLong(
+            appRes.getString(R.string.login_data_token_expiration_date),
+            Date().time + TOKEN_DURABILITY_TIME
+        ).apply()
+        preferences.edit().putString(
+            appRes.getString(R.string.login_data_username_key),
+            username
+        ).apply()
+        preferences.edit().putString(
+            appRes.getString(R.string.login_data_pw_key),
+            password
+        ).apply()
 
-            /* Change app-status to 'logged-in', trigger observer in LoginFragment */
-            _isLoggedIn.value = true
-            _loginResponse.value = 1
+        /* Change app-status to 'logged-in', trigger observer in LoginFragment */
+        _isLoggedIn.value = true
 
-            if (answerSheets == null) {
-                //get all questionnaires
-                communicationHandler.getAllQuestionnaires(token, this)
-            } else {
-                //send answerSheets
-                sendAnswerSheets(answerSheets)
-            }
+        //trigger LoginDialog dismiss
+        _loginResponse.value = true
+        _loginResponse.value = false
+
+        if (answerSheets == null) {
+            //get all questionnaires and past answerSheets
+            communicationHandler.getAllQuestionnaires(token, this)
+            communicationHandler.getAllAnswerSheets(token, this)
         } else {
-            /* Be sure app-status is not 'logged-in', trigger observer in LoginFragment */
-            _isLoggedIn.value = false
-            _loginResponse.value = 2
+            //send current answerSheets
+            sendAnswerSheets(answerSheets)
         }
-        _loginResponse.value = -1
+
     }
 
-    private fun positiveResponse(response: String): Boolean {
-        return true
+    fun loginErrorReceived(
+        error: VolleyError
+    ) {
+        when (error) {
+            is AuthFailureError -> {
+                _errorSendingLoginData.value = badLoginCombinationToast
+            }
+            is NetworkError -> {
+                _errorSendingLoginData.value = networkErrorMessage
+            }
+            is ParseError -> {
+                _errorSendingLoginData.value = anonymousErrorMessage
+            }
+            is ServerError -> {
+                _errorSendingLoginData.value = serverErrorMessage
+            }
+            is TimeoutError -> {
+                _errorSendingLoginData.value = timeoutErrorMessage
+            }
+        }
+        _isLoggedIn.value = false
+        _errorSendingLoginData.value = ""
+    }
+
+    fun resetPasswordResponseReceived(succession: Boolean) {
+        when (succession) {
+            true -> _showResetPasswordSuccessionToast.value = resetPasswordLinkSendMessage
+            false -> _showResetPasswordSuccessionToast.value = anonymousErrorMessage
+        }
     }
 
     fun createAndSendAnswerSheets() {
@@ -322,7 +387,13 @@ class SharedViewModel(
         return map
     }
 
-    fun updateBackupMap(username: String?, email: String?, emailRepeat: String?, password: String?, passwordRepeat: String?){
+    fun updateBackupMap(
+        username: String?,
+        email: String?,
+        emailRepeat: String?,
+        password: String?,
+        passwordRepeat: String?
+    ) {
         registerDialogBackupMap["username"] = username
         registerDialogBackupMap["email"] = email
         registerDialogBackupMap["emailRepeat"] = emailRepeat

@@ -19,7 +19,7 @@ class StartViewModel(
     val databaseHandler: DatabaseHandler
 ) : ViewModel() {
 
-    companion object{
+    companion object {
         private const val BASELINE_ID = 1
     }
 
@@ -34,8 +34,8 @@ class StartViewModel(
     fun profileDataAvailable(answerSheets: List<AnswerSheet>?): Boolean {
         var available = false
         if (answerSheets == null) return available
-        for (answerSheet in answerSheets){
-            available = answerSheet.id == BASELINE_ID
+        for (answerSheet in answerSheets) {
+            available = available || answerSheet.id == BASELINE_ID
         }
         return available
     }
@@ -46,7 +46,7 @@ class StartViewModel(
      * After changing rating [_resetDone] is set to true to trigger its observer in [StartFragment].
      * */
     //TODO delete this
-    fun resetAllQuestionRatings(){
+    fun resetAllQuestionRatings() {
         //set questions rating to default value (-1)
         databaseHandler.questions.forEach { question ->
             question.rating = false

@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/personalQuestioning_destination"
-        android:name="name.herbers.android.highsenso.questioning.PersonalQuestioningFragment"
+        android:name="name.herbers.android.highsenso.questioning.BaselineQuestioningFragment"
         android:label="PersonalQuestioningFragment" >
         <action
             android:id="@+id/action_personalQuestioning_destination_to_questioning_destination"

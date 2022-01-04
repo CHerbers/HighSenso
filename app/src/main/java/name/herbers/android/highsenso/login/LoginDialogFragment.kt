@@ -27,8 +27,8 @@ class LoginDialogFragment(
     private lateinit var dialog: AlertDialog
     private lateinit var binding: DialogLoginBinding
 
-    private val badCombinationToast = R.string.login_dialog_bad_combination_toast_message
     private val invalidInputToast = R.string.login_dialog_invalid_input_toast_message
+    private val successfulLogin = R.string.login_dialog_successful_login
 
     companion object {
         const val TAG = "LoginDialog"
@@ -68,9 +68,13 @@ class LoginDialogFragment(
         })
 
         sharedViewModel.loginResponse.observe(this, { success ->
-            when (success) {
-                1 -> dismiss()
-                0 -> handleNegativeLoginResponse(getString(badCombinationToast))
+            if (success){
+                Toast.makeText(
+                    context,
+                    successfulLogin,
+                    Toast.LENGTH_SHORT
+                ).show()
+                dismiss()
             }
         })
     }

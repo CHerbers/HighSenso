@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -58,13 +57,11 @@ class RegisterDialogFragment(
             addAllEditTextListeners()
             setPrivacyTextViewListener()
             setAllButtonListeners()
-            initCountrySpinner()
+//            initCountrySpinner()
 
             binding.registerDialogPrivacyCheckBox.movementMethod = LinkMovementMethod.getInstance()
 
             binding.registerDialogPrivacyCheckBox.setOnClickListener { }
-
-            binding.registerDialogCountrySpinner
 
             dialog = builder.create()
             dialog
@@ -144,7 +141,7 @@ class RegisterDialogFragment(
                         binding.registerDialogMailEditText.text.toString(),
                         binding.registerDialogPasswordEditText.text.toString(),
                         binding.registerDialogPasswordRepeatEditText.text.toString(),
-                        Settings(getSelectedCountryId())
+                        Settings("de")
                     )
                 )
                 elementsAreEnabled(false)
@@ -175,16 +172,16 @@ class RegisterDialogFragment(
         binding.registerDialogRegisterButton.isEnabled = isEnabled
     }
 
-    private fun getSelectedCountryId(): String {
-        val item: Any = binding.registerDialogCountrySpinner.selectedItem
-        Locale.getAvailableLocales().forEach { locale ->
-            val localeString = locale.getDisplayCountry(Locale.GERMAN)
-            if (localeString == item.toString()) {
-                return locale.toLanguageTag().split("-")[1].lowercase()
-            }
-        }
-        return ""
-    }
+//    private fun getSelectedCountryId(): String {
+//        val item: Any = binding.registerDialogCountrySpinner.selectedItem
+//        Locale.getAvailableLocales().forEach { locale ->
+//            val localeString = locale.getDisplayCountry(Locale.GERMAN)
+//            if (localeString == item.toString()) {
+//                return locale.toLanguageTag().split("-")[1].lowercase()
+//            }
+//        }
+//        return ""
+//    }
 
     /**
      * This function adds an onClickListener to the LoginButton that calls an associated function
@@ -227,15 +224,15 @@ class RegisterDialogFragment(
      * This function initiates the countrySpinner by adding the spinners content Strings and an
      * adapter.
      * */
-    private fun initCountrySpinner() {
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            getCountryList()
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.registerDialogCountrySpinner.adapter = adapter
-    }
+//    private fun initCountrySpinner() {
+//        val adapter = ArrayAdapter(
+//            requireContext(),
+//            android.R.layout.simple_spinner_item,
+//            getCountryList()
+//        )
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        binding.registerDialogCountrySpinner.adapter = adapter
+//    }
 
     /**
      * This function creates a [List] of Strings of all countries available in [Locale].

@@ -47,6 +47,7 @@ class StartFragment : Fragment() {
     private lateinit var binding: FragmentStartBinding
     private lateinit var preferences: SharedPreferences
     private val loginViewModel = LoginViewModel()
+    private var profileMenuItem: MenuItem? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,6 +98,7 @@ class StartFragment : Fragment() {
         Timber.i("Overflow menu created!")
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+        profileMenuItem = menu.findItem(R.id.profile_destination)
     }
 
     //handle navigation on item selection
@@ -139,7 +141,7 @@ class StartFragment : Fragment() {
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
-                if (sharedViewModel.questionnaires.isNullOrEmpty()) {
+                if (sharedViewModel.questionnaires.isNullOrEmpty() && false) { //TODO fix
                     /* this is true if no questionnaires could be loaded to this point.
                     * Therefore questioning cannot be started and a message is shown instead */
                     NoQuestionnairesAvailableDialog().show(
@@ -155,8 +157,6 @@ class StartFragment : Fragment() {
                     } else {
                         Navigation.findNavController(view)
                             .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
-//                    Navigation.findNavController(view)
-//                        .navigate(R.id.action_startFragment_to_questioningFragment)
                     }
                 }
             } else {
@@ -230,12 +230,14 @@ class StartFragment : Fragment() {
                 binding.startFragmentRegisterButton.visibility = View.INVISIBLE
                 binding.startTitleTextView.text =
                     getString(R.string.start_welcome_username_text)
+                profileMenuItem?.isVisible =  true
             } else {
                 binding.startFragmentLoginButton.text =
                     getString(R.string.start_fragment_login_button)
                 binding.startFragmentRegisterButton.visibility = View.VISIBLE
                 binding.startTitleTextView.text =
                     getString(R.string.start_welcome_text)
+                profileMenuItem?.isVisible =  false
             }
         })
     }
@@ -304,6 +306,13 @@ class StartFragment : Fragment() {
         })
     }
 
+    private fun showLoginDialog(sharedViewModel: SharedViewModel) {
+        LoginDialogFragment(sharedViewModel, loginViewModel).show(
+            childFragmentManager,
+            LoginDialogFragment.TAG
+        )
+    }
+
     private fun setStartMailSentDialogObserver(sharedViewModel: SharedViewModel) {
         sharedViewModel.startSentMailDialog.observe(viewLifecycleOwner, { startDialog ->
             if (startDialog) {
@@ -313,13 +322,6 @@ class StartFragment : Fragment() {
                 )
             }
         })
-    }
-
-    private fun showLoginDialog(sharedViewModel: SharedViewModel) {
-        LoginDialogFragment(sharedViewModel, loginViewModel).show(
-            childFragmentManager,
-            LoginDialogFragment.TAG
-        )
     }
 
     /**
@@ -337,7 +339,6 @@ class StartFragment : Fragment() {
         })
     }
 
-
     private fun setStartPrivacyFragmentObserver(sharedViewModel: SharedViewModel) {
         sharedViewModel.startPrivacyFragment.observe(viewLifecycleOwner, { toStart ->
             if (toStart) {
@@ -346,14 +347,6 @@ class StartFragment : Fragment() {
             }
         })
     }
-
-    /**
-     * [ResetPasswordDialogFragment] is called to check if the user really wants to reset all ratings.
-     * */
-//    private fun handleResetQuestions(sharedViewModel: SharedViewModel): Boolean {
-//        ResetPasswordDialogFragment(sharedViewModel, loginViewModel).show(childFragmentManager, ResetPasswordDialogFragment.TAG)
-//        return true
-//    }
 
     /**
      * This function is checking if its the first start of the App. If so the [PrivacyDialogFragment]
