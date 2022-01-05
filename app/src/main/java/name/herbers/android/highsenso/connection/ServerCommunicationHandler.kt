@@ -63,8 +63,8 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
     companion object {
         // URL constants
-        private const val QUESTIONNAIRES_URL = "studies/1/questionnaires/1/"
-        private const val ANSWER_SHEETS_URL = "answersheets"
+        private const val QUESTIONNAIRES_URL = "studies/1/questionnaires/"
+        private const val ANSWER_SHEETS_URL = "/answersheets"
         private const val TOKEN_URL = "?token="
 
         //Timber logging messages constants
@@ -176,7 +176,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
     fun sendAnswerSheet(token: String, answerSheet: AnswerSheet) {
         val url =
-            serverURL + QUESTIONNAIRES_URL + ANSWER_SHEETS_URL + TOKEN_URL + token //TODO check URL
+            serverURL + QUESTIONNAIRES_URL + answerSheet.id + ANSWER_SHEETS_URL + TOKEN_URL + token //TODO check URL
         val request = RequestData(Data("questionnaires", answerSheet))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
@@ -242,8 +242,9 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
                 try {
                     val dataJSON: JSONObject = response.getJSONObject("data")
-                    sharedViewModel.questionnaires =
+                    sharedViewModel.updateQuestionnaires(
                         getQuestionnaireListFromJSONArray(dataJSON.getJSONArray("attributes"))
+                    )
                     Timber.i(SUCCESSFULLY_PARSED)
                 } catch (e: JSONException) {
                     Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
@@ -281,7 +282,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                             )
                         )
                     }
-                    sharedViewModel.questionnaires = questionnaires
+                    sharedViewModel.updateQuestionnaires(questionnaires)
                     Timber.i(SUCCESSFULLY_PARSED)
                 } catch (e: JSONException) {
                     Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
@@ -311,7 +312,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                     val data = gson.fromJson(response, Data::class.java)
                     if (data.attributes is List<*>) {
                         if (data.attributes is Questionnaire) {
-                            sharedViewModel.questionnaires = data.attributes as List<Questionnaire>?
+                            sharedViewModel.updateQuestionnaires(data.attributes as List<Questionnaire>)
                         }
                     }
 //                    val dataJSON: JSONObject = response.getJSONObject("data")
@@ -335,7 +336,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
     fun getAllAnswerSheets(token: String, sharedViewModel: SharedViewModel) {
         val url = serverURL + QUESTIONNAIRES_URL + TOKEN_URL + token
-        val answerSheets: List<AnswerSheet>
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             url,
@@ -343,9 +343,21 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             { response ->
                 Timber.i(RECEIVED_RESPONSE + "getAllAnswerSheets: $response")
                 try {
+                    val answerSheets = mutableListOf<AnswerSheet>()
                     val dataJSON: JSONObject = response.getJSONObject("data")
-                    sharedViewModel.answerSheets =
-                        getAnswerSheetListFromJSONArray(dataJSON.getJSONArray("attributes"))
+                    val attributes = dataJSON.getJSONArray("attributes")
+                    for (i in 0 until attributes.length()) {
+                        answerSheets.add(
+                            gson.fromJson(
+                                attributes[i].toString(),
+                                AnswerSheet::class.java
+                            )
+                        )
+                    }
+                    sharedViewModel.updateAnswerSheets(answerSheets)
+//                    sharedViewModel.updateAnswerSheets(
+//                        getAnswerSheetListFromJSONArray(dataJSON.getJSONArray("attributes"))
+//                    )
                     Timber.i(SUCCESSFULLY_PARSED)
                 } catch (e: JSONException) {
                     Timber.i(JSON_EXCEPTION + "AnswerSheets! \n" + e.printStackTrace())
@@ -414,14 +426,14 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 Question(
                     question.getInt("position"),
                     question.getString("name"),
-                    question.getBoolean("is_active"),
-                    question.getString("elementtype"),
-                    question.getBoolean(requiredField),
                     question.getString(questionTypeField),
                     question.getString("label"),
                     question.get("values"),
+                    listOf(),    //TODO fix
                     question.getString("restricted_to"),
-                    listOf()    //TODO fix
+                    question.getBoolean("is_active"),
+                    question.getBoolean(requiredField),
+                    question.getString("elementtype")
                 )
             )
         }
@@ -437,10 +449,10 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 AnswerSheet(
                     answerSheet.getInt("id"),
                     answerSheet.getLong(collectedAtField),
-                    answerSheet.getString(localeField),
                     getAnswersListFromJSONArray(answerSheet.getJSONArray(answerField)),
                     getSensorDataListFromJSONArray(answerSheet.getJSONArray(sensorDataField)),
-                    getClientFromJSONObject(answerSheet.getJSONObject(clientField))
+                    getClientFromJSONObject(answerSheet.getJSONObject(clientField)),
+                    answerSheet.getString(localeField)
                 )
             )
         }
@@ -454,9 +466,9 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             val answer = array.getJSONObject(i)
             answerList.add(
                 Answer(
+                    answer.getString(valueField),
                     answer.getString(labelField),
-                    answer.getLong(collectedAtField),
-                    answer.getInt(valueField)
+                    answer.getLong(collectedAtField)
                 )
             )
         }
@@ -468,24 +480,21 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
         for (i in 0 until array.length()) {
             val sensorData = array.getJSONObject(i)
-            when (val sensorType = sensorData.getString(nameField)) {
+            when (sensorData.getString(nameField)) {
                 ambientAudioSDField -> questionList.add(
                     AmbientAudioSensorData(
-                        sensorType,
                         sensorData.getLong(collectedAtField),
                         sensorData.getDouble(amplitudeField).toFloat()
                     )
                 )
                 ambientLightSDField -> questionList.add(
                     AmbientLightSensorData(
-                        sensorType,
                         sensorData.getLong(collectedAtField),
                         sensorData.getDouble(luxField).toFloat()
                     )
                 )
                 ambientTempSDField -> questionList.add(
                     AmbientTempSensorData(
-                        sensorType,
                         sensorData.getLong(collectedAtField),
                         sensorData.getDouble(degreesField).toFloat()
                     )

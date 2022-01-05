@@ -6,6 +6,6 @@ package name.herbers.android.highsenso.data
  *@author Herbers
  */
 data class TranslationHeadline(
-    val locale: String = "de",
-    val headline: String
+    val headline: String,
+    val locale: String = "de"
 )

@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.Client
-import name.herbers.android.highsenso.data.Question
+import name.herbers.android.highsenso.data.Element
 import name.herbers.android.highsenso.data.SensorData
 
 /**
@@ -18,14 +18,14 @@ class DataConverter
 
 class QuestionConverter {
     @TypeConverter
-    fun toQuestionList(json: String): List<Question> {
-        val type = object : TypeToken<List<Question>>() {}.type
+    fun toQuestionList(json: String): List<Element> {
+        val type = object : TypeToken<List<Element>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toJson(questions: List<Question>): String {
-        val type = object : TypeToken<List<Question>>() {}.type
+    fun toJson(questions: List<Element>): String {
+        val type = object : TypeToken<List<Element>>() {}.type
         return Gson().toJson(questions, type)
     }
 }

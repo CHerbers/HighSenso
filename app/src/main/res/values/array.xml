@@ -32,4 +32,20 @@
         <item>Berentet</item>
         <item>Anders</item>
     </string-array>
+
+<!--    question types-->
+    <string-array name="question_types">
+        <item>TextDate</item>
+        <item>SingleChoice</item>
+        <item>SingleChoiceKnob</item>
+        <item>Knob</item>
+        <item>TextString</item>
+        <item>YesNoSwitch</item>
+    </string-array>
+
+<!--    element types-->
+    <string-array name="element_types">
+        <item>elements/question</item>
+        <item>elements/headlines</item>
+    </string-array>
 </resources>

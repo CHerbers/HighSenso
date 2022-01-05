@@ -1,5 +1,7 @@
 package name.herbers.android.highsenso.data
 
+import name.herbers.android.highsenso.Constants
+
 /**
  *
  *@project HighSenso
@@ -7,6 +9,6 @@ package name.herbers.android.highsenso.data
  */
 data class Headlines (
     override val position: Int,
-    override val elementtype: String,
-    val translations: TranslationHeadline
+    val translations: List<TranslationHeadline>,
+    override val elementtype: String = Constants.ELEMENT_TYPE_HEADLINE
 ): Element()

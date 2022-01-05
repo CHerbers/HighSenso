@@ -58,15 +58,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var lastTempSensorMeasurement = 0L
     private var lastLightSensorMeasurement = 0L
 
-    companion object {
-        private const val SERVER_URL = "https://www.google.com" //TODO insert right URL
-        private const val AUDIO_SENSOR_MEASURING_DURATION = 8
-        private const val SENSOR_MEASURING_INTERVAL_NANOS =
-            5000000000L    //Interval between two sensor measurements in nanoseconds
-        private const val HSP_QUESTIONNAIRE = "HSPScala"
-        private const val DEAL_WITH_HS_QUESTIONNAIRE = "DealWithHS"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -93,7 +84,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         /* HTTP Connection */
         val serverCommunicationHandler =
-            ServerCommunicationHandler(SERVER_URL, this)
+            ServerCommunicationHandler(Constants.SERVER_URL, this)
 
         //init sharedViewModel TODO maybe look for saved questionnaires/ answerSheets
         val sharedViewModelFactory =
@@ -160,7 +151,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val gatherAudioPeriodically = object : Runnable {
         override fun run() {
             audioRecording()
-            val sensorMeasuringIntervalMillis = SENSOR_MEASURING_INTERVAL_NANOS / 1000000L
+            val sensorMeasuringIntervalMillis = Constants.SENSOR_MEASURING_INTERVAL_NANOS / 1000000L
             repTaskHandler.postDelayed(this, sensorMeasuringIntervalMillis)
         }
     }
@@ -245,18 +236,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Timber.i("Permission to record audio granted! Recorder will be started!")
             val ambientAudioRecorder = AmbientAudioRecorder()
             val recordedAudio =
-                ambientAudioRecorder.getAverageAmbientAudio(AUDIO_SENSOR_MEASURING_DURATION)
+                ambientAudioRecorder.getAverageAmbientAudio(Constants.AUDIO_SENSOR_MEASURING_DURATION)
             when (sharedViewModel.questionnaireName.value) {
-                HSP_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(
+                Constants.HSP_SCALE_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(
                     AmbientAudioSensorData(
-                        getString(R.string.ambient_audio_sd_field),
                         Date().time,
                         recordedAudio.toFloat()
                     )
                 )  //TODO multiple data (like it is now) or just one average value
-                DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(
+                Constants.DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(
                     AmbientAudioSensorData(
-                        getString(R.string.ambient_audio_sd_field),
                         Date().time,
                         recordedAudio.toFloat()
                     )
@@ -363,14 +352,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         when (event.sensor) {
             mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) -> {
                 val measuredTemp = event.values[0]
-                if (lastTempSensorMeasurement == 0L || eventTime > lastTempSensorMeasurement + SENSOR_MEASURING_INTERVAL_NANOS) {
+                if (lastTempSensorMeasurement == 0L || eventTime > lastTempSensorMeasurement + Constants.SENSOR_MEASURING_INTERVAL_NANOS) {
                     Timber.i("eventTime: $eventTime; last: $lastTempSensorMeasurement")
                     saveTempSensorData(measuredTemp, eventTime)
                 }
             }
             mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) -> {
                 val measuredLight = event.values[0]
-                if (lastLightSensorMeasurement == 0L || eventTime > lastLightSensorMeasurement + SENSOR_MEASURING_INTERVAL_NANOS) {
+                if (lastLightSensorMeasurement == 0L || eventTime > lastLightSensorMeasurement + Constants.SENSOR_MEASURING_INTERVAL_NANOS) {
                     saveLightSensorData(measuredLight, eventTime)
                 }
             }
@@ -381,13 +370,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Timber.i("Event on ambient temperature sensor: $measuredTemp °C")
         lastTempSensorMeasurement = eventTime
         val tempData = AmbientTempSensorData(
-            getString(R.string.ambient_temp_sd_field),
             Date().time,
             measuredTemp
         )
         when (sharedViewModel.questionnaireName.value) {
-            HSP_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(tempData)
-            DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(tempData)
+            Constants.HSP_SCALE_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(tempData)
+            Constants.DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(tempData)
         }
     }
 
@@ -395,13 +383,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Timber.i("Event on light sensor: $measuredLight lux")
         lastLightSensorMeasurement = eventTime
         val lightData = AmbientLightSensorData(
-            getString(R.string.ambient_light_sd_field),
             Date().time,
             measuredLight
         )
         when (sharedViewModel.questionnaireName.value) {
-            HSP_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(lightData)
-            DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(lightData)
+            Constants.HSP_SCALE_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(lightData)
+            Constants.DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(lightData)
         }
     }
 

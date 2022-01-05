@@ -6,7 +6,7 @@ package name.herbers.android.highsenso.data
  *@author Herbers
  */
 data class AmbientLightSensorData(
-    override val name: String,
     override val collectedAt: Long,
-    var lux: Float
+    var lux: Float,
+    override val name: String = "ambientLightSensorData"
 ): SensorData()

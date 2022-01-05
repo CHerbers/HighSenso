@@ -5,8 +5,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.AnswerSheet
 import timber.log.Timber
 
 /**
@@ -25,7 +27,7 @@ class ResultViewModel(
     private val questions = sharedViewModel.databaseHandler.questions
 
     /* some constants */
-    companion object{
+    companion object {
         private const val HSP_POSITIVE_LIMIT = 14
     }
 
@@ -106,7 +108,19 @@ class ResultViewModel(
      * */
     private fun calculateResult() {
         /* Calculate the HSP-Scala-Score */
+        val oldSum = getAverageSumOfOldAnswerSheets()
         var ratingSum = 0
+
+        if (sharedViewModel.currentAnswers.containsKey(Constants.HSP_SCALE_QUESTIONNAIRE)) {
+            sharedViewModel.currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]?.forEach { (_, answer) ->
+                ratingSum += answer.value.toInt()
+            }
+        } else {
+            ratingSum = if (oldSum == -1) 0 else oldSum
+        }
+        var sum = 0
+
+
         sharedViewModel.databaseHandler.questions.forEach { question ->
             if (question.itemQuestion)
                 if (question.rating)
@@ -138,6 +152,29 @@ class ResultViewModel(
         }
         //TODO calculate which result texts from database should be shown onscreen
         //_resultContent = ...
+    }
+
+    /**
+     * This function calculates the average sum of positive answered questions form all old [AnswerSheet]s.
+     *
+     * @return -1 if there are no old AnswerSheets for the "HSP-Scale"
+     * else the average of the sum of positive answered items of the old AnswerSheets
+     * */
+    private fun getAverageSumOfOldAnswerSheets(): Int {
+        var sum = 0
+        var count = 0
+        var noOldAnswerSheets = true
+        sharedViewModel.answerSheets?.forEach { answerSheet ->
+            if (answerSheet.id == Constants.HSP_SCALE_QUESTIONNAIRE_ID) {
+                noOldAnswerSheets = false
+                count++
+                answerSheet.answers.forEach { answer ->
+                    sum += answer.value.toInt()
+                }
+            }
+        }
+
+        return if (noOldAnswerSheets) -1 else sum.div(count)
     }
 
     /**
@@ -185,6 +222,21 @@ class ResultViewModel(
         return questions[35].rating || questions[36].rating
     }
 
+    private fun checkWorkplaceProblems(i: Int): Boolean {
+        var problems = false
+//        sharedViewModel.currentAnswers.forEach { (questionnaireName, answerMap) ->
+//            val answersDWHSMap = if (questionnaireName == Constants.DEAL_WITH_HS_QUESTIONNAIRE) answerMap else null
+//            if (answersDWHSMap.isNullOrEmpty())
+//            questionnaire.questions.forEach { element ->
+//                val question = element as Question
+//                if (question.label == "workspace_mood" || question.label == "workspace_stimulus"){
+//
+//                }
+//            }
+//        }
+        return problems
+    }
+
     fun handleSendResult(age: Int, gender: String) {
         //TODO send the stuff
         //TODO change specific location key after sending
@@ -228,7 +280,7 @@ class ResultViewModel(
         val isNegative = rating < HSP_POSITIVE_LIMIT
         var iteration = 1
         val answerSheets = sharedViewModel.answerSheets
-        if (answerSheets != null){
+        if (answerSheets != null) {
             iteration += answerSheets.size
         }
 

@@ -6,7 +6,7 @@ package name.herbers.android.highsenso.data
  *@author Herbers
  */
 data class Answer(
+    val value: String,
     val label: String? = null,
-    val collectedAt: Long? = null,
-    val value: Int
+    val collectedAt: Long? = null
 )

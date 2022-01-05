@@ -1,32 +1,21 @@
 package name.herbers.android.highsenso.data
 
-import androidx.room.ColumnInfo
+import name.herbers.android.highsenso.Constants
 
 /**
  *
  *@project HighSenso
  *@author Herbers
  */
-//@Entity(tableName = "questions_table")
 data class Question(
-//    @PrimaryKey
     override val position: Int,
-    @ColumnInfo
     val name: String,
-    @ColumnInfo
-    val is_active: Boolean,
-    @ColumnInfo
-    override val elementtype: String,
-    @ColumnInfo
-    val required: Boolean,
-    @ColumnInfo
     val questiontype: String,
-    @ColumnInfo
     val label: String,
-    @ColumnInfo
     val values: Any,                  //mostly List<Int>, List<String>, Values
-    @ColumnInfo
-    val restricted_to: String?,
-    @ColumnInfo
-    val translations: List<TranslationQuestion>
+    val translations: List<TranslationQuestion>,
+    val restricted_to: String? = null,
+    val is_active: Boolean = true,
+    val required: Boolean = true,
+    override val elementtype: String = Constants.ELEMENT_TYPE_QUESTION
 ) : Element()

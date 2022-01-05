@@ -26,6 +26,10 @@ class BaselineQuestioningViewModel(
     val isFinished: LiveData<Boolean>
         get() = _isFinished
 
+    private val _questionnaireTitle = MutableLiveData("")
+    val questionnaireTitle: LiveData<String>
+        get() = _questionnaireTitle
+
     //some constants
     private val appRes = application.applicationContext.resources
     private val errorInvalidInput =
@@ -41,6 +45,11 @@ class BaselineQuestioningViewModel(
 
     init {
         Timber.i("PersonalQuestioningViewModel created!")
+    }
+
+    fun setQuestionnaireTitle(title: String) {
+        Timber.i("Baseline Title was set to: $title")
+        _questionnaireTitle.value = title
     }
 
     fun handleNextButtonClick() {

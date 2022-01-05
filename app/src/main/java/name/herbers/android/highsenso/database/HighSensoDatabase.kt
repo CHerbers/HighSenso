@@ -26,7 +26,7 @@ import java.io.File
  * @author Christoph Herbers
  * @since 1.0
  * */
-@Database(entities = [Questionnaire::class, AnswerSheet::class], version = 2, exportSchema = false)
+@Database(entities = [Questionnaire::class, AnswerSheet::class], version = 4, exportSchema = false)
 @TypeConverters(
     QuestionConverter::class,
     AnswerConverter::class,
@@ -44,7 +44,7 @@ abstract class HighSensoDatabase : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: HighSensoDatabase? = null
-        fun getInstance(context: Context): HighSensoDatabase? {
+        fun getInstance(context: Context): HighSensoDatabase {
             synchronized(this) {
                 var instance = INSTANCE
 
@@ -70,7 +70,7 @@ abstract class HighSensoDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         HighSensoDatabase::class.java,
-                        "questions_database"
+                        "high_senso_database"
                     )
                         .fallbackToDestructiveMigration()
                         .build()

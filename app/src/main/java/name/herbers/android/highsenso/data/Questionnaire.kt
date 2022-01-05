@@ -17,8 +17,6 @@ data class Questionnaire(
     val id: Int,
     @ColumnInfo
     val name: String,
-//    @TypeConverters(QuestionSoloConverter::class)
-//    val questions: Question
     @TypeConverters(QuestionConverter::class)
-    val questions: List<Question>
+    val questions: List<Element>
 )

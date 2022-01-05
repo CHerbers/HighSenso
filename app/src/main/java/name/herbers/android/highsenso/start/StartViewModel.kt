@@ -31,13 +31,13 @@ class StartViewModel(
      * Checks if the profile data is complete.
      *
      * */
-    fun profileDataAvailable(answerSheets: List<AnswerSheet>?): Boolean {
+    fun baselineAnswerSheetAvailable(answerSheets: List<AnswerSheet>?): Boolean {
         var available = false
         if (answerSheets == null) return available
         for (answerSheet in answerSheets) {
             available = available || answerSheet.id == BASELINE_ID
         }
-        return available
+        return false
     }
 
     /**

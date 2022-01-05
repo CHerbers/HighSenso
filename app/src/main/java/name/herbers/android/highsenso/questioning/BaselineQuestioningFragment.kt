@@ -2,8 +2,6 @@ package name.herbers.android.highsenso.questioning
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -16,8 +14,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.Headlines
+import name.herbers.android.highsenso.data.Question
 import name.herbers.android.highsenso.database.UserProfile
 import name.herbers.android.highsenso.databinding.FragmentBaselineQuestioningBinding
 import name.herbers.android.highsenso.dialogs.LocationDialogFragment
@@ -69,14 +70,25 @@ class BaselineQuestioningFragment : Fragment() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-
-        val adapter = QuestionAdapter()
-//        binding.baselineRecyclerView.adapter = adapter
+        val adapter = QuestionAdapter(sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] ?: mutableMapOf(), viewModel)
+        val baselineQuestions = mutableListOf<Question>()
+        val baselineQuestionnaireElements =
+            sharedViewModel.getQuestionnaireByQuestionnaireName(Constants.BASELINE_QUESTIONNAIRE)?.questions
+        baselineQuestionnaireElements?.forEach { element ->
+            Timber.i("Current baseline element: ${element.elementtype}")
+            if (element.elementtype == Constants.ELEMENT_TYPE_QUESTION) {
+                baselineQuestions.add(element as Question)
+            } else if (element.elementtype == Constants.ELEMENT_TYPE_HEADLINE) {
+                viewModel.setQuestionnaireTitle((element as Headlines).translations[0].headline)
+            }
+        }
+        adapter.data = baselineQuestions
+        binding.baselineRecyclerView.adapter = adapter
 
         setLocationDialogObserver(sharedViewModel)
 
         //init spinners (dropdown selections)
-        initAllSpinners()
+//        initAllSpinners()
 
         //init editTexts
         initAllEditTexts()
@@ -97,12 +109,13 @@ class BaselineQuestioningFragment : Fragment() {
             }
         }
 
-        Timber.i("PersonalQuestionFragment created!")
+        Timber.i("BaselineQuestionFragment created!")
         return binding.root
     }
 
     private fun dataComplete(): Boolean {
-        return binding.ageEditText.text.toString() != "" && binding.childrenEditText.text.toString() != "" && binding.professionEditText.text.toString() != ""
+//        return binding.ageEditText.text.toString() != "" && binding.childrenEditText.text.toString() != "" && binding.professionEditText.text.toString() != ""
+        return true
     }
 
     /**
@@ -125,28 +138,28 @@ class BaselineQuestioningFragment : Fragment() {
      * Calls [initSpinner] for every of the four [Spinner]s with its corresponding string-array
      * and starting selection.
      * */
-    private fun initAllSpinners() {
-        initSpinner(
-            binding.genderSpinner,
-            R.array.gender_array,
-            userProfile.gender
-        )
-        initSpinner(
-            binding.martialStatusSpinner,
-            R.array.marital_Status_array,
-            userProfile.martialStatus
-        )
-        initSpinner(
-            binding.educationSpinner,
-            R.array.education_array,
-            userProfile.education
-        )
-        initSpinner(
-            binding.professionTypeSpinner,
-            R.array.professionType_array,
-            userProfile.professionType
-        )
-    }
+//    private fun initAllSpinners() {
+//        initSpinner(
+//            binding.genderSpinner,
+//            R.array.gender_array,
+//            userProfile.gender
+//        )
+//        initSpinner(
+//            binding.martialStatusSpinner,
+//            R.array.marital_Status_array,
+//            userProfile.martialStatus
+//        )
+//        initSpinner(
+//            binding.educationSpinner,
+//            R.array.education_array,
+//            userProfile.education
+//        )
+//        initSpinner(
+//            binding.professionTypeSpinner,
+//            R.array.professionType_array,
+//            userProfile.professionType
+//        )
+//    }
 
     /**
      * Fills a [Spinner] with data from a string-array given in [res].
@@ -158,55 +171,55 @@ class BaselineQuestioningFragment : Fragment() {
      * @param selection is the current selection position
      * */
     private fun initSpinner(spinner: Spinner, res: Int, selection: Int) {
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            res,
-            android.R.layout.simple_spinner_item
-        ).also { arrayAdapter ->
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = arrayAdapter
-        }
-        spinner.setSelection(selection)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (spinner) {
-                    binding.genderSpinner -> {
-                        userProfile.gender = position
-                        Timber.i("Gender was changed to '${userProfile.genderString}'!")
-                    }
-                    binding.martialStatusSpinner -> {
-                        userProfile.martialStatus = position
-                        Timber.i("Martial status was changed to '${userProfile.martialStatusString}'!")
-                    }
-                    binding.educationSpinner -> {
-                        userProfile.education = position
-                        Timber.i("Education was changed to '${userProfile.educationString}'!")
-                    }
-                    binding.professionTypeSpinner -> {
-                        userProfile.professionType = position
-                        Timber.i("ProfessionType was changed to '${userProfile.professionTypeString}'")
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //do nothing (needed override fun)
-            }
-        }
+//        ArrayAdapter.createFromResource(
+//            requireContext(),
+//            res,
+//            android.R.layout.simple_spinner_item
+//        ).also { arrayAdapter ->
+//            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            spinner.adapter = arrayAdapter
+//        }
+//        spinner.setSelection(selection)
+//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                when (spinner) {
+//                    binding.genderSpinner -> {
+//                        userProfile.gender = position
+//                        Timber.i("Gender was changed to '${userProfile.genderString}'!")
+//                    }
+//                    binding.martialStatusSpinner -> {
+//                        userProfile.martialStatus = position
+//                        Timber.i("Martial status was changed to '${userProfile.martialStatusString}'!")
+//                    }
+//                    binding.educationSpinner -> {
+//                        userProfile.education = position
+//                        Timber.i("Education was changed to '${userProfile.educationString}'!")
+//                    }
+//                    binding.professionTypeSpinner -> {
+//                        userProfile.professionType = position
+//                        Timber.i("ProfessionType was changed to '${userProfile.professionTypeString}'")
+//                    }
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                //do nothing (needed override fun)
+//            }
+//        }
     }
 
     /**
      * Calls [initEditText] for every of the three [EditText]s.
      * */
     private fun initAllEditTexts() {
-        initEditText(binding.ageEditText)
-        initEditText(binding.childrenEditText)
-        initEditText(binding.professionEditText)
+//        initEditText(binding.ageEditText)
+//        initEditText(binding.childrenEditText)
+//        initEditText(binding.professionEditText)
     }
 
     /**
@@ -232,45 +245,45 @@ class BaselineQuestioningFragment : Fragment() {
      * @param hint the hint that should be shown in the [editText]
      * */
     private fun initEditText(editText: EditText) {
-        val ageEditText = binding.ageEditText
-        val childrenEditText = binding.childrenEditText
-        val professionEditText = binding.professionEditText
-
-        /* EditText shows realtime error if input is invalid */
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-                //not needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s == null) return
-                /* checks if the changed text is valid and sets an error message if not */
-                val errorMessage = when (editText) {
-                    ageEditText -> viewModel.getAgeErrorMessage(s.toString())
-                    childrenEditText -> viewModel.getChildrenErrorMessage(s.toString())
-                    professionEditText -> viewModel.getProfessionErrorMessage(s.toString())
-                    else -> ""
-                }
-                if (errorMessage != "") {
-                    editText.error = errorMessage
-                } else if (s.toString() != "") {
-                    /* the personalData gets updated if the changed text is not invalid nor empty */
-                    when (editText) {
-                        ageEditText -> userProfile.dateOfBirth = Integer.parseInt(s.toString())
-                        childrenEditText -> userProfile.children = Integer.parseInt(s.toString())
-                        professionEditText -> userProfile.profession = s.toString()
-                    }
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //not needed
-            }
-        })
+//        val ageEditText = binding.ageEditText
+//        val childrenEditText = binding.childrenEditText
+//        val professionEditText = binding.professionEditText
+//
+//        /* EditText shows realtime error if input is invalid */
+//        editText.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(
+//                s: CharSequence?,
+//                start: Int,
+//                count: Int,
+//                after: Int
+//            ) {
+//                //not needed
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                if (s == null) return
+//                /* checks if the changed text is valid and sets an error message if not */
+//                val errorMessage = when (editText) {
+//                    ageEditText -> viewModel.getAgeErrorMessage(s.toString())
+//                    childrenEditText -> viewModel.getChildrenErrorMessage(s.toString())
+//                    professionEditText -> viewModel.getProfessionErrorMessage(s.toString())
+//                    else -> ""
+//                }
+//                if (errorMessage != "") {
+//                    editText.error = errorMessage
+//                } else if (s.toString() != "") {
+//                    /* the personalData gets updated if the changed text is not invalid nor empty */
+//                    when (editText) {
+//                        ageEditText -> userProfile.dateOfBirth = Integer.parseInt(s.toString())
+//                        childrenEditText -> userProfile.children = Integer.parseInt(s.toString())
+//                        professionEditText -> userProfile.profession = s.toString()
+//                    }
+//                }
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                //not needed
+//            }
+//        })
     }
 }

@@ -10,6 +10,7 @@ import com.android.volley.*
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.database.DatabaseHandler
+import name.herbers.android.highsenso.database.DatabaseHelper
 import name.herbers.android.highsenso.database.UserProfile
 import timber.log.Timber
 import java.util.*
@@ -38,8 +39,10 @@ class SharedViewModel(
 ) : ViewModel() {
     var backFromResult: Boolean = false
 
-    val currentAnswersHSP: MutableList<Answer> = mutableListOf()
-    val currentAnswersDWHS: MutableList<Answer> = mutableListOf()
+    val currentAnswers: Map<String, MutableMap<String, Answer>> = mutableMapOf()
+
+    //    val currentAnswersHSP: Map<String, Answer> = mutableMapOf()
+//    val currentAnswersDWHS: Map<String, Answer> = mutableMapOf()
     val sensorDataHSP: MutableList<SensorData> = mutableListOf()
     val sensorDataDWHS: MutableList<SensorData> = mutableListOf()
 
@@ -119,15 +122,26 @@ class SharedViewModel(
     val showResetPasswordSuccessionToast: LiveData<String>
         get() = _showResetPasswordSuccessionToast
 
-    companion object {
-        private const val TOKEN_DURABILITY_TIME =
-            10000L //TODO adjust durability to actual token durability
-        private const val LOCALE = "DEU"
-
-    }
-
     init {
         Timber.i("SharedViewModel created!")
+
+        //TODO delete
+        setUpQuestionnairesAndAnswerSheets()
+    }
+
+    private fun setUpQuestionnairesAndAnswerSheets() {
+        questionnaires = DatabaseHelper().getQuestionnaires()
+        questionnaires?.forEach { questionnaire ->
+            databaseHandler.updateDatabaseQuestionnaire(questionnaire)
+        }
+        answerSheets = DatabaseHelper().getAnswerSheets()
+    }
+
+    fun getQuestionnaireByQuestionnaireName(name: String): Questionnaire?{
+        questionnaires?.forEach { questionnaire ->
+            if (questionnaire.name == name) return questionnaire
+        }
+        return null
     }
 
     /**
@@ -274,7 +288,7 @@ class SharedViewModel(
         ).apply()
         preferences.edit().putLong(
             appRes.getString(R.string.login_data_token_expiration_date),
-            Date().time + TOKEN_DURABILITY_TIME
+            Date().time + Constants.TOKEN_DURABILITY_TIME
         ).apply()
         preferences.edit().putString(
             appRes.getString(R.string.login_data_username_key),
@@ -335,28 +349,45 @@ class SharedViewModel(
     }
 
     fun createAndSendAnswerSheets() {
+        val answerSheetList = mutableListOf<AnswerSheet>()
         val client = Client(
             android.os.Build.MODEL,
             android.os.Build.DEVICE,
             android.os.Build.VERSION.RELEASE
         )
-        val answerSheetHSP = AnswerSheet(
-            2,
-            Date().time,
-            LOCALE,
-            currentAnswersHSP,
-            sensorDataHSP,
-            client
-        )
-        val answerSheetDWHS = AnswerSheet(
-            3,
-            Date().time,
-            LOCALE,
-            currentAnswersDWHS,
-            sensorDataDWHS,
-            client
-        )
-        sendAnswerSheets(listOf(answerSheetHSP, answerSheetDWHS))
+        val answerHSPMap = currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]
+        if (answerHSPMap != null) {
+            val answerHSP = mutableListOf<Answer>()
+            answerHSPMap.forEach { (_, answer) ->
+                answerHSP.add(answer)
+            }
+            answerSheetList.add(
+                AnswerSheet(
+                    2,
+                    Date().time,
+                    answerHSP,
+                    sensorDataHSP,
+                    client
+                )
+            )
+        }
+        val answerDWHMap = currentAnswers[Constants.DEAL_WITH_HS_QUESTIONNAIRE]
+        if (answerDWHMap != null) {
+            val answersDWHS = mutableListOf<Answer>()
+            answerDWHMap.forEach { (_, answer) ->
+                answersDWHS.add(answer)
+            }
+            answerSheetList.add(
+                AnswerSheet(
+                    3,
+                    Date().time,
+                    answersDWHS,
+                    sensorDataDWHS,
+                    client
+                )
+            )
+        }
+        sendAnswerSheets(answerSheetList)
     }
 
     fun sendAnswerSheets(answerSheets: List<AnswerSheet>) {
@@ -399,6 +430,20 @@ class SharedViewModel(
         registerDialogBackupMap["emailRepeat"] = emailRepeat
         registerDialogBackupMap["password"] = password
         registerDialogBackupMap["passwordRepeat"] = passwordRepeat
+    }
+
+    fun updateAnswerSheets(loadedAnswerSheets: List<AnswerSheet>) {
+        answerSheets = loadedAnswerSheets
+        loadedAnswerSheets.forEach { answerSheet ->
+            databaseHandler.updateDatabaseAnswerSheet(answerSheet)
+        }
+    }
+
+    fun updateQuestionnaires(loadedQuestionnaires: List<Questionnaire>) {
+        questionnaires = loadedQuestionnaires
+        loadedQuestionnaires.forEach { questionnaire ->
+            databaseHandler.updateDatabaseQuestionnaire(questionnaire)
+        }
     }
 
     override fun onCleared() {
