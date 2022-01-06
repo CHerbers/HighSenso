@@ -20,7 +20,7 @@ data class AnswerSheet(
     @TypeConverters(AnswerConverter::class)
     val answers: List<Answer>,
     @TypeConverters(SensorDataConverter::class)
-    val sensorData: List<SensorData>,
+    val sensorData: List<SensorData>?,
     @TypeConverters(ClientConverter::class)
     val client: Client,
     val locale: String = "de"

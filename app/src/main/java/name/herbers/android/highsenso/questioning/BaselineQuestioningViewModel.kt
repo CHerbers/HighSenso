@@ -52,16 +52,6 @@ class BaselineQuestioningViewModel(
         _questionnaireTitle.value = title
     }
 
-    fun handleNextButtonClick() {
-        //TODO: send data after checking privacy settings (but only one time!)
-        _isFinished.value = true
-        _isFinished.value = false
-    }
-
-    fun handleBackButtonClick() {
-
-    }
-
     /**
      * Calculates a fitting error message depending on the input String.
      * Regarding [maxAge], [minAge] and [regexNumbers].

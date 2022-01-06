@@ -7,12 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.volley.*
+import com.google.gson.Gson
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.DatabaseHelper
 import name.herbers.android.highsenso.database.UserProfile
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
 import java.util.*
 
 /**
@@ -34,15 +37,13 @@ class SharedViewModel(
     var questionnaires: List<Questionnaire>?,
     var answerSheets: List<AnswerSheet>?,
     private val preferences: SharedPreferences,
-    application: Application,
+    private val application: Application,
     private val communicationHandler: ServerCommunicationHandler
 ) : ViewModel() {
     var backFromResult: Boolean = false
 
-    val currentAnswers: Map<String, MutableMap<String, Answer>> = mutableMapOf()
+    val currentAnswers: MutableMap<String, MutableMap<String, Answer>> = mutableMapOf()
 
-    //    val currentAnswersHSP: Map<String, Answer> = mutableMapOf()
-//    val currentAnswersDWHS: Map<String, Answer> = mutableMapOf()
     val sensorDataHSP: MutableList<SensorData> = mutableListOf()
     val sensorDataDWHS: MutableList<SensorData> = mutableListOf()
 
@@ -124,24 +125,31 @@ class SharedViewModel(
 
     init {
         Timber.i("SharedViewModel created!")
-
         //TODO delete
-        setUpQuestionnairesAndAnswerSheets()
+        if (Constants.OFFLINE_MODE) setUpQuestionnairesAndAnswerSheets()
     }
 
     private fun setUpQuestionnairesAndAnswerSheets() {
-        questionnaires = DatabaseHelper().getQuestionnaires()
+        questionnaires = DatabaseHelper().getQuestionnaires(application.applicationContext)
         questionnaires?.forEach { questionnaire ->
             databaseHandler.updateDatabaseQuestionnaire(questionnaire)
         }
         answerSheets = DatabaseHelper().getAnswerSheets()
+        initCurrentAnswers()
     }
 
-    fun getQuestionnaireByQuestionnaireName(name: String): Questionnaire?{
+    fun getQuestionnaireByQuestionnaireName(name: String): Questionnaire? {
         questionnaires?.forEach { questionnaire ->
             if (questionnaire.name == name) return questionnaire
         }
         return null
+    }
+
+    private fun initCurrentAnswers() {
+        questionnaires?.forEach { questionnaire ->
+            if (currentAnswers[questionnaire.name] == null) currentAnswers[questionnaire.name] =
+                mutableMapOf()
+        }
     }
 
     /**
@@ -156,7 +164,7 @@ class SharedViewModel(
         _locationDialogDismiss.value = false
     }
 
-    fun callMailSentDialog() {
+    private fun callMailSentDialog() {
         _startSentMailDialog.value = true
         _startSentMailDialog.value = false
     }
@@ -350,48 +358,67 @@ class SharedViewModel(
 
     fun createAndSendAnswerSheets() {
         val answerSheetList = mutableListOf<AnswerSheet>()
-        val client = Client(
-            android.os.Build.MODEL,
-            android.os.Build.DEVICE,
-            android.os.Build.VERSION.RELEASE
-        )
+
+        val answerBaselineMap = currentAnswers[Constants.BASELINE_QUESTIONNAIRE]
+        if (answerBaselineMap != null) {
+            answerSheetList.add(
+                createAnswerSheetFromCurrentAnswers(
+                    answerBaselineMap,
+                    Constants.BASELINE_QUESTIONNAIRE_ID,
+                    null
+                )
+            )
+        }
+
         val answerHSPMap = currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]
         if (answerHSPMap != null) {
-            val answerHSP = mutableListOf<Answer>()
-            answerHSPMap.forEach { (_, answer) ->
-                answerHSP.add(answer)
-            }
             answerSheetList.add(
-                AnswerSheet(
-                    2,
-                    Date().time,
-                    answerHSP,
-                    sensorDataHSP,
-                    client
+                createAnswerSheetFromCurrentAnswers(
+                    answerHSPMap,
+                    Constants.HSP_SCALE_QUESTIONNAIRE_ID,
+                    sensorDataHSP
                 )
             )
         }
         val answerDWHMap = currentAnswers[Constants.DEAL_WITH_HS_QUESTIONNAIRE]
         if (answerDWHMap != null) {
-            val answersDWHS = mutableListOf<Answer>()
-            answerDWHMap.forEach { (_, answer) ->
-                answersDWHS.add(answer)
-            }
             answerSheetList.add(
-                AnswerSheet(
-                    3,
-                    Date().time,
-                    answersDWHS,
-                    sensorDataDWHS,
-                    client
+                createAnswerSheetFromCurrentAnswers(
+                    answerDWHMap,
+                    Constants.DEAL_WITH_HS_QUESTIONNAIRE_ID,
+                    sensorDataDWHS
                 )
             )
         }
         sendAnswerSheets(answerSheetList)
     }
 
+    private fun createAnswerSheetFromCurrentAnswers(
+        answersMap: Map<String, Answer>,
+        questionnaireId: Int,
+        sensorData: List<SensorData>?
+    ): AnswerSheet {
+        val client = Client(
+            android.os.Build.MODEL,
+            android.os.Build.DEVICE,
+            android.os.Build.VERSION.RELEASE
+        )
+        val answers = mutableListOf<Answer>()
+        answersMap.forEach { (_, answer) ->
+            answers.add(answer)
+        }
+        return AnswerSheet(
+            questionnaireId,
+            Date().time,
+            answers,
+            sensorData,
+            client
+        )
+    }
+
     fun sendAnswerSheets(answerSheets: List<AnswerSheet>) {
         val token = preferences.getString(appRes.getString(R.string.login_data_token), "")
+        answerSheetsToJsonFile(answerSheets) //TODO delete
         if (token == null || token == "") {
             Timber.i("This should never be possible! Mon Dieu!")
             return
@@ -444,6 +471,34 @@ class SharedViewModel(
         loadedQuestionnaires.forEach { questionnaire ->
             databaseHandler.updateDatabaseQuestionnaire(questionnaire)
         }
+        initCurrentAnswers()
+    }
+
+    private fun answerSheetsToJsonFile(answerSheets: List<AnswerSheet>) {
+        val gson = Gson()
+        var count = 0
+        answerSheets.forEach { answerSheet ->
+            count++
+            val bodyJSON = gson.toJson(answerSheet)
+            Timber.i(bodyJSON)
+            val path = "answersheet$count.json"
+
+            try {
+                File(path).printWriter().use { out ->
+                    out.println(bodyJSON)
+                }
+            } catch (e: IOException) {
+                Timber.e("IOException!" + e.printStackTrace())
+            }
+        }
+    }
+
+    fun loadQuestionnairesFromDeviceDatabase() {
+        if (questionnaires.isNullOrEmpty()) questionnaires = databaseHandler.questionnaires
+    }
+
+    fun loadAnswerSheetsFromDeviceDatabase() {
+        if (answerSheets.isNullOrEmpty()) answerSheets = databaseHandler.answerSheets
     }
 
     override fun onCleared() {

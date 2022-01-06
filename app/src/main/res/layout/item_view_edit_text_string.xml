@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="question"
             type="name.herbers.android.highsenso.data.Question" />
@@ -23,7 +24,7 @@
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/personal_questioning_item_external_spacing"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            app:questionTitle="@{question}"/>
+            app:questionTitle="@{question}" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_text_item_view_editText_layout"
@@ -31,8 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_textView_layout_margin"
             android:layout_marginTop="@dimen/personal_questioning_item_intern_spacing"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
             <EditText
@@ -41,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:ems="10"
+                android:imeOptions="actionDone"
                 android:inputType="text"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
         </com.google.android.material.textfield.TextInputLayout>

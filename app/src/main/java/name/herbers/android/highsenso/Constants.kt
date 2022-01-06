@@ -6,6 +6,8 @@ package name.herbers.android.highsenso
  *@author Herbers
  */
 object Constants {
+
+    const val OFFLINE_MODE = true
     /* Questionnaire */
     const val BASELINE_QUESTIONNAIRE = "Baseline"
     const val BASELINE_QUESTIONNAIRE_ID = 1
@@ -20,8 +22,10 @@ object Constants {
 
     /* Data */
     const val LOCALE = "DEU"
-    const val ELEMENT_TYPE_QUESTION = "elements/question"
-    const val ELEMENT_TYPE_HEADLINE = "elements/headline"
+    const val ELEMENTS = "elements"
+    const val ELEMENT_TYPE = "elementtype"
+    const val ELEMENT_TYPE_QUESTION = "elements/questions"
+    const val ELEMENT_TYPE_HEADLINE = "elements/headlines"
     const val QUESTION_TYPE_DATE = "TextDate"
     const val QUESTION_TYPE_SINGLE_CHOICE = "SingleChoice"
     const val QUESTION_TYPE_SINGLE_CHOICE_KNOB = "SingleChoiceKnob"
@@ -36,4 +40,7 @@ object Constants {
 
     /* URI */
     const val SERVER_URL = "https://www.google.com" //TODO insert right URL
+    const val QUESTIONNAIRES_URI = "studies/1/questionnaires/"
+    const val ANSWER_SHEETS_URI = "/answersheets"
+    const val TOKEN_URI = "?token="
 }

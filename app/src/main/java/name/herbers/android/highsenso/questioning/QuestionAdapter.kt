@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import name.herbers.android.highsenso.Constants
+import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.Question
 import name.herbers.android.highsenso.databinding.*
@@ -20,7 +21,7 @@ import java.util.*
  *@author Herbers
  */
 class QuestionAdapter(
-    val givenAnswers: MutableMap<String, Answer>,
+    val sharedViewModel: SharedViewModel,
     val viewModel: BaselineQuestioningViewModel
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -42,6 +43,8 @@ class QuestionAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = data[position]
+        val givenAnswers = getGivenAnswers()
+
         when (holder) {
             is SpinnerViewHolder -> holder.bind(holder, item, viewModel)
             is EditTextStringViewHolder -> holder.bind(holder, item, viewModel, givenAnswers)
@@ -51,6 +54,7 @@ class QuestionAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val givenAnswers = getGivenAnswers()
         return when (viewType) {
             TYPE_EDIT_STRING_VIEW -> EditTextStringViewHolder.from(parent)
             TYPE_EDIT_DATE_VIEW -> DatePickerViewHolder.from(parent)
@@ -70,21 +74,11 @@ class QuestionAdapter(
         }
     }
 
-//    class ViewHolder private constructor(val binding: SpinnerItemViewBinding) :
-//        RecyclerView.ViewHolder(binding.root) {
-//
-//        fun bind(holder: RecyclerView.ViewHolder, item: Question, res: Resources) {
-//
-//        }
-//
-//        companion object {
-//            fun from(parent: ViewGroup): RecyclerView.ViewHolder {
-//                val layoutInflater = LayoutInflater.from(parent.context)
-//                val binding = SpinnerItemViewBinding.inflate(layoutInflater, parent, false)
-//                return ViewHolder(binding)
-//            }
-//        }
-//    }
+    private fun getGivenAnswers(): MutableMap<String, Answer>{
+        val givenAnswers = sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] ?: mutableMapOf()
+        sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] = givenAnswers
+        return givenAnswers
+    }
 
     class SpinnerViewHolder(
         val binding: ItemViewSpinnerBinding,
@@ -108,7 +102,7 @@ class QuestionAdapter(
                     id: Long
                 ) {
                     val values = item.values as List<*>
-                    val value = values[position] as String
+                    val value = values[position].toString()
 //                    val label = answers[position] as String
                     givenAnswers[item.label] = Answer(value, item.label, Date().time)
                 }

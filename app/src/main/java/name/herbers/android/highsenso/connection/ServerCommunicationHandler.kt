@@ -5,6 +5,7 @@ import com.android.volley.AuthFailureError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.data.*
@@ -83,7 +84,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         registrationRequest: RegistrationRequest,
         sharedViewModel: SharedViewModel
     ) {
-        val url = serverURL
+        val url = Constants.SERVER_URL
         val request = RequestData(Data("users", registrationRequest))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
@@ -118,7 +119,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         sharedViewModel: SharedViewModel,
         answerSheets: List<AnswerSheet>?
     ) {
-        val url = serverURL
+        val url = Constants.SERVER_URL
         val loginRequest = LoginRequest(username, password)
         val request = RequestData(Data("users", loginRequest))
         val stringRequest: StringRequest = object : StringRequest(
@@ -176,7 +177,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 
     fun sendAnswerSheet(token: String, answerSheet: AnswerSheet) {
         val url =
-            serverURL + QUESTIONNAIRES_URL + answerSheet.id + ANSWER_SHEETS_URL + TOKEN_URL + token //TODO check URL
+            Constants.SERVER_URL + Constants.QUESTIONNAIRES_URI + answerSheet.id + Constants.ANSWER_SHEETS_URI + Constants.TOKEN_URI + token //TODO check URL
         val request = RequestData(Data("questionnaires", answerSheet))
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST,
@@ -202,7 +203,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     }
 
     fun sendResetPasswordRequest(mail: String, sharedViewModel: SharedViewModel) {
-        val url = serverURL //TODO complete URL
+        val url = Constants.SERVER_URL //TODO complete URL
         val resetPasswordRequest = ResetPasswordRequest(mail)
         val request = RequestData(Data("users", resetPasswordRequest))
         val stringRequest: StringRequest = object : StringRequest(
@@ -230,10 +231,9 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-    //TODO test this
-    fun getAllQuestionnairesJSON(token: String, sharedViewModel: SharedViewModel) {
-        val url = serverURL //TODO url
-//        val questionnaires: List<Questionnaire>
+
+    fun getAllQuestionnaires(token: String, sharedViewModel: SharedViewModel) {
+        val url = Constants.SERVER_URL + Constants.TOKEN_URI + token //TODO url
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             url,
@@ -252,6 +252,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             },
             { error ->
                 Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
+                sharedViewModel.loadQuestionnairesFromDeviceDatabase()
             }) {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
@@ -262,80 +263,80 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     }
 
     //TODO test his gson stuff
-    fun getAllQuestionnaires(token: String, sharedViewModel: SharedViewModel) {
-        val url = serverURL //TODO url
-        val questionnaires = mutableListOf<Questionnaire>()
-        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
-            Method.GET,
-            url,
-            null,
-            { response ->
-                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
-                try {
-                    val dataJSON: JSONObject = response.getJSONObject("data")
-                    val attributes = dataJSON.getJSONArray("attributes")
-                    for (i in 0 until attributes.length()) {
-                        questionnaires.add(
-                            gson.fromJson(
-                                attributes[i].toString(),
-                                Questionnaire::class.java
-                            )
-                        )
-                    }
-                    sharedViewModel.updateQuestionnaires(questionnaires)
-                    Timber.i(SUCCESSFULLY_PARSED)
-                } catch (e: JSONException) {
-                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
-                }
-            },
-            { error ->
-                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
-            }) {
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                return addHeader(contentHeader = false, languageHeader = true)
-            }
-        }
-        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
-    }
-
-    //TODO test this gson stuff too
-    fun getAllQuestionnairesALT2(token: String, sharedViewModel: SharedViewModel) {
-        val url = serverURL //TODO url
-        val questionnaires: List<Questionnaire>
-        val jsonObjectRequest: StringRequest = object : StringRequest(
-            Method.GET,
-            url,
-            { response ->
-                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
-                try {
-                    val data = gson.fromJson(response, Data::class.java)
-                    if (data.attributes is List<*>) {
-                        if (data.attributes is Questionnaire) {
-                            sharedViewModel.updateQuestionnaires(data.attributes as List<Questionnaire>)
-                        }
-                    }
+//    fun getAllQuestionnaires(token: String, sharedViewModel: SharedViewModel) {
+//        val url = serverURL //TODO url
+//        val questionnaires = mutableListOf<Questionnaire>()
+//        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
+//            Method.GET,
+//            url,
+//            null,
+//            { response ->
+//                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
+//                try {
 //                    val dataJSON: JSONObject = response.getJSONObject("data")
-//                    sharedViewModel.questionnaires =
-//                        getQuestionnaireListFromJSONArray(dataJSON.getJSONArray("attributes"))
-                    Timber.i(SUCCESSFULLY_PARSED)
-                } catch (e: JSONException) {
-                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
-                }
-            },
-            { error ->
-                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
-            }) {
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                return addHeader(contentHeader = false, languageHeader = true)
-            }
-        }
-        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
-    }
+//                    val attributes = dataJSON.getJSONArray("attributes")
+//                    for (i in 0 until attributes.length()) {
+//                        questionnaires.add(
+//                            gson.fromJson(
+//                                attributes[i].toString(),
+//                                Questionnaire::class.java
+//                            )
+//                        )
+//                    }
+//                    sharedViewModel.updateQuestionnaires(questionnaires)
+//                    Timber.i(SUCCESSFULLY_PARSED)
+//                } catch (e: JSONException) {
+//                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
+//                }
+//            },
+//            { error ->
+//                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
+//            }) {
+//            @Throws(AuthFailureError::class)
+//            override fun getHeaders(): Map<String, String> {
+//                return addHeader(contentHeader = false, languageHeader = true)
+//            }
+//        }
+//        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
+//    }
+//
+//    //TODO test this gson stuff too
+//    fun getAllQuestionnairesALT2(token: String, sharedViewModel: SharedViewModel) {
+//        val url = serverURL //TODO url
+//        val questionnaires: List<Questionnaire>
+//        val jsonObjectRequest: StringRequest = object : StringRequest(
+//            Method.GET,
+//            url,
+//            { response ->
+//                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
+//                try {
+//                    val data = gson.fromJson(response, Data::class.java)
+//                    if (data.attributes is List<*>) {
+//                        if (data.attributes is Questionnaire) {
+//                            sharedViewModel.updateQuestionnaires(data.attributes as List<Questionnaire>)
+//                        }
+//                    }
+////                    val dataJSON: JSONObject = response.getJSONObject("data")
+////                    sharedViewModel.questionnaires =
+////                        getQuestionnaireListFromJSONArray(dataJSON.getJSONArray("attributes"))
+//                    Timber.i(SUCCESSFULLY_PARSED)
+//                } catch (e: JSONException) {
+//                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
+//                }
+//            },
+//            { error ->
+//                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
+//            }) {
+//            @Throws(AuthFailureError::class)
+//            override fun getHeaders(): Map<String, String> {
+//                return addHeader(contentHeader = false, languageHeader = true)
+//            }
+//        }
+//        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
+//    }
 
     fun getAllAnswerSheets(token: String, sharedViewModel: SharedViewModel) {
-        val url = serverURL + QUESTIONNAIRES_URL + TOKEN_URL + token
+        val url = Constants.SERVER_URL + Constants.QUESTIONNAIRES_URI + Constants.TOKEN_URI + token //TODO check URL
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             url,
@@ -343,21 +344,21 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             { response ->
                 Timber.i(RECEIVED_RESPONSE + "getAllAnswerSheets: $response")
                 try {
-                    val answerSheets = mutableListOf<AnswerSheet>()
                     val dataJSON: JSONObject = response.getJSONObject("data")
-                    val attributes = dataJSON.getJSONArray("attributes")
-                    for (i in 0 until attributes.length()) {
-                        answerSheets.add(
-                            gson.fromJson(
-                                attributes[i].toString(),
-                                AnswerSheet::class.java
-                            )
-                        )
-                    }
-                    sharedViewModel.updateAnswerSheets(answerSheets)
-//                    sharedViewModel.updateAnswerSheets(
-//                        getAnswerSheetListFromJSONArray(dataJSON.getJSONArray("attributes"))
-//                    )
+//                    val answerSheets = mutableListOf<AnswerSheet>()
+//                    val attributes = dataJSON.getJSONArray("attributes")
+//                    for (i in 0 until attributes.length()) {
+//                        answerSheets.add(
+//                            gson.fromJson(
+//                                attributes[i].toString(),
+//                                AnswerSheet::class.java
+//                            )
+//                        )
+//                    }
+//                    sharedViewModel.updateAnswerSheets(answerSheets)
+                    sharedViewModel.updateAnswerSheets(
+                        getAnswerSheetListFromJSONArray(dataJSON.getJSONArray("attributes"))
+                    )
                     Timber.i(SUCCESSFULLY_PARSED)
                 } catch (e: JSONException) {
                     Timber.i(JSON_EXCEPTION + "AnswerSheets! \n" + e.printStackTrace())
@@ -365,6 +366,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             },
             { error ->
                 Timber.i(RECEIVED_ERROR + "getAllAnswerSheets request: $error")
+                sharedViewModel.loadAnswerSheetsFromDeviceDatabase()
             }) {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
@@ -417,27 +419,22 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         return questionnaireList
     }
 
-    private fun getQuestionListFromJSONArray(array: JSONArray): List<Question> {
-        val questionList = mutableListOf<Question>()
+    private fun getQuestionListFromJSONArray(array: JSONArray): List<Element> {
+        val elementList = mutableListOf<Element>()
 
         for (i in 0 until array.length()) {
-            val question = array.getJSONObject(i)
-            questionList.add(
-                Question(
-                    question.getInt("position"),
-                    question.getString("name"),
-                    question.getString(questionTypeField),
-                    question.getString("label"),
-                    question.get("values"),
-                    listOf(),    //TODO fix
-                    question.getString("restricted_to"),
-                    question.getBoolean("is_active"),
-                    question.getBoolean(requiredField),
-                    question.getString("elementtype")
+            val element = array.getJSONObject(i)
+            if (element.getString(Constants.ELEMENT_TYPE) == Constants.ELEMENT_TYPE_HEADLINE) {
+                elementList.add(
+                    gson.fromJson(element.toString(), Headlines::class.java)
                 )
-            )
+            } else {
+                elementList.add(
+                    gson.fromJson(element.toString(), Question::class.java)
+                )
+            }
         }
-        return questionList
+        return elementList
     }
 
     private fun getAnswerSheetListFromJSONArray(array: JSONArray): List<AnswerSheet> {
@@ -451,7 +448,8 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                     answerSheet.getLong(collectedAtField),
                     getAnswersListFromJSONArray(answerSheet.getJSONArray(answerField)),
                     getSensorDataListFromJSONArray(answerSheet.getJSONArray(sensorDataField)),
-                    getClientFromJSONObject(answerSheet.getJSONObject(clientField)),
+//                    getClientFromJSONObject(answerSheet.getJSONObject(clientField)),
+                    gson.fromJson(answerSheet.getJSONObject(clientField).toString(), Client::class.java),
                     answerSheet.getString(localeField)
                 )
             )
@@ -465,50 +463,54 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         for (i in 0 until array.length()) {
             val answer = array.getJSONObject(i)
             answerList.add(
-                Answer(
-                    answer.getString(valueField),
-                    answer.getString(labelField),
-                    answer.getLong(collectedAtField)
-                )
+                gson.fromJson(answer.toString(), Answer::class.java)
+//                Answer(
+//                    answer.getString(valueField),
+//                    answer.getString(labelField),
+//                    answer.getLong(collectedAtField)
+//                )
             )
         }
         return answerList
     }
 
     private fun getSensorDataListFromJSONArray(array: JSONArray): List<SensorData> {
-        val questionList = mutableListOf<SensorData>()
+        val sensorDataList = mutableListOf<SensorData>()
 
         for (i in 0 until array.length()) {
             val sensorData = array.getJSONObject(i)
             when (sensorData.getString(nameField)) {
-                ambientAudioSDField -> questionList.add(
-                    AmbientAudioSensorData(
-                        sensorData.getLong(collectedAtField),
-                        sensorData.getDouble(amplitudeField).toFloat()
-                    )
+                ambientAudioSDField -> sensorDataList.add(
+                    gson.fromJson(sensorData.toString(), AmbientAudioSensorData::class.java)
+//                    AmbientAudioSensorData(
+//                        sensorData.getLong(collectedAtField),
+//                        sensorData.getDouble(amplitudeField).toFloat()
+//                    )
                 )
-                ambientLightSDField -> questionList.add(
-                    AmbientLightSensorData(
-                        sensorData.getLong(collectedAtField),
-                        sensorData.getDouble(luxField).toFloat()
-                    )
+                ambientLightSDField -> sensorDataList.add(
+                    gson.fromJson(sensorData.toString(), AmbientLightSensorData::class.java)
+//                    AmbientLightSensorData(
+//                        sensorData.getLong(collectedAtField),
+//                        sensorData.getDouble(luxField).toFloat()
+//                    )
                 )
-                ambientTempSDField -> questionList.add(
-                    AmbientTempSensorData(
-                        sensorData.getLong(collectedAtField),
-                        sensorData.getDouble(degreesField).toFloat()
-                    )
+                ambientTempSDField -> sensorDataList.add(
+                    gson.fromJson(sensorData.toString(), AmbientTempSensorData::class.java)
+//                    AmbientTempSensorData(
+//                        sensorData.getLong(collectedAtField),
+//                        sensorData.getDouble(degreesField).toFloat()
+//                    )
                 )
             }
         }
-        return questionList
+        return sensorDataList
     }
 
-    private fun getClientFromJSONObject(jsonObject: JSONObject): Client {
-        return Client(
-            jsonObject.getString(nameField),
-            jsonObject.getString(deviceField),
-            jsonObject.getString(osField)
-        )
-    }
+//    private fun getClientFromJSONObject(jsonObject: JSONObject): Client {
+//        return Client(
+//            jsonObject.getString(nameField),
+//            jsonObject.getString(deviceField),
+//            jsonObject.getString(osField)
+//        )
+//    }
 }

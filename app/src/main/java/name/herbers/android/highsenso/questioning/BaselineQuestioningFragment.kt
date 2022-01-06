@@ -70,7 +70,7 @@ class BaselineQuestioningFragment : Fragment() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-        val adapter = QuestionAdapter(sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] ?: mutableMapOf(), viewModel)
+        val adapter = QuestionAdapter(sharedViewModel, viewModel)
         val baselineQuestions = mutableListOf<Question>()
         val baselineQuestionnaireElements =
             sharedViewModel.getQuestionnaireByQuestionnaireName(Constants.BASELINE_QUESTIONNAIRE)?.questions

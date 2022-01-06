@@ -7,6 +7,6 @@ package name.herbers.android.highsenso.data
  */
 data class TranslationQuestion(
     val question: String,
-    val answers: List<Any>,      //Either List<String> or List<Answer>
+    val answers: Any,      //Either String or List<String>
     val locale: String = "de"
 )

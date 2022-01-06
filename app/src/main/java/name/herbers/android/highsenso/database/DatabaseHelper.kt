@@ -1,8 +1,13 @@
 package name.herbers.android.highsenso.database
 
+import android.content.Context
+import com.google.gson.Gson
 import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.data.Question
+import org.json.JSONObject
+import timber.log.Timber
+import java.io.IOException
 import java.util.*
 
 /**
@@ -12,167 +17,54 @@ import java.util.*
  */
 class DatabaseHelper {
 
-    fun getQuestionnaires(): List<Questionnaire> {
-        return listOf(
-            getBaselineQuestionnaire(),
-            getHSPScalaQuestionnaire(),
-            getDealWithHSQuestionnaire()
-        )
-    }
+    private val gson = Gson()
 
-    private fun getBaselineQuestionnaire(): Questionnaire {
-        return Questionnaire(
-            Constants.BASELINE_QUESTIONNAIRE_ID, Constants.BASELINE_QUESTIONNAIRE, listOf(
-                Headlines(
-                    4,
-                    listOf(TranslationHeadline("Bitte gib uns ein paar Angaben zu Deiner Person."))
-                ),
-                Question(
-                    2,
-                    "element2",
-                    Constants.QUESTION_TYPE_DATE,
-                    "birthdate",
-                    "",
-                    listOf(TranslationQuestion("Was ist Dein Geburtsdatum", listOf<String>())),
-                    "PASTS"
-                ),
-                Question(
-                    3,
-                    "element3",
-                    Constants.QUESTION_TYPE_SINGLE_CHOICE,
-                    "sex",
-                    listOf("0", "1", "2"),
-                    listOf(
-                        TranslationQuestion(
-                            "Welches Geschlecht hast Du?",
-                            listOf("Weiblich", "Männlich", "Divers")
-                        )
-                    )
-                ),
-                Question(
-                    4,
-                    "element4",
-                    Constants.QUESTION_TYPE_SINGLE_CHOICE_KNOB,
-                    "country",
-                    listOf("AFG", "EGY", "ALB", "DZA", "AND"),
-                    listOf(
-                        TranslationQuestion(
-                            "In welchem Land lebst Du aktuell?",
-                            listOf(
-                                "Afghanistan",
-                                "Ägypten",
-                                "Albanien",
-                                "Algerien",
-                                "Andorra"
-                            )
-                        )
-                    )
-                ),
-                Question(
-                    5,
-                    "element5",
-                    Constants.QUESTION_TYPE_SINGLE_CHOICE,
-                    "family_status",
-                    listOf("1", "2", "3", "4", "5", "6", "7"),
-                    listOf(
-                        TranslationQuestion(
-                            "Welchen Familienstand hast Du?", listOf(
-                                "Verheiratet bzw. in fester Partnerschaft",
-                                "Verheiratet, getrennt lebend",
-                                "Geschieden",
-                                "In eingetragener Partnerschaft (gleichgeschlechtlich)",
-                                "In eingetragener Partnerschaft (gleichgeschlechtlich), getrennt lebend",
-                                "Verwitwet",
-                                "Ledig"
-                            )
-                        )
-                    )
-                ),
-                Question(
-                    6,
-                    "element6",
-                    Constants.QUESTION_TYPE_KNOB,
-                    "children",
-                    Values(0, 20, 1),
-                    listOf(
-                        TranslationQuestion(
-                            "Wie viele Kinder hast Du?", listOf(
-                                Answer("0", "0"), Answer("20", "20")
+    fun getQuestionnaires(context: Context): List<Questionnaire> {
+        try {
+            val path = "questionnaires/highsenso_"
+            val questionnaireList = mutableListOf<Questionnaire>()
 
-                            )
-                        )
-                    )
-                ),
-                Question(
-                    7,
-                    "element7",
-                    Constants.QUESTION_TYPE_SINGLE_CHOICE_KNOB,
-                    "education",
-                    listOf("0", "1", "2", "3", "4", "5", "6", "9"),
-                    listOf(
-                        TranslationQuestion(
-                            "Was ist Dein höhchster Bildungsabschluss?", listOf(
-                                "Keine formale Bildung",
-                                "Primarschule (Grundschulbildung)",
-                                "Sekundarstufe I (Abschluss der Sekundarstufe, der keinen Zugang zu einer Universität ermöglicht)",
-                                "Obere Sekundarstufe (Studiengänge, die den Zugang zur Universität ermöglichen)",
-                                "Postsekundäre, nicht-tertiäre Bildung (andere Bildungsgänge der Sekundarstufe II)",
-                                "Tertiärstufe, erste Stufe (auch Fachschulen)",
-                                "Oberer Tertiärbereich (Master, Doktor)",
-                                "Keine Antwort, andere"
-                            )
-                        )
-                    )
-                ),
-                Question(
-                    8,
-                    "element8",
-                    Constants.QUESTION_TYPE_SINGLE_CHOICE,
-                    "employment_relationship",
-                    listOf("0", "1", "2", "3", "4", "5", "6", "9", "10"),
-                    listOf(
-                        TranslationQuestion(
-                            "In welchem Arbeitsverhätnis stehst Du?", listOf(
-                                "Schüler*in",
-                                "Student*in",
-                                "Arbeitssuchend",
-                                "Angestellt (Teilzeit)",
-                                "Angestellt (Vollzeit)",
-                                "Selbstständig",
-                                "Berentet",
-                                "Anderes",
-                                "Keine Angabe"
-                            )
-                        )
-                    )
-                ),
-                Question(
-                    9,
-                    "element9",
-                    Constants.QUESTION_TYPE_TEXT_STRING,
-                    "profession",
-                    "",
-                    listOf(TranslationQuestion("Was ist dein Beruf?", listOf<String>()))
-                ),
+            val jsonObjectBaseline = JSONObject(
+                context.assets.open(path + "Baseline_structure.json").bufferedReader()
+                    .use { it.readText() }
             )
-        )
-    }
-
-    private fun getHSPScalaQuestionnaire(): Questionnaire {
-        return Questionnaire(
-            Constants.HSP_SCALE_QUESTIONNAIRE_ID, Constants.HSP_SCALE_QUESTIONNAIRE, listOf(
-
+            val jsonObjectHSP = JSONObject(
+                context.assets.open(path + "HSPScala_structure.json").bufferedReader()
+                    .use { it.readText() }
             )
-        )
-    }
-
-    private fun getDealWithHSQuestionnaire(): Questionnaire {
-        return Questionnaire(
-            Constants.DEAL_WITH_HS_QUESTIONNAIRE_ID, Constants.DEAL_WITH_HS_QUESTIONNAIRE, listOf(
-
+            val jsonObjectDWHS = JSONObject(
+                context.assets.open(path + "DealingWithHS_structure.json").bufferedReader()
+                    .use { it.readText() }
             )
-        )
+
+            questionnaireList.add(
+                Questionnaire(
+                    Constants.BASELINE_QUESTIONNAIRE_ID,
+                    Constants.BASELINE_QUESTIONNAIRE,
+                    getQuestionListFromJsonObject(jsonObjectBaseline)
+                )
+            )
+            questionnaireList.add(
+                Questionnaire(
+                    Constants.HSP_SCALE_QUESTIONNAIRE_ID,
+                    Constants.HSP_SCALE_QUESTIONNAIRE,
+                    getQuestionListFromJsonObject(jsonObjectHSP)
+                )
+            )
+            questionnaireList.add(
+                Questionnaire(
+                    Constants.DEAL_WITH_HS_QUESTIONNAIRE_ID,
+                    Constants.DEAL_WITH_HS_QUESTIONNAIRE,
+                    getQuestionListFromJsonObject(jsonObjectDWHS)
+                )
+            )
+            return questionnaireList
+        } catch (e: IOException) {
+            Timber.i("Exception while trying to create Questionnaire list from assets! + ${e.printStackTrace()}")
+        }
+        return listOf()
     }
+
 
     fun getAnswerSheets(): List<AnswerSheet> {
         return listOf(getBaselineAnswerSheet())
@@ -189,8 +81,8 @@ class DatabaseHelper {
             Date().time,
             listOf(
                 Answer(
-                    "1-1-2022",
-                    "1-1-2022",
+                    "1.1.2022",
+                    "1.1.2022",
                     Date().time
                 ),
                 Answer(
@@ -236,5 +128,24 @@ class DatabaseHelper {
             ),
             client
         )
+    }
+
+    private fun getQuestionListFromJsonObject(jsonObject: JSONObject): List<Element> {
+        val array = jsonObject.getJSONArray(Constants.ELEMENTS)
+        val elementList = mutableListOf<Element>()
+
+        for (i in 0 until array.length()) {
+            val element = array.getJSONObject(i)
+            if (element.getString(Constants.ELEMENT_TYPE) == Constants.ELEMENT_TYPE_HEADLINE) {
+                elementList.add(
+                    gson.fromJson(element.toString(), Headlines::class.java)
+                )
+            } else {
+                elementList.add(
+                    gson.fromJson(element.toString(), Question::class.java)
+                )
+            }
+        }
+        return elementList
     }
 }

@@ -1,0 +1,638 @@
+{
+  "elements": [
+    {
+      "position": 1,
+      "name": "element1",
+      "elementtype": "elements/headlines",
+      "translations": [
+        {
+          "locale": "de",
+          "headline": "Lies Dir die Aussage gut durch und bewerte, ob sie auf Dich eher zutrifft oder eher nicht."
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "name": "element2",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "overwhelming_stimuli",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich fühle mich schnell von starkem sensorischen Reizen überwältigt.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "name": "element3",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "subtleties",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich nehme Feinheiten in meiner Umgebung wahr.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 4,
+      "name": "element4",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "affecting_moods",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Die Stimmung Anderer beeinflusst mich.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "name": "element5",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "pain_sensitive",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin sehr schmerzempfindlich.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 6,
+      "name": "element6",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "withdraw",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "An arbeitsreichen Tagen habe ich das Bedürfnis mich zurückzuziehen (ins Bett, in einen dunklen Raum o.Ä.), um Privatsphäre zu haben und mich von Reizen zu erholen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "name": "element7",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "coffeine_sensitive",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich reagiere empfindlich auf Koffein.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "name": "element8",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "sensory_sensibility",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin schnell überwältigt von hellem Licht, starken Gerüchen, rauen Stoffen oder nahen Sirenen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "name": "element9",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "complex_inner_life",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich habe ein komplexes Innenleben.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "name": "element10",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "noise_sensitive",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Bei Lärm fühle ich mich unwohl.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "name": "element11",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "art_sensitive",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich fühle mich von Musik und/oder Kunst stark bewegt.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "name": "element12",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "exhausted_nervous_system",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Mein Nervensystem ist manchmal so erschöpft, dass ich eine Auszeit brauche.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 13,
+      "name": "element13",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "conscientious",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin gewissenhaft.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 14,
+      "name": "element14",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "easily_startled",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin schreckhaft.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 15,
+      "name": "element15",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "workload_sensitive",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich fühle mich verunsichert, wenn ich sehr viel in einer sehr kurzen Zeitspanne tun muss.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 16,
+      "name": "element16",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "empathy",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Wenn sich Leute in einer physischen Umgebung unwohl fühlen, tendiere ich dazu, zu wissen, was getan werden muss, damit sie sich besser fühlen (etwa das Verändern von Lichtverhältnissen oder Sitzplatz).",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 17,
+      "name": "element17",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "annoying_workload",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin verärgert, wenn Leute versuchen, mir sehr viel Arbeit auf einmal aufzubürden.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 18,
+      "name": "element18",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "avoid_mistakes",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin sehr darauf bedacht, Fehler zu vermeiden und Dinge nicht zu vergessen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 19,
+      "name": "element19",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "avoid_violence",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich lege Wert darauf, gewaltsamen Filmen und Serien aus dem Weg zu gehen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 20,
+      "name": "element20",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "turbulent_environment",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich fühle mich unangenehm erregt, wenn um mich herum sehr viel passiert.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 21,
+      "name": "element21",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "hunger_mood",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Sehr hungrig zu sein löst eine starke Reaktion in mir aus, stört meine Konzentration oder meine Stimmung.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 22,
+      "name": "element22",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "upshaking_changes",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Veränderungen in meinem Leben verunsichern mich.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 23,
+      "name": "element23",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "enjoying_delicacies ",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich nehme zarte oder feine Gerüche, Geschmäcker, Klänge oder Kunstwerke wahr und erfreue mich an ihnen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 24,
+      "name": "element24",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "uncomfortable_workload",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich finde es unangenehm wenn ich viel um die Ohren habe.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 25,
+      "name": "element25",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "avoid_situations",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich richte mein Leben stark darauf aus, unangenehmen oder überfordernden Situationen aus dem Weg zu gehen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 26,
+      "name": "element26",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "intense_stimuli",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich störe mich an intensiven Reizen, wie Lärm oder chaotischen Szenen.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 27,
+      "name": "element27",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "nervousity",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Wenn ich mit anderen im Wettbewerb stehe oder bei einer Aufgabe beobachtet werde, werde ich so nervös und unsicher, dass ich eine viel schlechtere Leistung erbringe, als ich es sonst getan hätte.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 28,
+      "name": "element28",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "shy_child",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Als ich ein Kind war haben mich meine Eltern oder Lehrer für empfindlich oder schüchtern gehalten.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    }
+  ],
+  "name": "HSPScala",
+  "id": 3
+}

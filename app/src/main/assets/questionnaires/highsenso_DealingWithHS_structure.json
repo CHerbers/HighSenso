@@ -1,0 +1,274 @@
+{
+  "elements": [
+    {
+      "position": 1,
+      "name": "element1",
+      "elementtype": "elements/headlines",
+      "translations": [
+        {
+          "locale": "de",
+          "headline": "Lies Dir die Aussage gut durch und bewerte, ob sie auf Dich eher zutrifft oder eher nicht."
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "name": "element2",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "enthusiasm",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich habe eine hohe Begeisterungsfähigkeit",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "name": "element3",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "emotional_vulnerability",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich habe eine hohe emotionale Verletzlichkeit.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 4,
+      "name": "element4",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "self_doubt",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich habe oft Selbstzweifel.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "name": "element5",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "world_pain",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich empfinde manchmal Weltschmerz.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 6,
+      "name": "element6",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "lingering_emotion",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Gefühle klingen bei mir noch lange nach.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "name": "element7",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "social_isolated",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin sozial isoliert.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "name": "element8",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "frequent_anxiety",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich leide häufig unter Ängsten.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "name": "element9",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "unsatisfactory_life",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Ich bin mit meinem Leben unzufrieden.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "name": "element10",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "workspace_mood",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Am Arbeitsplatz oder in der Schule (oder Ähnliches) fühle ich mich unwohl.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "name": "element11",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "YesNoSwitch",
+      "label": "workspace_stimulus",
+      "values": [
+        "0",
+        "1"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Am Arbeitsplatz oder in der Schule (oder Ähnliches) fühle ich mich überreizt.",
+          "answers": [
+            "Nein",
+            "Ja"
+          ]
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "name": "element12",
+      "is_active": true,
+      "elementtype": "elements/questions",
+      "required": true,
+      "questiontype": "SingleChoice",
+      "label": "current_location",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "99"
+      ],
+      "translations": [
+        {
+          "locale": "de",
+          "question": "Wo befindest Du Dich gerade?",
+          "answers": [
+            "Zuhause",
+            "Am Arbeitsplatz (bzw. Schule, Uni)",
+            "Draußen/ Unterwegs",
+            "Anderes/ Keine Angabe"
+          ]
+        }
+      ]
+    }
+  ],
+  "name": "DealingWithHS",
+  "id": 2
+}

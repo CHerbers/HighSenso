@@ -26,7 +26,7 @@ import java.io.File
  * @author Christoph Herbers
  * @since 1.0
  * */
-@Database(entities = [Questionnaire::class, AnswerSheet::class], version = 4, exportSchema = false)
+@Database(entities = [Questionnaire::class, AnswerSheet::class], version = 5, exportSchema = false)
 @TypeConverters(
     QuestionConverter::class,
     AnswerConverter::class,

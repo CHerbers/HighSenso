@@ -25,7 +25,11 @@ fun Spinner.setUpContent(question: Question?) {
         ArrayAdapter(
             context,
             R.layout.simple_spinner_item,
-            question.translations[0].answers
+            try {
+                question.translations[0].answers as List<String>
+            } catch (e: TypeCastException) {
+                listOf()
+            }
         ).also { arrayAdapter ->
             arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
             adapter = arrayAdapter
