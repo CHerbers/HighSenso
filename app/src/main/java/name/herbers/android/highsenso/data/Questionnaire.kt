@@ -4,9 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import name.herbers.android.highsenso.database.QuestionConverter
+import name.herbers.android.highsenso.database.ElementsConverter
 
 /**
+ * Data class for questionnaires.
  *
  *@project HighSenso
  *@author Herbers
@@ -17,6 +18,6 @@ data class Questionnaire(
     val id: Int,
     @ColumnInfo
     val name: String,
-    @TypeConverters(QuestionConverter::class)
+    @TypeConverters(ElementsConverter::class)
     val questions: List<Element>
 )

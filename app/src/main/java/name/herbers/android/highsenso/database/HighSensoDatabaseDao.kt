@@ -5,7 +5,7 @@ import name.herbers.android.highsenso.data.AnswerSheet
 import name.herbers.android.highsenso.data.Questionnaire
 
 /**
- * *Data access interface* for [HighSensoDatabase].
+ * Data access interface* for [HighSensoDatabase].
  * Holds insert, update and query functions.
  *
  * @project HighSenso

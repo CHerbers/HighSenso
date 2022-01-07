@@ -31,7 +31,7 @@ fun Spinner.setUpContent(question: Question?) {
                 listOf()
             }
         ).also { arrayAdapter ->
-            arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+            arrayAdapter.setDropDownViewResource(name.herbers.android.highsenso.R.layout.multiline_spinner_dropdown_item)
             adapter = arrayAdapter
         }
         setSelection(0)

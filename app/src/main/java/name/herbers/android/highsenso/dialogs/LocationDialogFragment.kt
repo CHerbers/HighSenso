@@ -12,10 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.AnswerSheet
 import name.herbers.android.highsenso.databinding.DialogLocationBinding
 import timber.log.Timber
 
 /**
+ * This [DialogFragment] asks the user for their location.
+ * After answering it with one of the location buttons, the current location is stored until it is
+ * send to the webserver inside of an [AnswerSheet].
  *
  *@project HighSenso
  *@author Herbers

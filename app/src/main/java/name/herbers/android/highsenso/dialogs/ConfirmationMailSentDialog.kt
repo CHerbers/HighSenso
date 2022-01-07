@@ -8,6 +8,8 @@ import name.herbers.android.highsenso.R
 import timber.log.Timber
 
 /**
+ * This [DialogFragment] is used to tell the user that a confirmation mail was sent after a
+ * reset password request.
  *
  *@project HighSenso
  *@author Herbers

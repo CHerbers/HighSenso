@@ -13,8 +13,6 @@ import name.herbers.android.highsenso.database.DatabaseHandler
  * This is the [ViewModelProvider.Factory] for [SharedViewModel].
  * Creates a SharedViewModel.
  *
- * @param databaseHandler the [DatabaseHandler] that manages all database access
- *
  * @project HighSenso
  * @author Christoph Herbers
  * @since 1.0

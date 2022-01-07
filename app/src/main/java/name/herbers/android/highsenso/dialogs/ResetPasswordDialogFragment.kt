@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModel
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.databinding.DialogResetPasswordBinding
@@ -16,10 +16,7 @@ import name.herbers.android.highsenso.login.LoginViewModel
 import timber.log.Timber
 
 /**
- * This dialog checks if the user really wants to delete the current questions ratings for data
- * safety purpose.
- * @param startViewModel the corresponding [ViewModel] which holds the logic to reset the questions
- * ratings
+ * This [DialogFragment] asks for a mail as input to send a reset password request to the webserver.
  *
  * @project HighSenso
  * @author Christoph Herbers
@@ -33,10 +30,11 @@ class ResetPasswordDialogFragment(
     private lateinit var dialog: AlertDialog
 
     companion object {
-        const val TAG = "ResetDialog"
+        const val TAG = "ResetPasswordDialog"
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        Timber.i("$TAG created!")
         return activity.let {
             binding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
@@ -48,8 +46,8 @@ class ResetPasswordDialogFragment(
             builder.setView(binding.root)
             builder.setTitle(R.string.reset_dialog_title)
             builder.setPositiveButton(R.string.positive_button) { _, _ ->
-                val mailEditText = binding.resetPasswordDialogMailEditText
-                if (mailEditText.error == null && mailEditText.text.isNotEmpty()) {
+                val mailEditText = binding.resetPasswordDialogEditTextLayout.editText
+                if (mailEditText != null && mailEditText.error == null && mailEditText.text.isNotEmpty()) {
                     sharedViewModel.handleResetPassword(mailEditText.text.toString())
                     Timber.i("ResetPasswordDialog was answered positive! Mail: ${mailEditText.text}")
                     dismiss()
@@ -68,8 +66,13 @@ class ResetPasswordDialogFragment(
         }
     }
 
+    /**
+     * This function adds a [TextWatcher] to the mail [EditText] to check validity of the given
+     * input.
+     * */
     private fun addMailEditTextListener() {
-        binding.resetPasswordDialogMailEditText.addTextChangedListener(object : TextWatcher {
+        binding.resetPasswordDialogEditTextLayout.editText?.addTextChangedListener(object :
+            TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //not needed
             }
@@ -79,10 +82,8 @@ class ResetPasswordDialogFragment(
                 val errorMessage = loginViewModel.getMailErrorMessage(s.toString())
                 if (errorMessage != "") {
                     binding.resetPasswordDialogMailEditText.error = errorMessage
-
                 } else {
                     binding.resetPasswordDialogMailEditText.error = null
-
                 }
             }
 
@@ -90,5 +91,10 @@ class ResetPasswordDialogFragment(
                 //not needed
             }
         })
+    }
+
+    override fun onDestroy() {
+        Timber.i("$TAG destroyed!")
+        super.onDestroy()
     }
 }

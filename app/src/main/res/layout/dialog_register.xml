@@ -29,14 +29,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
+            android:hint="@string/register_dialog_username_editText_default"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_dialog_username_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/register_dialog_username_editText_default"
                 android:inputType="textPersonName"
                 android:maxLength="@integer/username_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
@@ -48,14 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
+            android:hint="@string/register_dialog_mail_editText_default"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_dialog_mail_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/register_dialog_mail_editText_default"
                 android:inputType="textEmailAddress"
                 android:maxLength="@integer/mail_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
@@ -66,14 +66,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
+            android:hint="@string/register_dialog_mail_repeat_editText_default"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_dialog_mail_repeat_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/register_dialog_mail_repeat_editText_default"
                 android:inputType="textEmailAddress"
                 android:maxLength="@integer/mail_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
@@ -84,14 +84,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
+            android:hint="@string/register_dialog_password_editText_default"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_dialog_password_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/register_dialog_password_editText_default"
                 android:inputType="textPassword"
                 android:maxLength="@integer/password_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
@@ -102,14 +102,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
+            android:hint="@string/register_dialog_password_repeat_editText_default"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_dialog_password_repeat_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/register_dialog_password_repeat_editText_default"
                 android:inputType="textPassword"
                 android:maxLength="@integer/password_length_max"
                 android:textColorHighlight="@color/edit_text_color_highlight" />
@@ -118,9 +118,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginHorizontal="@dimen/register_dialog_editView_margin"
-            android:gravity="start">
+            android:gravity="start"
+            android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/register_dialog_privacy_checkBox"
@@ -132,11 +132,10 @@
                 android:id="@+id/register_dialog_privacy_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:layout_marginBottom="@dimen/standard_textView_layout_margin"
                 android:text="@string/register_dialog_privacy_textView"
-                android:textColor="@color/login_dialog_forgotPW_text_color"
-                android:layout_marginBottom="@dimen/standard_textView_layout_margin"/>
-
+                android:textAlignment="center"
+                android:textColor="@color/login_dialog_forgotPW_text_color" />
         </LinearLayout>
 
         <Button

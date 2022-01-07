@@ -5,8 +5,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.EditText
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.SharedViewModel
@@ -19,6 +18,9 @@ import name.herbers.android.highsenso.databinding.ItemViewSpinnerBinding
 import java.util.*
 
 /**
+ * This class is a [RecyclerView.Adapter] for the RecyclerView in [BaselineQuestioningFragment].
+ * Every [RecyclerView.ViewHolder] class is declared in here.
+ * Tha adapter decides when which ViewHolder is to be shown or to be destroyed.
  *
  *@project HighSenso
  *@author Herbers
@@ -26,8 +28,7 @@ import java.util.*
 class QuestionAdapter(
     val sharedViewModel: SharedViewModel,
     val viewModel: BaselineQuestioningViewModel
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TYPE_SPINNER_VIEW = 0
@@ -48,6 +49,7 @@ class QuestionAdapter(
         val item = data[position]
         val givenAnswers = getGivenAnswers()
 
+        /* calls specific bind() function on the given ViewHolder */
         when (holder) {
             is SpinnerViewHolder -> holder.bind(item, viewModel)
             is EditTextStringViewHolder -> holder.bind(item, viewModel, givenAnswers)
@@ -58,6 +60,8 @@ class QuestionAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val givenAnswers = getGivenAnswers()
+
+        /* create a specific ViewHolder depending on the given viewType */
         return when (viewType) {
             TYPE_EDIT_STRING_VIEW -> EditTextStringViewHolder.from(parent)
             TYPE_EDIT_DATE_VIEW -> DatePickerViewHolder.from(parent)
@@ -68,6 +72,7 @@ class QuestionAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
+        /* return an int depending on the question type of the question in the current data pos */
         return when (data[position].questiontype) {
             in Constants.QUESTION_TYPE_SINGLE_CHOICE, Constants.QUESTION_TYPE_SINGLE_CHOICE_KNOB -> TYPE_SPINNER_VIEW
             Constants.QUESTION_TYPE_TEXT_STRING -> TYPE_EDIT_STRING_VIEW
@@ -77,12 +82,31 @@ class QuestionAdapter(
         }
     }
 
-    private fun getGivenAnswers(): MutableMap<String, Answer>{
-        val givenAnswers = sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] ?: mutableMapOf()
+    /**
+     * Checks if there are saved answers for the baseline questionnaire in [SharedViewModel.currentAnswers]
+     * and returns them. If here are none an empty [MutableList] is returned and currentAnswers gets
+     * updated.
+     *
+     * @return a [MutableMap] of question labels as keys and their given [Answer] as value
+     * */
+    private fun getGivenAnswers(): MutableMap<String, Answer> {
+        val givenAnswers =
+            sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] ?: mutableMapOf()
         sharedViewModel.currentAnswers[Constants.BASELINE_QUESTIONNAIRE] = givenAnswers
         return givenAnswers
     }
 
+    /**
+     * A [RecyclerView.ViewHolder] class, that holds a [TextView] to show a question and a
+     * [Spinner] to  provide possible answers.
+     * An instance is created if there is a question requiring a Spinner.
+     *
+     * @param binding the [ItemViewSpinnerBinding] to access the layout items
+     * @param givenAnswers a [MutableMap] of [Answer]s already given to read them and save new answers
+     *
+     *@project HighSenso
+     *@author Herbers
+     */
     class SpinnerViewHolder(
         val binding: ItemViewSpinnerBinding,
         val givenAnswers: MutableMap<String, Answer>
@@ -105,7 +129,6 @@ class QuestionAdapter(
                 ) {
                     val values = item.values as List<*>
                     val value = values[position].toString()
-//                    val label = answers[position] as String
                     givenAnswers[item.label] = Answer(value, item.label, Date().time)
                 }
 
@@ -127,6 +150,16 @@ class QuestionAdapter(
         }
     }
 
+    /**
+     * A [RecyclerView.ViewHolder] class, that holds a [TextView] to show a question and an
+     * [EditText] for answering.
+     * An instance is created if there is a question requiring a [String] as answer.
+     *
+     * @param binding the [ItemViewEditTextStringBinding] to access the layout items
+     *
+     *@project HighSenso
+     *@author Herbers
+     */
     class EditTextStringViewHolder(val binding: ItemViewEditTextStringBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -137,8 +170,8 @@ class QuestionAdapter(
         ) {
             binding.question = item
             binding.executePendingBindings()
-            val editText = binding.editTextItemViewEditText
-            editText.addTextChangedListener(
+            val editText = binding.editTextItemViewEditTextLayout.editText
+            editText?.addTextChangedListener(
                 EditTextChangeListener(
                     viewModel,
                     givenAnswers,
@@ -158,6 +191,16 @@ class QuestionAdapter(
         }
     }
 
+    /**
+     * A [RecyclerView.ViewHolder] class, that holds a [TextView] to show a question and an
+     * [EditText] for answering.
+     * An instance is created if there is a question requiring an [Int] as answer.
+     *
+     * @param binding the [ItemViewEditTextNumberBinding] to access the layout items
+     *
+     *@project HighSenso
+     *@author Herbers
+     */
     class EditTextNumberViewHolder(val binding: ItemViewEditTextNumberBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
@@ -167,8 +210,8 @@ class QuestionAdapter(
         ) {
             binding.question = item
             binding.executePendingBindings()
-            val editText = binding.editTextItemViewEditText
-            editText.addTextChangedListener(
+            val editText = binding.editTextItemViewEditTextLayout.editText
+            editText?.addTextChangedListener(
                 EditTextChangeListener(
                     viewModel,
                     givenAnswers,
@@ -189,6 +232,16 @@ class QuestionAdapter(
 
     }
 
+    /**
+     * A [RecyclerView.ViewHolder] class, that holds a [TextView] to show a question and an
+     * [DatePicker] for answering.
+     * An instance is created if there is a question requiring an date as answer.
+     *
+     * @param binding the [ItemViewDatePickerBinding] to access the layout items
+     *
+     *@project HighSenso
+     *@author Herbers
+     */
     class DatePickerViewHolder(val binding: ItemViewDatePickerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -232,7 +285,10 @@ class QuestionAdapter(
      * @param viewModel the [BaselineQuestioningViewModel] holding functions to check input validity
      * @param contentType the content type of the EditText
      * @param question the current [Question] represented by the EditText
-     * */
+     *
+     *@project HighSenso
+     *@author Herbers
+     */
     class EditTextChangeListener(
         val viewModel: BaselineQuestioningViewModel,
         private val givenAnswers: MutableMap<String, Answer>,

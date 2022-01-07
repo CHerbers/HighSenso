@@ -1,6 +1,8 @@
 package name.herbers.android.highsenso.data
 
 /**
+ * Data class for question translations.
+ * This holds the actual question in the specific languages.
  *
  *@project HighSenso
  *@author Herbers

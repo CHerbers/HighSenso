@@ -25,6 +25,8 @@ import name.herbers.android.highsenso.login.LoginViewModel
 import name.herbers.android.highsenso.login.RegisterDialogFragment
 import name.herbers.android.highsenso.menu.AboutFragment
 import name.herbers.android.highsenso.menu.PrivacyFragment
+import name.herbers.android.highsenso.menu.PrivacyViewModel
+import name.herbers.android.highsenso.menu.PrivacyViewModelFactory
 import name.herbers.android.highsenso.questioning.QuestioningFragment
 import timber.log.Timber
 
@@ -56,7 +58,7 @@ class StartFragment : Fragment() {
     ): View {
         Timber.i("StartFragment created!")
 
-        //init DataBinding and ViewModel
+        /* init DataBinding and ViewModel */
         val sharedViewModel: SharedViewModel by activityViewModels()
         val databaseHandler = sharedViewModel.databaseHandler
         val startViewModelFactory = StartViewModelFactory(databaseHandler)
@@ -67,10 +69,10 @@ class StartFragment : Fragment() {
         binding.startViewModel = startViewModel
         binding.lifecycleOwner = this
 
-        //init SharedPreferences
+        /* init SharedPreferences */
         preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
 
-        //set title
+        /* set title */
         val actionBar = (activity as AppCompatActivity).supportActionBar
         if (actionBar != null) {
             actionBar.title =
@@ -78,23 +80,23 @@ class StartFragment : Fragment() {
             actionBar.setDisplayHomeAsUpEnabled(false)
         }
 
-        //activate menu in this Fragment
+        /* activate menu in this Fragment */
         setHasOptionsMenu(true)
 
-        //Observers
+        /* Observers */
         setAllObservers()
 
-        //Listener to navigate to QuestioningFragment
+        /* Listener to navigate to QuestioningFragment */
         setAllButtonListeners(sharedViewModel)
 
-        //checking if first start of App and calls privacy dialog if so
+        /* checking if first start of App and calls privacy dialog if so */
         privacyCheck()
 
         //inflate the layout for this Fragment
         return binding.root
     }
 
-    //inflate overflow_menu
+    /* inflate overflow_menu */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         Timber.i("Overflow menu created!")
         super.onCreateOptionsMenu(menu, inflater)
@@ -102,7 +104,7 @@ class StartFragment : Fragment() {
         profileMenuItem = menu.findItem(R.id.profile_destination)
     }
 
-    //handle navigation on item selection
+    /* handle navigation on item selection */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.i("Menu Item \"${item.title}\" was selected!")
         return when (item.itemId) {
@@ -139,7 +141,9 @@ class StartFragment : Fragment() {
 
     /**
      * Sets a [View.OnClickListener] to the startButton.
-     * Navigates to the [QuestioningFragment] to start the questioning if the [Button] was clicked.
+     * Navigates to the [QuestioningFragment] to start the questioning if the [Button] was clicked
+     * while logged in.
+     * Otherwise the [LoginDialogFragment] is shown.
      *
      * @param sharedViewModel the [SharedViewModel] that provides functionality to the listeners.
      * */
@@ -180,7 +184,7 @@ class StartFragment : Fragment() {
     /**
      * Sets a [View.OnClickListener] to the loginButton, that calls
      * [SharedViewModel.handleLoginButtonClick] if the [Button] was clicked while logged in.
-     * Else if shows the [LogoutDialog].
+     * Shows the [LogoutDialog] otherwise.
      *
      * @param sharedViewModel is the [SharedViewModel] holding function to handle the button click
      * */
@@ -383,7 +387,13 @@ class StartFragment : Fragment() {
             Timber.i("Sensor data privacy setting set to false!")
 
             /* call privacy dialog */
-            PrivacyDialogFragment(preferences).show(childFragmentManager, "PrivacyDialog")
+            val privacyViewModelFactory = PrivacyViewModelFactory(preferences, resources)
+            val privacyViewModel =
+                ViewModelProvider(this, privacyViewModelFactory).get(PrivacyViewModel::class.java)
+            PrivacyDialogFragment(privacyViewModel).show(
+                childFragmentManager,
+                PrivacyDialogFragment.TAG
+            )
         }
     }
 }

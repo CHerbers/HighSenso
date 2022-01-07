@@ -6,8 +6,11 @@ import androidx.room.TypeConverters
 import name.herbers.android.highsenso.database.AnswerConverter
 import name.herbers.android.highsenso.database.ClientConverter
 import name.herbers.android.highsenso.database.SensorDataConverter
+import name.herbers.android.highsenso.database.HighSensoDatabase
 
 /**
+ * Data class for answer sheets.
+ * Can be stored in the [HighSensoDatabase].
  *
  *@project HighSenso
  *@author Herbers

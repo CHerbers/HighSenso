@@ -29,7 +29,7 @@ class BaselineQuestioningViewModel(
     private val regexLetters = "[a-zA-ZäöüÄÖÜß]".toRegex()
 
     init {
-        Timber.i("PersonalQuestioningViewModel created!")
+        Timber.i("BaselineQuestioningViewModel created!")
     }
 
     /**
@@ -42,7 +42,7 @@ class BaselineQuestioningViewModel(
         if (childCount == "") return ""
         if (!regexNumbers.containsMatchIn(childCount)) return errorInvalidInput
         if (childCount.toInt() > 20) return errorInvalidInput
-        validInputChildren =  true
+        validInputChildren = true
         return ""
     }
 
@@ -53,14 +53,24 @@ class BaselineQuestioningViewModel(
      * */
     fun getProfessionErrorMessage(profession: String): String {
         validInputProfession = false
-        if (profession == "")return ""
+        if (profession == "") return ""
         if (!regexLetters.containsMatchIn(profession)) return errorInvalidInput
         validInputProfession = true
         return ""
     }
 
+    /**
+     * Checks if all given inputs are valid by checking the validity flags.
+     *
+     * @return true if every input is valid, false otherwise
+     * */
     fun validInput(): Boolean {
         return validInputProfession && validInputChildren
+    }
+
+    override fun onCleared() {
+        Timber.i("BaselineQuestioningViewModel destroyed!")
+        super.onCleared()
     }
 
 }

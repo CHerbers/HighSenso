@@ -3,6 +3,8 @@ package name.herbers.android.highsenso.data
 import name.herbers.android.highsenso.Constants
 
 /**
+ * Data class for headlines.
+ * Headlines represent the headline/message of a [Questionnaire].
  *
  *@project HighSenso
  *@author Herbers

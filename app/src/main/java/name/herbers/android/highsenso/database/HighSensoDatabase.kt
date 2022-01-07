@@ -22,13 +22,16 @@ import java.io.File
  * In case the on-device database will be deleted a new database will be created and stored on the
  * device like it was done on the first start of the app.
  *
+ * This database is mostly for backup. Normally every Questionnaire and AnswerSheet are requested from
+ * the server.
+ *
  * @project HighSenso
  * @author Christoph Herbers
  * @since 1.0
  * */
 @Database(entities = [Questionnaire::class, AnswerSheet::class], version = 5, exportSchema = false)
 @TypeConverters(
-    QuestionConverter::class,
+    ElementsConverter::class,
     AnswerConverter::class,
     SensorDataConverter::class,
     ClientConverter::class
@@ -77,10 +80,10 @@ abstract class HighSensoDatabase : RoomDatabase() {
 
                     INSTANCE = instance
                 }
-                    Timber.i("Database initialized!")
-                    return instance
-                }
+                Timber.i("Database initialized!")
+                return instance
             }
         }
-
     }
+
+}

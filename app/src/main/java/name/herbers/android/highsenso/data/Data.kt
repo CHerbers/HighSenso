@@ -1,6 +1,7 @@
 package name.herbers.android.highsenso.data
 
 /**
+ * Data class for a data object.
  *
  *@project HighSenso
  *@author Herbers

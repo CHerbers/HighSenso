@@ -15,12 +15,14 @@ import org.json.JSONObject
 import timber.log.Timber
 
 /**
+ * This class holds the logic for server communication.
+ * It creates different requests and sends them.
+ * Responses and error following requests are managed in this class.
  *
  *@project HighSenso
  *@author Herbers
  */
 class ServerCommunicationHandler(private val serverURL: String, val context: Context) {
-    private val answerSheetList = mutableListOf<AnswerSheet>()
     val gson = Gson()
 
     /* data string fields */
@@ -32,9 +34,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     private val idField = context.getString(R.string.id_field)
 
     //question
-    private val minField = context.getString(R.string.min_field)
-    private val maxField = context.getString(R.string.max_field)
-    private val stepField = context.getString(R.string.step_field)
     private val requiredField = context.getString(R.string.required_field)
     private val variableField = context.getString(R.string.variable_field)
     private val localeField = context.getString(R.string.locale_field)

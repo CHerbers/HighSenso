@@ -3,6 +3,8 @@ package name.herbers.android.highsenso.data
 import name.herbers.android.highsenso.Constants
 
 /**
+ * Data class for a question.
+ * Used by [Questionnaire]s.
  *
  *@project HighSenso
  *@author Herbers

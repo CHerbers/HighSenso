@@ -3,7 +3,6 @@ package name.herbers.android.highsenso.dialogs
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.databinding.DialogPrivacyBinding
 import name.herbers.android.highsenso.menu.PrivacyFragment
+import name.herbers.android.highsenso.menu.PrivacyViewModel
 import timber.log.Timber
 
 /**
@@ -28,12 +28,18 @@ import timber.log.Timber
  *@project HighSenso
  *@author Herbers
  */
-class PrivacyDialogFragment(private val preferences: SharedPreferences) : DialogFragment() {
+class PrivacyDialogFragment(private val viewModel: PrivacyViewModel) : DialogFragment() {
+
+    companion object {
+        const val TAG = "PrivacyDialog"
+    }
+
     private lateinit var binding: DialogPrivacyBinding
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        handlePrivacySettingsFirstCall()
+        Timber.i("$TAG created!")
+        viewModel.handlePrivacySettingsFirstCall()
 
         return activity.let {
             binding = DataBindingUtil.inflate(
@@ -49,8 +55,7 @@ class PrivacyDialogFragment(private val preferences: SharedPreferences) : Dialog
             val dialog = builder.create()
             dialog.setOnShowListener {
                 dialog.getButton(Dialog.BUTTON_POSITIVE).setOnClickListener {
-                    setPrivacyPreferences(
-                        binding.privacyQuestioningCheckBox.isChecked,
+                    viewModel.setPrivacyPreferences(
                         binding.privacySensorCheckBox.isChecked
                     )
                     dialog.dismiss()
@@ -61,35 +66,8 @@ class PrivacyDialogFragment(private val preferences: SharedPreferences) : Dialog
         }
     }
 
-    /**
-     *  This function sets the privacy_settings_first_call_key in the [SharedPreferences] to false.
-     *  This is needed because this dialog should only be shown once, on the first start of the
-     *  HighSenso App.
-     */
-    private fun handlePrivacySettingsFirstCall() {
-        preferences.edit().putBoolean(
-            getString(R.string.privacy_setting_first_call_key),
-            false
-        ).apply()
-        Timber.i("First call set to false!")
-    }
-
-    /**
-     * This function sets the value of the privacy preferences keys on the given boolean values.
-     *
-     * @param questioningCheckBox the value privacy_setting_send_general_data_key is set to
-     * @param sensorDataCheckBox the value privacy_setting_send_sensor_data_key is set to
-     * */
-    private fun setPrivacyPreferences(questioningCheckBox: Boolean, sensorDataCheckBox: Boolean) {
-        preferences.edit().putBoolean(
-            getString(R.string.privacy_setting_send_general_data_key),
-            questioningCheckBox
-        ).apply()
-        Timber.i("General privacy setting set to ${questioningCheckBox}!")
-        preferences.edit().putBoolean(
-            getString(R.string.privacy_setting_gather_sensor_data_key),
-            sensorDataCheckBox
-        ).apply()
-        Timber.i("Sensor data privacy setting set to ${sensorDataCheckBox}!")
+    override fun onDestroy() {
+        Timber.i("$TAG destroyed!")
+        super.onDestroy()
     }
 }

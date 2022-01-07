@@ -32,7 +32,6 @@ import timber.log.Timber
  * @since 1.0
  * */
 class ResultFragment : Fragment() {
-
     private lateinit var binding: FragmentResultBinding
     private lateinit var viewModel: ResultViewModel
 
@@ -42,7 +41,7 @@ class ResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        //init the DataBinding and ViewModel
+        /* init the DataBinding and ViewModel */
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false)
         val application = requireNotNull(this.activity).application
         val sharedViewModel: SharedViewModel by activityViewModels()
@@ -52,7 +51,7 @@ class ResultFragment : Fragment() {
         binding.resultViewModel = viewModel
         binding.lifecycleOwner = this
 
-        //set action bar (title and back button)
+        /* set action bar (title and back button) */
         val actionBar = (activity as AppCompatActivity).supportActionBar
         if (actionBar != null) {
             actionBar.title =
@@ -61,15 +60,6 @@ class ResultFragment : Fragment() {
         }
         initObservers()
         binding.linkListTextView.movementMethod = LinkMovementMethod.getInstance()
-
-//        binding.resultHspInfoTextView.visibility = View.GONE
-//        setHasOptionsMenu(true)
-
-        /* Listener for sendResultButton */
-//        binding.sendResultButton.setOnClickListener {
-//            Timber.i("sendResetButton clicked!")
-////            SendDialogFragment(viewModel).show(childFragmentManager, SendDialogFragment.TAG)
-//        }
 
         /* Listener for backToStartButton. Navigation back to StartFragment */
         binding.backToStartButton.setOnClickListener { view ->
@@ -105,13 +95,6 @@ class ResultFragment : Fragment() {
      * This function is initiating every needed [Observer] of [LiveData] from the [ResultViewModel].
      * */
     private fun initObservers() {
-        viewModel.disableHelpTextViews.observe(viewLifecycleOwner, { disable ->
-            if (disable) {
-                Timber.i("User negative! TextViews visibility set to 'gone'!")
-//                binding.resultConditionalTextView.visibility = View.GONE
-//                binding.resultPersonalTextView.visibility = View.GONE
-            }
-        })
         showMessageObserver(viewModel.hasEnthusiasm, binding.resultEnthusiasmTextView)
         showMessageObserver(
             viewModel.isEmotionalVulnerable,

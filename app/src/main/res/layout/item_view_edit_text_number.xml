@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -36,7 +35,7 @@
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             android:paddingVertical="@dimen/editText_padding_top_bot">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_item_view_editText"
                 style="@style/general_editText"
                 android:layout_width="match_parent"

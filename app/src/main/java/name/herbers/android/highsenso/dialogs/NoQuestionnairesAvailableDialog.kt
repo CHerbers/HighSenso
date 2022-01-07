@@ -5,9 +5,13 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import name.herbers.android.highsenso.R
+import name.herbers.android.highsenso.data.Questionnaire
 import timber.log.Timber
 
 /**
+ * This [DialogFragment] is used to tell the user that no [Questionnaire]s are available.
+ * This should only happen if loading the questionnaires from the webserver failed after successful
+ * login and if there are additionally no old questionnaires saved on the device.
  *
  *@project HighSenso
  *@author Herbers

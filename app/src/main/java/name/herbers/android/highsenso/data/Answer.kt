@@ -1,6 +1,8 @@
 package name.herbers.android.highsenso.data
 
 /**
+ * Data class for the answers.
+ * Used in [Questionnaire]s and [AnswerSheet]s.
  *
  *@project HighSenso
  *@author Herbers

@@ -12,7 +12,7 @@ import com.google.gson.Gson
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.database.DatabaseHandler
-import name.herbers.android.highsenso.database.DatabaseHelper
+import name.herbers.android.highsenso.database.OfflineHelper
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -124,11 +124,11 @@ class SharedViewModel(
     }
 
     private fun setUpQuestionnairesAndAnswerSheets() {
-        questionnaires = DatabaseHelper().getQuestionnaires(application.applicationContext)
+        questionnaires = OfflineHelper().getQuestionnaires(application.applicationContext)
         questionnaires?.forEach { questionnaire ->
             databaseHandler.updateDatabaseQuestionnaire(questionnaire)
         }
-        answerSheets = DatabaseHelper().getAnswerSheets()
+        answerSheets = OfflineHelper().getAnswerSheets()
         initCurrentAnswers()
     }
 
@@ -475,7 +475,7 @@ class SharedViewModel(
             count++
             val bodyJSON = gson.toJson(answerSheet)
             Timber.i(bodyJSON)
-            val path = Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/answersheets/anwersheet$count.json"
+            val path = Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/files/anwersheet$count.json"
 
             try {
                 File(path).printWriter().use { out ->

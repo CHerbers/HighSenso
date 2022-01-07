@@ -9,19 +9,24 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.RegistrationRequest
 import name.herbers.android.highsenso.data.Settings
 import name.herbers.android.highsenso.databinding.DialogRegisterBinding
+import name.herbers.android.highsenso.menu.PrivacyFragment
 import timber.log.Timber
-import java.text.Collator
-import java.util.*
 
 /**
+ * This [DialogFragment] is used to let the user register themselves.
+ * Therefore it provides [EditText]s for user input and checks their validity.
+ * If the register button is clicked and the input is valid, the [ServerCommunicationHandler] is
+ * called to send a register request.
  *
  *@project HighSenso
  *@author Herbers
@@ -32,7 +37,7 @@ class RegisterDialogFragment(
 ) : DialogFragment() {
     private lateinit var dialog: AlertDialog
     private lateinit var binding: DialogRegisterBinding
-    private lateinit var editTextList: List<EditText>
+    private lateinit var editTextList: List<EditText?>
 
     companion object {
         const val TAG = "RegisterDialog"
@@ -43,6 +48,7 @@ class RegisterDialogFragment(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        Timber.i("$TAG created!")
         return activity.let {
             binding = DataBindingUtil.inflate(
                 LayoutInflater.from(context), R.layout.dialog_register, null, false
@@ -57,7 +63,6 @@ class RegisterDialogFragment(
             addAllEditTextListeners()
             setPrivacyTextViewListener()
             setAllButtonListeners()
-//            initCountrySpinner()
 
             binding.registerDialogPrivacyCheckBox.movementMethod = LinkMovementMethod.getInstance()
 
@@ -68,6 +73,11 @@ class RegisterDialogFragment(
         }
     }
 
+    /**
+     * Sets a listener to the privacy [TextView].
+     * If clicked the given answers get saved, this dialog gets dismissed and the [PrivacyFragment]
+     * is shown.
+     * */
     private fun setPrivacyTextViewListener() {
         binding.registerDialogPrivacyTextView.setOnClickListener {
             Timber.i("Privacy TextView clicked!")
@@ -77,6 +87,10 @@ class RegisterDialogFragment(
         }
     }
 
+    /**
+     * Adds observers to [SharedViewModel.errorSendingRegisterData] and [SharedViewModel.registerResponse]
+     * to perform actions after a register request got answered by the webserver.
+     * */
     private fun addObservers() {
         sharedViewModel.errorSendingRegisterData.observe(this, { errorMessage ->
             if (errorMessage != "")
@@ -93,7 +107,11 @@ class RegisterDialogFragment(
         })
     }
 
-
+    /**
+     * This function is called after the login request was answered negative by the webserver.
+     * It enables all element, so the user can edit and click them.
+     * Also a [Toast] is shown to tell the user what went wrong.
+     * */
     private fun handleNegativeLoginResponse(toastMessage: String) {
         elementsAreEnabled(true)
         Toast.makeText(
@@ -108,13 +126,13 @@ class RegisterDialogFragment(
      *
      * @return a [List] of every [EditText] of this Dialog
      * */
-    private fun createEditTextList(): List<EditText> {
+    private fun createEditTextList(): List<EditText?> {
         return listOf(
-            binding.registerDialogUsernameEditText,
-            binding.registerDialogMailEditText,
-            binding.registerDialogMailRepeatEditText,
-            binding.registerDialogPasswordEditText,
-            binding.registerDialogPasswordRepeatEditText
+            binding.registerDialogUsernameEditTextLayout.editText,
+            binding.registerDialogMailEditTextLayout.editText,
+            binding.registerDialogMailRepeatEditTextLayout.editText,
+            binding.registerDialogPasswordEditTextLayout.editText,
+            binding.registerDialogPasswordRepeatEditTextLayout.editText
         )
     }
 
@@ -137,10 +155,10 @@ class RegisterDialogFragment(
 
                 sharedViewModel.sendRegistrationRequest(
                     RegistrationRequest(
-                        binding.registerDialogUsernameEditText.text.toString(),
-                        binding.registerDialogMailEditText.text.toString(),
-                        binding.registerDialogPasswordEditText.text.toString(),
-                        binding.registerDialogPasswordRepeatEditText.text.toString(),
+                        binding.registerDialogUsernameEditTextLayout.editText?.text.toString(),
+                        binding.registerDialogMailEditTextLayout.editText?.text.toString(),
+                        binding.registerDialogPasswordEditTextLayout.editText?.text.toString(),
+                        binding.registerDialogPasswordRepeatEditTextLayout.editText?.text.toString(),
                         Settings("de")
                     )
                 )
@@ -172,17 +190,6 @@ class RegisterDialogFragment(
         binding.registerDialogRegisterButton.isEnabled = isEnabled
     }
 
-//    private fun getSelectedCountryId(): String {
-//        val item: Any = binding.registerDialogCountrySpinner.selectedItem
-//        Locale.getAvailableLocales().forEach { locale ->
-//            val localeString = locale.getDisplayCountry(Locale.GERMAN)
-//            if (localeString == item.toString()) {
-//                return locale.toLanguageTag().split("-")[1].lowercase()
-//            }
-//        }
-//        return ""
-//    }
-
     /**
      * This function adds an onClickListener to the LoginButton that calls an associated function
      * on the [SharedViewModel].
@@ -204,7 +211,7 @@ class RegisterDialogFragment(
      * */
     private fun noErrorMessageActive(): Boolean {
         editTextList.forEach { editText ->
-            if (editText.error != null || editText.text.isEmpty()) return false
+            if (editText?.error != null || editText?.text.isNullOrBlank()) return false
         }
         Timber.i("No error message active!")
         return true
@@ -221,50 +228,6 @@ class RegisterDialogFragment(
     }
 
     /**
-     * This function initiates the countrySpinner by adding the spinners content Strings and an
-     * adapter.
-     * */
-//    private fun initCountrySpinner() {
-//        val adapter = ArrayAdapter(
-//            requireContext(),
-//            android.R.layout.simple_spinner_item,
-//            getCountryList()
-//        )
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        binding.registerDialogCountrySpinner.adapter = adapter
-//    }
-
-    /**
-     * This function creates a [List] of Strings of all countries available in [Locale].
-     * The german speaking countries (Germany, Austria, Switzerland) are put to the start of
-     * the List.
-     *
-     * @return a [List] of country names as Strings
-     * */
-    private fun getCountryList(): List<String> {
-        val countryList: MutableList<String> = mutableListOf()
-        val germanSpeakingCountries = listOf(
-            "Deutschland",
-            "Österreich",
-            "Schweiz"
-        )
-        Locale.getAvailableLocales().forEach { locale ->
-            val localeString = locale.getDisplayCountry(Locale.GERMAN)
-            if (localeString != "" && !countryList.contains(localeString)) {
-                countryList.add(localeString)
-            }
-        }
-        Collections.sort(countryList, Collator.getInstance(Locale.GERMAN))
-
-        for (i in germanSpeakingCountries.indices) {
-            val country = germanSpeakingCountries[i]
-            countryList.remove(country)
-            countryList.add(i, country)
-        }
-        return countryList
-    }
-
-    /**
      * Adds an onChangeListener to a given [EditText].
      * After text is changed an error message is shown if the inserted text does not fit the
      * specific requirements. The error message is created by specific functions in the
@@ -272,15 +235,15 @@ class RegisterDialogFragment(
      *
      * @param editText is the EditText a Listener is added to
      * */
-    private fun addEditTextListener(editText: EditText) {
+    private fun addEditTextListener(editText: EditText?) {
         //EditTexts
-        val usernameEditText = binding.registerDialogUsernameEditText
-        val mailEditText = binding.registerDialogMailEditText
-        val mailRepeatEditText = binding.registerDialogMailRepeatEditText
-        val passwordEditText = binding.registerDialogPasswordEditText
-        val passwordRepeatEditText = binding.registerDialogPasswordRepeatEditText
+        val usernameEditText = binding.registerDialogUsernameEditTextLayout.editText
+        val mailEditText = binding.registerDialogMailEditTextLayout.editText
+        val mailRepeatEditText = binding.registerDialogMailRepeatEditTextLayout.editText
+        val passwordEditText = binding.registerDialogPasswordEditTextLayout.editText
+        val passwordRepeatEditText = binding.registerDialogPasswordRepeatEditTextLayout.editText
 
-        editText.addTextChangedListener(object : TextWatcher {
+        editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
@@ -297,12 +260,12 @@ class RegisterDialogFragment(
                     mailEditText -> loginViewModel.getMailErrorMessage(s.toString())
                     mailRepeatEditText -> loginViewModel.getMailRepeatErrorMessage(
                         s.toString(),
-                        mailEditText.text.toString()
+                        mailEditText?.text.toString()
                     )
                     passwordEditText -> loginViewModel.getPasswordErrorMessage(s.toString())
                     passwordRepeatEditText -> loginViewModel.getPasswordRepeatErrorMessage(
                         s.toString(),
-                        passwordEditText.text.toString()
+                        passwordEditText?.text.toString()
                     )
                     else -> ""
                 }
@@ -319,6 +282,10 @@ class RegisterDialogFragment(
         })
     }
 
+    /**
+     * This function checks if there are already answers for the given questionnaire.
+     * If so the answers are shown in their corresponding [EditText]s.
+     * */
     private fun fillEditTextsFromBackup() {
         val map = sharedViewModel.registerDialogBackupMap
         val username = map["username"]
@@ -327,29 +294,32 @@ class RegisterDialogFragment(
         val password = map["password"]
         val passwordRepeat = map["passwordRepeat"]
         if (username != null)
-            binding.registerDialogUsernameEditText.setText(username)
+            binding.registerDialogUsernameEditTextLayout.editText?.setText(username)
         if (email != null)
-            binding.registerDialogMailEditText.setText(email)
+            binding.registerDialogMailEditTextLayout.editText?.setText(email)
         if (emailRepeat != null)
-            binding.registerDialogMailRepeatEditText.setText(emailRepeat)
+            binding.registerDialogMailRepeatEditTextLayout.editText?.setText(emailRepeat)
         if (password != null)
-            binding.registerDialogPasswordEditText.setText(password)
+            binding.registerDialogPasswordEditTextLayout.editText?.setText(password)
         if (passwordRepeat != null)
-            binding.registerDialogPasswordRepeatEditText.setText(passwordRepeat)
+            binding.registerDialogPasswordRepeatEditTextLayout.editText?.setText(passwordRepeat)
     }
 
-    private fun backUpEditTexts(){
+    /**
+     * Given answers in the [EditText]s are saved.
+     * */
+    private fun backUpEditTexts() {
         sharedViewModel.updateBackupMap(
-            binding.registerDialogUsernameEditText.text.toString(),
-            binding.registerDialogMailEditText.text.toString(),
-            binding.registerDialogMailRepeatEditText.text.toString(),
-            binding.registerDialogPasswordEditText.text.toString(),
-            binding.registerDialogPasswordRepeatEditText.text.toString()
+            binding.registerDialogUsernameEditTextLayout.editText?.text.toString(),
+            binding.registerDialogMailEditTextLayout.editText?.text.toString(),
+            binding.registerDialogMailRepeatEditTextLayout.editText?.text.toString(),
+            binding.registerDialogPasswordEditTextLayout.editText?.text.toString(),
+            binding.registerDialogPasswordRepeatEditTextLayout.editText?.text.toString()
         )
     }
 
     override fun onDestroy() {
-        Timber.i("RegisterDialog destroyed!")
+        Timber.i("$TAG destroyed!")
         super.onDestroy()
     }
 }

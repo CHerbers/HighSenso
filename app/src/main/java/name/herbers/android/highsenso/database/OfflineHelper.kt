@@ -4,21 +4,29 @@ import android.content.Context
 import com.google.gson.Gson
 import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.data.*
-import name.herbers.android.highsenso.data.Question
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
 
 /**
+ * This class exist to work around the non existence of a webserver.
+ * It provides the three needed [Questionnaire]s by reading them from .json files in the
+ * assets/questionnaires folder.
  *
  *@project HighSenso
  *@author Herbers
  */
-class DatabaseHelper {
-
+class OfflineHelper {
     private val gson = Gson()
 
+    /**
+     * This function reads the questionnaires from the .json files in the assets/questionnaires folder,
+     * creates [Questionnaire] object and returns them in a [List].
+     *
+     * @param context the applications context, needed to access the assets folder
+     * @return a [List] of [Questionnaire]s read from .json files
+     * */
     fun getQuestionnaires(context: Context): List<Questionnaire> {
         try {
             val path = "questionnaires/highsenso_"
@@ -82,42 +90,42 @@ class DatabaseHelper {
             listOf(
                 Answer(
                     "1.1.2022",
-                    "1.1.2022",
+                    "birthdate",
                     Date().time
                 ),
                 Answer(
                     "0",
-                    "Webilich",
+                    "sex",
                     Date().time
                 ),
                 Answer(
                     "AFG",
-                    "Afghanistan",
+                    "country",
                     Date().time
                 ),
                 Answer(
                     "1",
-                    "Verheiratet bzw. in fester Partnerschaft",
+                    "family_status",
                     Date().time
                 ),
                 Answer(
                     "3",
-                    "3",
+                    "children",
                     Date().time
                 ),
                 Answer(
                     "0",
-                    "Keine formale Bildung",
+                    "education",
                     Date().time
                 ),
                 Answer(
                     "2",
-                    "Arbeitssuchend",
+                    "employment_relationship",
                     Date().time
                 ),
                 Answer(
                     "Student",
-                    "Student",
+                    "profession",
                     Date().time
                 )
             ),
@@ -130,6 +138,13 @@ class DatabaseHelper {
         )
     }
 
+    /**
+     * Extracts the [Element]s from a given [JSONObject]. Because an [Element] is either an [Headlines]
+     * or a [Question], [Gson] fails to automatically parse them.
+     *
+     * @param jsonObject a [JSONObject] that should represent a [List] of [Element]s in JSON format
+     * @return a [List] of [Element]s parsed from the given [JSONObject]
+     * */
     private fun getQuestionListFromJsonObject(jsonObject: JSONObject): List<Element> {
         val array = jsonObject.getJSONArray(Constants.ELEMENTS)
         val elementList = mutableListOf<Element>()

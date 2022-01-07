@@ -8,7 +8,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
@@ -26,7 +25,6 @@ import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.HighSensoDatabase
 import name.herbers.android.highsenso.sensor.AmbientAudioRecorder
 import timber.log.Timber
-import java.io.File
 import java.util.*
 
 /**
@@ -61,7 +59,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
 
         val application = requireNotNull(this).application
-        if (Constants.DELETE_DATABASE) deleteDatabaseInAppData()            //development only
         if (Constants.FIRST_START) resetFirstCallPreferencesKey()           //development only
         database = HighSensoDatabase.getInstance(application)
         val databaseHandler = DatabaseHandler(database.highSensoDatabaseDao)
@@ -148,33 +145,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun stopGatherAudioPeriodically() {
         Timber.i("Stopping repeating task to gather audio data!")
         repTaskHandler.removeCallbacks(gatherAudioPeriodically)
-    }
-
-    /**
-     * Deletes the database files in the data folder on the device.
-     * This is only for development purpose.
-     * */
-    private fun deleteDatabaseInAppData() {
-        //create a Files from an existing question_database (-shm, -wal)
-        val roomDbPath =
-            Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/databases/questions_database"
-        val roomDb = File(roomDbPath)
-        val roomDbShm = File("$roomDbPath-shm")
-        val roomDbWal = File("$roomDbPath-wal")
-
-        //delete Files if existing
-        if (roomDb.exists()) {
-            Timber.i("Db does exist and will be deleted!")
-            roomDb.delete()
-        }
-        if (roomDbShm.exists()) {
-            Timber.i("Db-smh does exist and will be deleted!")
-            roomDbShm.delete()
-        }
-        if (roomDbWal.exists()) {
-            Timber.i("Db-wal does exist and will be deleted!")
-            roomDbWal.delete()
-        }
     }
 
     /**

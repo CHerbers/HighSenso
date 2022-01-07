@@ -6,13 +6,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import name.herbers.android.highsenso.data.AnswerSheet
+import name.herbers.android.highsenso.data.Question
 import name.herbers.android.highsenso.data.Questionnaire
 import name.herbers.android.highsenso.dispatcher.DefaultDispatcherProvider
 import name.herbers.android.highsenso.dispatcher.DispatcherProvider
 import timber.log.Timber
 
 /**
- * The [DatabaseHandler] is responsible for all communication with [QuestionDatabaseDao].
+ * The [DatabaseHandler] is responsible for all communication with [HighSensoDatabase].
  * Every interaction with the database is via this Class. Therefore one DatabaseHandler is
  * provided in every [ViewModel] of this App that has to get or set database data.
  * @property database the [HighSensoDatabaseDao] with the database manipulation logic/queries
@@ -51,7 +52,7 @@ class DatabaseHandler(
     }
 
     /**
-     * Calls a SELECT function from [QuestionDatabaseDao] to get all questions
+     * Calls a SELECT function from [HighSensoDatabase] to get all questions
      * from the database.
      * @return a [List] of all [Question]s from the database
      * */
@@ -62,7 +63,7 @@ class DatabaseHandler(
     }
 
     /**
-     * Calls a SELECT function from [QuestionDatabaseDao] to get all questions
+     * Calls a SELECT function from [HighSensoDatabase] to get all questions
      * from the database.
      * @return a [List] of all [Question]s from the database
      * */

@@ -9,6 +9,8 @@ import name.herbers.android.highsenso.questioning.QuestioningViewModel
 import timber.log.Timber
 
 /**
+ * This [DialogFragment] is used to ask the user if they are sure they want to end the questioning
+ * und navigate to the results.
  *
  *@project HighSenso
  *@author Herbers

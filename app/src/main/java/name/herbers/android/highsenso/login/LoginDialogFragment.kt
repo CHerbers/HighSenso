@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -12,10 +13,15 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.databinding.DialogLoginBinding
 import timber.log.Timber
 
 /**
+ * This [DialogFragment] is used to let the user perform a login.
+ * Therefore [EditText]s are provided for user input and checked in terms of validity.
+ * If login button is clicked and all input valid, the [ServerCommunicationHandler] is called
+ * to send a login request.
  *
  *@project HighSenso
  *@author Herbers
@@ -35,7 +41,7 @@ class LoginDialogFragment(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
+        Timber.i("$TAG created!")
         return activity.let {
             binding = DataBindingUtil.inflate(
                 LayoutInflater.from(context), R.layout.dialog_login, null, false
@@ -153,7 +159,7 @@ class LoginDialogFragment(
     }
 
     override fun onDestroy() {
-        Timber.i("LoginDialog destroyed!")
+        Timber.i("$TAG destroyed!")
         super.onDestroy()
     }
 

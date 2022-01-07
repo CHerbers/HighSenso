@@ -8,15 +8,14 @@ import name.herbers.android.highsenso.data.Client
 import name.herbers.android.highsenso.data.Element
 import name.herbers.android.highsenso.data.SensorData
 
+
 /**
+ * Converter to convert [Element]s for [HighSensoDatabase].
  *
  *@project HighSenso
  *@author Herbers
  */
-
-class DataConverter
-
-class QuestionConverter {
+class ElementsConverter {
     @TypeConverter
     fun toQuestionList(json: String): List<Element> {
         val type = object : TypeToken<List<Element>>() {}.type
@@ -30,6 +29,12 @@ class QuestionConverter {
     }
 }
 
+/**
+ * Converter to convert [Answer]s for [HighSensoDatabase].
+ *
+ *@project HighSenso
+ *@author Herbers
+ */
 class AnswerConverter {
     private val type = object : TypeToken<List<Answer>>() {}.type
 
@@ -44,6 +49,12 @@ class AnswerConverter {
     }
 }
 
+/**
+ * Converter to convert [SensorData]s for [HighSensoDatabase].
+ *
+ *@project HighSenso
+ *@author Herbers
+ */
 class SensorDataConverter {
     private val type = object : TypeToken<List<SensorData>>() {}.type
 
@@ -58,6 +69,12 @@ class SensorDataConverter {
     }
 }
 
+/**
+ * Converter to convert [Client]s for [HighSensoDatabase].
+ *
+ *@project HighSenso
+ *@author Herbers
+ */
 class ClientConverter {
     private val type = object : TypeToken<Client>() {}.type
 

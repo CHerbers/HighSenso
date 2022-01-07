@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 /**
  * This is the [ViewModel] for the [LoginDialogFragment] as well as the [RegisterDialogFragment].
  * It holds every non-UI based logic for those Fragments besides functions used for communication
- * with the server. The provided logic especially contains the validation of user inputs.
+ * with the server. The provided logic especially contains the validation of user input.
  *
  *@project HighSenso
  *@author Herbers
@@ -18,6 +18,11 @@ class LoginViewModel : ViewModel() {
         private const val INVALID_REPEAT_MAIL_MESSAGE = "Nicht-identische E-Mail-Adressen!"
         private const val INVALID_PASSWORD_MESSAGE = "Passwort zu kurz!"
         private const val INVALID_REPEAT_PASSWORD_MESSAGE = "Nicht-identische Passwörter!"
+
+        private const val PASSWORD_MIN_LENGTH = 6
+        private const val PASSWORD_MAX_LENGTH = 24
+        private const val USERNAME_MIN_LENGTH = 3
+        private const val USERNAME_MAX_LENGTH = 16
     }
 
     /**
@@ -79,13 +84,13 @@ class LoginViewModel : ViewModel() {
 
     /**
      * This function checks if the given username is a valid one.
+     * Only depending on the length.
      *
      * @param username the username to check
      * @return true if the username is valid, false otherwise
      * */
     fun inputUsernameValidation(username: String): Boolean {
-        //TODO validate name
-        return true
+        return username.length in USERNAME_MIN_LENGTH..USERNAME_MAX_LENGTH
     }
 
     /**
@@ -105,12 +110,12 @@ class LoginViewModel : ViewModel() {
 
     /**
      * This function checks if the given password is a valid one.
+     * Only depending on the length.
      *
      * @param password the password to check
      * @return true if the password is valid, false otherwise
      * */
     fun inputPasswordValidation(password: String): Boolean {
-        //TODO missing validation?
-        return password.length > 5
+        return password.length in PASSWORD_MIN_LENGTH..PASSWORD_MAX_LENGTH
     }
 }

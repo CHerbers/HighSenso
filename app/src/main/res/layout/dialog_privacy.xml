@@ -23,14 +23,14 @@
             android:layout_marginEnd="@dimen/privacy_dialog_layout_margin"
             android:text="@string/privacy_dialog_message" />
 
-        <CheckBox
-            android:id="@+id/privacy_questioning_checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/privacy_dialog_layout_margin"
-            android:layout_marginTop="@dimen/privacy_dialog_spacing"
-            android:layout_marginEnd="@dimen/privacy_dialog_layout_margin"
-            android:text="@string/privacy_dialog_questioning_setting_checkBox" />
+        <!--        <CheckBox-->
+        <!--            android:id="@+id/privacy_questioning_checkBox"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="@dimen/privacy_dialog_layout_margin"-->
+        <!--            android:layout_marginTop="@dimen/privacy_dialog_spacing"-->
+        <!--            android:layout_marginEnd="@dimen/privacy_dialog_layout_margin"-->
+        <!--            android:text="@string/privacy_dialog_questioning_setting_checkBox" />-->
 
         <CheckBox
             android:id="@+id/privacy_sensor_checkBox"

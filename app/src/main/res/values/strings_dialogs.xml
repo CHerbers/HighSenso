@@ -56,7 +56,7 @@
         Ich stimme der annonymisierten Übersendung meines Ergebnisses zu
     </string>
     <string name="privacy_dialog_sensor_data_setting_checkBox">
-        Ich stimme dem Sammeln und annonymisierten Senden von Sensordaten zu
+        Ich stimme dem Sammeln und zentralen Speichern von Sensordaten (Umgebungstemperatur, Umgebungshelligkeit) zu
     </string>
 
     <!--    location dialog-->

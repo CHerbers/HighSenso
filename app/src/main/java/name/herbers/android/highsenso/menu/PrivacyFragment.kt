@@ -1,5 +1,6 @@
 package name.herbers.android.highsenso.menu
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -37,7 +39,12 @@ class PrivacyFragment : Fragment() {
     ): View {
         //init the DataBinding and ViewModel
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_privacy, container, false)
-        viewModel = ViewModelProvider(this).get(PrivacyViewModel::class.java)
+        val privacyViewModelFactory = PrivacyViewModelFactory(
+            requireActivity().getPreferences(Context.MODE_PRIVATE),
+            resources
+        )
+        viewModel =
+            ViewModelProvider(this, privacyViewModelFactory).get(PrivacyViewModel::class.java)
         binding.privacyViewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -48,9 +55,29 @@ class PrivacyFragment : Fragment() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        setUpPrivacySwitchCheckedStatus()
+        setPrivacySwitchListener()
 
         Timber.i("PrivacyFragment created!")
         return binding.root
+    }
+
+    /**
+     * Checks the settings [SwitchCompat] depending of specific key in [SharedPreferences].
+     * */
+    private fun setUpPrivacySwitchCheckedStatus() {
+        binding.privacySettingsSwitch.isChecked = viewModel.getCheckedStatus()
+    }
+
+    /**
+     * Sets an [View.OnClickListener] to the [SwitchCompat]. If checked or unchecked a specific key in
+     * [SharedPreferences] is adjusted.
+     * */
+    private fun setPrivacySwitchListener() {
+        val switch = binding.privacySettingsSwitch
+        switch.setOnClickListener {
+            viewModel.setPrivacyPreferences(switch.isChecked)
+        }
     }
 
     /**

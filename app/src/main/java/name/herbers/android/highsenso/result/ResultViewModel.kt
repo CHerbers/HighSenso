@@ -34,10 +34,6 @@ class ResultViewModel(
 
     /* Observed LiveData */
     //LiveData observed by Fragment to decide if a TextView is shown
-    private val _disableHelpTextViews = MutableLiveData<Boolean>()
-    val disableHelpTextViews: LiveData<Boolean>
-        get() = _disableHelpTextViews
-
     private val _hasEnthusiasm = MutableLiveData<Boolean>()
     val hasEnthusiasm: LiveData<Boolean>
         get() = _hasEnthusiasm
@@ -95,20 +91,12 @@ class ResultViewModel(
     private fun calculateResult() {
         /* Calculate the HSP-Scala-Score */
         var currentRatingSum = -1
-        if (sharedViewModel.currentAnswers.containsKey(Constants.HSP_SCALE_QUESTIONNAIRE)) {
-            sharedViewModel.currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]?.forEach { (_, answer) ->
-                currentRatingSum += answer.value.toInt()
-                Timber.i("Current rating: $currentRatingSum")
-            }
+        sharedViewModel.currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]?.forEach { (_, answer) ->
+            currentRatingSum += answer.value.toInt()
         }
+        if (currentRatingSum > -1) currentRatingSum++
+        Timber.i("Current rating: $currentRatingSum")
         val ratingSum = getAverageSumOfOldAnswerSheets(currentRatingSum)
-
-
-//        sharedViewModel.databaseHandler.questions.forEach { question ->
-//            if (question.itemQuestion)
-//                if (question.rating)
-//                    ratingSum++
-//        }
         Timber.i("Total rating sum: $ratingSum!")
 
         /* General check if user is a HSP and generating message */
@@ -260,7 +248,6 @@ class ResultViewModel(
             R.string.general_HSP_part_0_declaration,
             resultPositivity,
             if (isNegative) {
-                _disableHelpTextViews.value = true
                 appRes.getString(R.string.general_HSP_negative)
             } else ""
         )

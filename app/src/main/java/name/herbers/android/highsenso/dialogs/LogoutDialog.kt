@@ -22,6 +22,7 @@ class LogoutDialog(val sharedViewModel: SharedViewModel) : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        Timber.i("LogoutDialog created!")
         return activity.let {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.logout_dialog_title)
@@ -42,5 +43,10 @@ class LogoutDialog(val sharedViewModel: SharedViewModel) : DialogFragment() {
             }
             builder.create()
         }
+    }
+
+    override fun onDestroy() {
+        Timber.i("LogoutDialog destroyed!")
+        super.onDestroy()
     }
 }

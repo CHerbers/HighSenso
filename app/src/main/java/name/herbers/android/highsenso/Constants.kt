@@ -9,7 +9,6 @@ object Constants {
 
     const val OFFLINE_MODE = true
     const val FIRST_START = false
-    const val DELETE_DATABASE = false
     /* Questionnaire */
     const val BASELINE_QUESTIONNAIRE = "Baseline"
     const val BASELINE_QUESTIONNAIRE_ID = 1
