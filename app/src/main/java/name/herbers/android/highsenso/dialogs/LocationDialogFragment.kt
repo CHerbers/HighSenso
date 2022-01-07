@@ -81,14 +81,14 @@ class LocationDialogFragment(
         val workButton = binding.locationDialogOptionWorkButton
         val outsideButton = binding.locationDialogOptionOutsideButton
         val elseButton = binding.locationDialogOptionElseButton
-        var currentLocation = sharedViewModel.userProfile.currentLocation
+        var currentLocation = sharedViewModel.currentLocation
 
         val listener = View.OnClickListener { view ->
             when (view) {
                 homeButton -> currentLocation = 0
                 workButton -> currentLocation = 1
                 outsideButton -> currentLocation = 2
-                elseButton -> currentLocation = 3
+                elseButton -> currentLocation = 9
             }
             Timber.i("Current location is: $currentLocation")
             sharedViewModel.locationDialogGetsDismissed()

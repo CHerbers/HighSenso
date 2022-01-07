@@ -40,20 +40,6 @@ class StartViewModel(
         return false
     }
 
-    /**
-     * Rating of all questions in the database handled by [DatabaseHandler] are updated to the
-     * default (unrated) rating (-1).
-     * After changing rating [_resetDone] is set to true to trigger its observer in [StartFragment].
-     * */
-    //TODO delete this
-    fun resetAllQuestionRatings() {
-        //set questions rating to default value (-1)
-        databaseHandler.questions.forEach { question ->
-            question.rating = false
-            databaseHandler.updateDatabase(question)
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
         Timber.i("StartViewModel destroyed!")

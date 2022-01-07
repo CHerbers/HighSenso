@@ -2,12 +2,14 @@ package name.herbers.android.highsenso.result
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.widget.TextView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.AnswerSheet
 import timber.log.Timber
 
@@ -24,23 +26,11 @@ class ResultViewModel(
 ) : AndroidViewModel(application) {
 
     private val appRes = application.applicationContext.resources
-    private val questions = sharedViewModel.databaseHandler.questions
 
     /* some constants */
     companion object {
         private const val HSP_POSITIVE_LIMIT = 14
     }
-
-    //error messages
-    private val errorInvalidInput =
-        appRes.getString(R.string.send_dialog_text_edit_error_invalid)
-    private val errorTooOld =
-        appRes.getString(R.string.send_dialog_text_edit_error_old)
-    private val errorTooYoung =
-        appRes.getString(R.string.send_dialog_text_edit_error_young)
-    private val maxAge = appRes.getInteger(R.integer.max_age)
-    private val minAge = appRes.getInteger(R.integer.min_age)
-    private val regex = "[0-9]".toRegex()
 
     /* Observed LiveData */
     //LiveData observed by Fragment to decide if a TextView is shown
@@ -93,10 +83,6 @@ class ResultViewModel(
     val resultConditionalContent: LiveData<String>
         get() = _resultConditionalContent
 
-//    private val _resultWorkplaceContent = MutableLiveData<String>()
-//    val resultWorkplaceContent: LiveData<String>
-//        get() = _resultWorkplaceContent
-
     init {
         Timber.i("ResultViewModel created!")
         calculateResult()
@@ -108,24 +94,21 @@ class ResultViewModel(
      * */
     private fun calculateResult() {
         /* Calculate the HSP-Scala-Score */
-        val oldSum = getAverageSumOfOldAnswerSheets()
-        var ratingSum = 0
-
+        var currentRatingSum = -1
         if (sharedViewModel.currentAnswers.containsKey(Constants.HSP_SCALE_QUESTIONNAIRE)) {
             sharedViewModel.currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]?.forEach { (_, answer) ->
-                ratingSum += answer.value.toInt()
+                currentRatingSum += answer.value.toInt()
+                Timber.i("Current rating: $currentRatingSum")
             }
-        } else {
-            ratingSum = if (oldSum == -1) 0 else oldSum
         }
-        var sum = 0
+        val ratingSum = getAverageSumOfOldAnswerSheets(currentRatingSum)
 
 
-        sharedViewModel.databaseHandler.questions.forEach { question ->
-            if (question.itemQuestion)
-                if (question.rating)
-                    ratingSum++
-        }
+//        sharedViewModel.databaseHandler.questions.forEach { question ->
+//            if (question.itemQuestion)
+//                if (question.rating)
+//                    ratingSum++
+//        }
         Timber.i("Total rating sum: $ratingSum!")
 
         /* General check if user is a HSP and generating message */
@@ -140,7 +123,7 @@ class ResultViewModel(
             Timber.i("User seems to suffer!")
             _isSuffering.value = true
             _sufferingMessageContent.value =
-                if (ratingSum < HSP_POSITIVE_LIMIT) appRes.getString(R.string.detected_suffering_negative_hsp_message)
+                if (currentRatingSum < HSP_POSITIVE_LIMIT) appRes.getString(R.string.detected_suffering_negative_hsp_message)
                 else appRes.getString(R.string.detected_suffering_positive_hsp_message)
         }
 
@@ -148,19 +131,16 @@ class ResultViewModel(
         if (checkWorkplaceProblems()) {
             Timber.i("User seems to feel uncomfortable at their workplace!")
             _hasWorkplaceProblem.value = true
-
         }
-        //TODO calculate which result texts from database should be shown onscreen
-        //_resultContent = ...
     }
 
     /**
      * This function calculates the average sum of positive answered questions form all old [AnswerSheet]s.
      *
-     * @return -1 if there are no old AnswerSheets for the "HSP-Scale"
-     * else the average of the sum of positive answered items of the old AnswerSheets
+     * @return -1 if there are no old nor current AnswerSheet(s) for the "HSP-Scale"
+     * else the mean of the sum of positive answered items of the old und current AnswerSheet(s)
      * */
-    private fun getAverageSumOfOldAnswerSheets(): Int {
+    private fun getAverageSumOfOldAnswerSheets(currentScore: Int = -1): Int {
         var sum = 0
         var count = 0
         var noOldAnswerSheets = true
@@ -173,28 +153,29 @@ class ResultViewModel(
                 }
             }
         }
-
-        return if (noOldAnswerSheets) -1 else sum.div(count)
+        if (noOldAnswerSheets) return currentScore
+        return if (currentScore == -1) sum.div(count) else (sum + currentScore).div(count + 1)
     }
 
     /**
      * This function checks the rating of the influence questions and sets the specific observed
-     * LiveData to true, to trigger that the corresponding TextView is shown onscreen.
+     * [LiveData] to true, to trigger the corresponding [TextView] to show onscreen.
      * */
     private fun checkInfluenceQuestions() {
-        if (questions.size <= 32) return
-        for (i in 27..31) {
-            val currentQuestion = questions[i]
-            if (currentQuestion.rating) {
-                Timber.i(currentQuestion.toString()) //TODO check for question.value instead of the id
-                when (currentQuestion.id) {
-                    28 -> _hasEnthusiasm.value = true
-                    29 -> _isEmotionalVulnerable.value = true
-                    30 -> _hasSelfDoubt.value = true
-                    31 -> _hasWorldPain.value = true
-                    32 -> _hasLingeringEmotions.value = true
-                }
-            }
+        getAnswersFromLabels(listOf(Constants.QUESTION_LABEL_ENTHUSIASM)).forEach { answer ->
+            if (answer.value == "1") _hasEnthusiasm.value = true
+        }
+        getAnswersFromLabels(listOf(Constants.QUESTION_LABEL_EMOTIONAL_VULNERABILITY)).forEach { answer ->
+            if (answer.value == "1") _isEmotionalVulnerable.value = true
+        }
+        getAnswersFromLabels(listOf(Constants.QUESTION_LABEL_SELF_DOUBT)).forEach { answer ->
+            if (answer.value == "1") _hasSelfDoubt.value = true
+        }
+        getAnswersFromLabels(listOf(Constants.QUESTION_LABEL_WORLD_PAIN)).forEach { answer ->
+            if (answer.value == "1") _hasWorldPain.value = true
+        }
+        getAnswersFromLabels(listOf(Constants.QUESTION_LABEL_LINGERING_EMOTION)).forEach { answer ->
+            if (answer.value == "1") _hasLingeringEmotions.value = true
         }
     }
 
@@ -203,11 +184,19 @@ class ResultViewModel(
      * suffering.
      * If one of those three questions was answered positively, the return value is true.
      *
-     * @return if the user is suffering.
+     * @return true if the user is suffering, false otherwise
      * */
     private fun checkSuffering(): Boolean {
-        if (questions.size <= 34) return false
-        return questions[32].rating || questions[33].rating || questions[34].rating
+        getAnswersFromLabels(
+            listOf(
+                Constants.QUESTION_LABEL_SOCIAL_ISOLATED,
+                Constants.QUESTION_LABEL_FREQUENT_ANXIETY,
+                Constants.QUESTION_LABEL_UNSATISFACTORY_LIFE
+            )
+        ).forEach { answer ->
+            if (answer.value == "1") return true
+        }
+        return false
     }
 
     /**
@@ -215,64 +204,41 @@ class ResultViewModel(
      * uncomfortable at their workplace.
      * If one of those two questions was answered positively, the return value is true.
      *
-     * @return if the user feels uncomfortable at their workplace.
+     * @return true, if the user feels uncomfortable at their workplace, false otherwise
      * */
     private fun checkWorkplaceProblems(): Boolean {
-        if (questions.size <= 36) return false
-        return questions[35].rating || questions[36].rating
-    }
-
-    private fun checkWorkplaceProblems(i: Int): Boolean {
-        var problems = false
-//        sharedViewModel.currentAnswers.forEach { (questionnaireName, answerMap) ->
-//            val answersDWHSMap = if (questionnaireName == Constants.DEAL_WITH_HS_QUESTIONNAIRE) answerMap else null
-//            if (answersDWHSMap.isNullOrEmpty())
-//            questionnaire.questions.forEach { element ->
-//                val question = element as Question
-//                if (question.label == "workspace_mood" || question.label == "workspace_stimulus"){
-//
-//                }
-//            }
-//        }
-        return problems
-    }
-
-    fun handleSendResult(age: Int, gender: String) {
-        //TODO send the stuff
-        //TODO change specific location key after sending
-        // preferences.edit().putBoolean(getString(R.string.location_option_work_key), true).apply()
-    }
-
-    /**
-     * Checks if the given input is a valid age.
-     * @param age the users age that is to check
-     * @return true if age is valid - false otherwise
-     * */
-    fun checkSendResultInput(age: Int): Boolean {
-        if (regex.containsMatchIn(age.toString()) && age <= maxAge && age >= minAge) {
-            Timber.i("$age is a valid age!")
-            return true
+        getAnswersFromLabels(
+            listOf(
+                Constants.QUESTION_LABEL_WORKPLACE_MOOD,
+                Constants.QUESTION_LABEL_WORKSPACE_STIMULUS
+            )
+        ).forEach { answer ->
+            if (answer.value == "1") return true
         }
-        Timber.i("$age is an invalid age!")
         return false
     }
 
     /**
-     * Calculates a fitting error message depending on the input String.
-     * @param age the users age
-     * @return a fitting error message if there is one or an empty string otherwise
+     * Searches all [Answer]s for the ones with the given labels and returns them if found
+     *
+     * @param labels a [List] of the labels, the [Answer]s are searched of
+     * @return a [List] of found [Answer]s
      * */
-    fun getErrorMessage(age: String): String {
-        if (age == "") return ""
-        if (!regex.containsMatchIn(age)) return errorInvalidInput
-        if (age.toInt() > maxAge) return errorTooOld
-        if (age.toInt() < minAge) return errorTooYoung
-        return ""
+    private fun getAnswersFromLabels(labels: List<String>): List<Answer> {
+        val answers = mutableListOf<Answer>()
+        sharedViewModel.currentAnswers.forEach { (_, questionnaires) ->
+            questionnaires.forEach { (_, answer) ->
+                labels.forEach { label ->
+                    if (answer.label == label) answers.add(answer)
+                }
+            }
+        }
+        return answers
     }
 
     /**
      * This functions build the string, that shows the result, if the user is a HSP and their
-     * HSP-Scala-Score.
+     * HSP-Scale-Score.
      * */
     @SuppressLint("StringFormatMatches")
     fun buildGeneralResultString(rating: Int): String {

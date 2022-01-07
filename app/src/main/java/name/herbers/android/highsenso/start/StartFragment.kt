@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -24,6 +24,7 @@ import name.herbers.android.highsenso.login.LoginDialogFragment
 import name.herbers.android.highsenso.login.LoginViewModel
 import name.herbers.android.highsenso.login.RegisterDialogFragment
 import name.herbers.android.highsenso.menu.AboutFragment
+import name.herbers.android.highsenso.menu.PrivacyFragment
 import name.herbers.android.highsenso.questioning.QuestioningFragment
 import timber.log.Timber
 
@@ -110,8 +111,6 @@ class StartFragment : Fragment() {
                 item,
                 requireView().findNavController()
             )
-            //reset question ratings
-//            R.id.reset_rating_destination -> handleResetQuestions()
             //navigate to AboutFragment
             R.id.about_destination -> NavigationUI.onNavDestinationSelected(
                 item,
@@ -127,6 +126,11 @@ class StartFragment : Fragment() {
         }
     }
 
+    /**
+     * This function calls every function that sets an [View.OnClickListener] to a [Button].
+     *
+     * @param sharedViewModel the [SharedViewModel] that provides functionality to the listeners.
+     * */
     private fun setAllButtonListeners(sharedViewModel: SharedViewModel) {
         setStartButtonListener(sharedViewModel)
         setLoginButtonListener(sharedViewModel)
@@ -134,8 +138,10 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * Sets a OnClickListener to the startButton.
-     * Navigates to the [QuestioningFragment] to start the questioning.
+     * Sets a [View.OnClickListener] to the startButton.
+     * Navigates to the [QuestioningFragment] to start the questioning if the [Button] was clicked.
+     *
+     * @param sharedViewModel the [SharedViewModel] that provides functionality to the listeners.
      * */
     private fun setStartButtonListener(sharedViewModel: SharedViewModel) {
         binding.startButton.setOnClickListener { view: View ->
@@ -150,10 +156,15 @@ class StartFragment : Fragment() {
                     )
                 } else {
                     if (startViewModel.baselineAnswerSheetAvailable(sharedViewModel.answerSheets)) {
-                        LocationDialogFragment(preferences, sharedViewModel).show(
-                            childFragmentManager,
-                            "LocationDialog"
-                        )
+                        if (sharedViewModel.locationQuestionAvailable()) {
+                            LocationDialogFragment(preferences, sharedViewModel).show(
+                                childFragmentManager,
+                                "LocationDialog"
+                            )
+                        } else {
+                            Navigation.findNavController(view)
+                                .navigate(R.id.action_startFragment_to_questioningFragment)
+                        }
                     } else {
                         Navigation.findNavController(view)
                             .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
@@ -167,7 +178,9 @@ class StartFragment : Fragment() {
 
 
     /**
-     *
+     * Sets a [View.OnClickListener] to the loginButton, that calls
+     * [SharedViewModel.handleLoginButtonClick] if the [Button] was clicked while logged in.
+     * Else if shows the [LogoutDialog].
      *
      * @param sharedViewModel is the [SharedViewModel] holding function to handle the button click
      * */
@@ -186,7 +199,8 @@ class StartFragment : Fragment() {
     }
 
     /**
-     *
+     * Sets a [View.OnClickListener] to the registerButton, that calls
+     * [SharedViewModel.handleRegisterButtonClick] if the [Button] was clicked.
      *
      * @param sharedViewModel is the [SharedViewModel] holding function to handle the button click
      * */
@@ -198,11 +212,10 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * Calls every fun that sets [Observer]s.
+     * Calls every function that sets [Observer]s.
      * */
     private fun setAllObservers() {
         val sharedViewModel: SharedViewModel by activityViewModels()
-//        setResetObserver(sharedViewModel)
         setLoginButtonsObserver(sharedViewModel)
         setStartRegisterDialogObserver(sharedViewModel)
         setStartLoginDialogObserver(sharedViewModel)
@@ -213,7 +226,7 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * Sets an Observer to [StartViewModel.isLoggedIn].
+     * Sets an Observer to [SharedViewModel.isLoggedIn].
      * If logged in, the registerButton is not shown, the label of the loginButton is set to
      * "logout" and the welcoming text shows the username.
      *
@@ -230,36 +243,20 @@ class StartFragment : Fragment() {
                 binding.startFragmentRegisterButton.visibility = View.INVISIBLE
                 binding.startTitleTextView.text =
                     getString(R.string.start_welcome_username_text)
-                profileMenuItem?.isVisible =  true
+                profileMenuItem?.isVisible = true
             } else {
                 binding.startFragmentLoginButton.text =
                     getString(R.string.start_fragment_login_button)
                 binding.startFragmentRegisterButton.visibility = View.VISIBLE
                 binding.startTitleTextView.text =
                     getString(R.string.start_welcome_text)
-                profileMenuItem?.isVisible =  false
+                profileMenuItem?.isVisible = false
             }
         })
     }
 
     /**
-     * Sets an Observer to [StartViewModel.resetDone]. Shows a [Toast] message onscreen if true.
-     * Message tells user that the reset is done.
-     * */
-    private fun setResetObserver(sharedViewModel: SharedViewModel) {
-        sharedViewModel.resetPasswordSent.observe(viewLifecycleOwner, { resetDone ->
-            if (resetDone) {
-                Toast.makeText(
-                    context,
-                    R.string.reset_dialog_toast_message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }
-
-    /**
-     * Sets an Observer to [StartViewModel.startResetPasswordDialog]. Starts the [ResetPasswordDialogFragment]
+     * Sets an Observer to [SharedViewModel.startResetPasswordDialog]. Starts the [ResetPasswordDialogFragment]
      * if true.
      *
      * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
@@ -276,8 +273,8 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * Sets an Observer to [StartViewModel.startRegisterDialog]. Starts the [RegisterDialogFragment]
-     * if true.
+     * Sets an Observer to [SharedViewModel.startRegisterDialog]. Shows the [RegisterDialogFragment]
+     * if it becomes true.
      *
      * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
      * */
@@ -293,8 +290,8 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * Sets an Observer to [StartViewModel.startLoginDialog]. Starts the [LoginDialogFragment]
-     * if true.
+     * Sets an Observer to [SharedViewModel.startLoginDialog]. Shows the [LoginDialogFragment]
+     * if it becomes true true.
      *
      * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
      * */
@@ -306,6 +303,9 @@ class StartFragment : Fragment() {
         })
     }
 
+    /**
+     * Shows the [LoginDialogFragment].
+     * */
     private fun showLoginDialog(sharedViewModel: SharedViewModel) {
         LoginDialogFragment(sharedViewModel, loginViewModel).show(
             childFragmentManager,
@@ -313,6 +313,12 @@ class StartFragment : Fragment() {
         )
     }
 
+    /**
+     * Sets an Observer to [SharedViewModel.startSentMailDialog]. Shows the [ConfirmationMailSentDialog]
+     * if it becomes true.
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
+     * */
     private fun setStartMailSentDialogObserver(sharedViewModel: SharedViewModel) {
         sharedViewModel.startSentMailDialog.observe(viewLifecycleOwner, { startDialog ->
             if (startDialog) {
@@ -325,8 +331,8 @@ class StartFragment : Fragment() {
     }
 
     /**
-     * Sets an Observer to [SharedViewModel.localDialogDismiss]. Navigates to [QuestioningFragment]
-     * if true.
+     * Sets an Observer to [SharedViewModel.locationDialogDismiss]. Navigates to [QuestioningFragment]
+     * if it becomes true.
      *
      * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
      * */
@@ -339,6 +345,12 @@ class StartFragment : Fragment() {
         })
     }
 
+    /**
+     * Sets an Observer to [SharedViewModel.startPrivacyFragment]. Navigates to [PrivacyFragment]
+     * if it becomes true.
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding the observed [LiveData]
+     * */
     private fun setStartPrivacyFragmentObserver(sharedViewModel: SharedViewModel) {
         sharedViewModel.startPrivacyFragment.observe(viewLifecycleOwner, { toStart ->
             if (toStart) {

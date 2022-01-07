@@ -2,10 +2,7 @@ package name.herbers.android.highsenso.questioning
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import name.herbers.android.highsenso.R
-import name.herbers.android.highsenso.database.DatabaseHandler
 import timber.log.Timber
 
 /**
@@ -17,53 +14,22 @@ import timber.log.Timber
  *@author Herbers
  */
 class BaselineQuestioningViewModel(
-    private val databaseHandler: DatabaseHandler,
     application: Application
 ) : AndroidViewModel(application) {
-
-    /* observed by PersonalQuestioningFragment, if true: navigation to ResultFragment */
-    private val _isFinished = MutableLiveData(false)
-    val isFinished: LiveData<Boolean>
-        get() = _isFinished
-
-    private val _questionnaireTitle = MutableLiveData("")
-    val questionnaireTitle: LiveData<String>
-        get() = _questionnaireTitle
+    /* as long as both of those are false, the next button will show an error toast because there
+    * are either empty EditTexts or EditTexts with invalid input */
+    var validInputChildren: Boolean = false
+    var validInputProfession: Boolean = false
 
     //some constants
     private val appRes = application.applicationContext.resources
     private val errorInvalidInput =
         appRes.getString(R.string.send_dialog_text_edit_error_invalid)
-    private val errorTooOld =
-        appRes.getString(R.string.send_dialog_text_edit_error_old)
-    private val errorTooYoung =
-        appRes.getString(R.string.send_dialog_text_edit_error_young)
-    private val maxAge = appRes.getInteger(R.integer.max_age)
-    private val minAge = appRes.getInteger(R.integer.min_age)
     private val regexNumbers = "[0-9]".toRegex()
     private val regexLetters = "[a-zA-ZäöüÄÖÜß]".toRegex()
 
     init {
         Timber.i("PersonalQuestioningViewModel created!")
-    }
-
-    fun setQuestionnaireTitle(title: String) {
-        Timber.i("Baseline Title was set to: $title")
-        _questionnaireTitle.value = title
-    }
-
-    /**
-     * Calculates a fitting error message depending on the input String.
-     * Regarding [maxAge], [minAge] and [regexNumbers].
-     * @param age the users age
-     * @return a fitting error message if there is one or an empty string otherwise
-     * */
-    fun getAgeErrorMessage(age: String): String {
-        if (age == "") return ""
-        if (!regexNumbers.containsMatchIn(age)) return errorInvalidInput
-        if (age.toInt() > maxAge) return errorTooOld
-        if (age.toInt() < minAge) return errorTooYoung
-        return ""
     }
 
     /**
@@ -72,8 +38,11 @@ class BaselineQuestioningViewModel(
      * @return a fitting error message if there is one or an empty string otherwise
      * */
     fun getChildrenErrorMessage(childCount: String): String {
+        validInputChildren = false
         if (childCount == "") return ""
         if (!regexNumbers.containsMatchIn(childCount)) return errorInvalidInput
+        if (childCount.toInt() > 20) return errorInvalidInput
+        validInputChildren =  true
         return ""
     }
 
@@ -83,9 +52,15 @@ class BaselineQuestioningViewModel(
      * @return a fitting error message if there is one or an empty string otherwise
      * */
     fun getProfessionErrorMessage(profession: String): String {
-        if (profession == "") return ""
+        validInputProfession = false
+        if (profession == "")return ""
         if (!regexLetters.containsMatchIn(profession)) return errorInvalidInput
+        validInputProfession = true
         return ""
+    }
+
+    fun validInput(): Boolean {
+        return validInputProfession && validInputChildren
     }
 
 }

@@ -38,7 +38,7 @@
             android:layout_marginTop="@dimen/standard_textView_layout_margin"
             android:layout_marginEnd="@dimen/standard_textView_layout_margin"
             android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:text="@string/question_instruction"
+            android:text="@{questioningViewModel.headline}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

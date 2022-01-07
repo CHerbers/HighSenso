@@ -1,17 +1,16 @@
 package name.herbers.android.highsenso
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,10 +21,9 @@ import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.AmbientAudioSensorData
 import name.herbers.android.highsenso.data.AmbientLightSensorData
 import name.herbers.android.highsenso.data.AmbientTempSensorData
+import name.herbers.android.highsenso.data.AnswerSheet
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.HighSensoDatabase
-import name.herbers.android.highsenso.database.QuestionDatabase
-import name.herbers.android.highsenso.database.UserProfile
 import name.herbers.android.highsenso.sensor.AmbientAudioRecorder
 import timber.log.Timber
 import java.io.File
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     //ViewModel shared with ResetDialogFragment and StartFragment
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var questionDatabase: QuestionDatabase
+    private lateinit var database: HighSensoDatabase
 
     //launcher to ask for mic permission
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
@@ -63,34 +61,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
 
         val application = requireNotNull(this).application
-//        deleteDatabaseInAppData()             //development only
-//        resetFirstCallPreferencesKey()        //development only
-        questionDatabase = QuestionDatabase.getInstance(application)!!
-        val dataSource = questionDatabase.questionDatabaseDao
-        val database: HighSensoDatabase? = HighSensoDatabase.getInstance(application)!!
-        val databaseHandler = DatabaseHandler(dataSource, database?.highSensoDatabaseDao)
-        val res = applicationContext.resources
+        if (Constants.DELETE_DATABASE) deleteDatabaseInAppData()            //development only
+        if (Constants.FIRST_START) resetFirstCallPreferencesKey()           //development only
+        database = HighSensoDatabase.getInstance(application)
+        val databaseHandler = DatabaseHandler(database.highSensoDatabaseDao)
 
         preferences = this.getPreferences(Context.MODE_PRIVATE)
-
-        //init personalData with string-arrays as param
-        val userProfile = UserProfile(
-            locationList(),
-            res.getStringArray(R.array.gender_array).toList(),
-            res.getStringArray(R.array.marital_Status_array).toList(),
-            res.getStringArray(R.array.education_array).toList(),
-            res.getStringArray(R.array.professionType_array).toList()
-        )
 
         /* HTTP Connection */
         val serverCommunicationHandler =
             ServerCommunicationHandler(Constants.SERVER_URL, this)
 
-        //init sharedViewModel TODO maybe look for saved questionnaires/ answerSheets
+        //init sharedViewModel
         val sharedViewModelFactory =
             SharedViewModelFactory(
                 databaseHandler,
-                userProfile,
                 null,
                 null,
                 preferences,
@@ -102,7 +87,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             sharedViewModelFactory
         ).get(SharedViewModel::class.java)
 
-        repTaskHandler = Handler()
+        repTaskHandler = Handler(Looper.getMainLooper())
 
         /* Login check and load questions and answerSheets if logged in */
         val token = preferences.getString(getString(R.string.login_data_token), null)
@@ -125,12 +110,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 )
             }
             else -> {
-                sharedViewModel.changeLoginStatus(true) //TODO set to false!
+                sharedViewModel.changeLoginStatus(Constants.OFFLINE_MODE)
             }
         }
 
         //init ActivityResultLauncher for permission stuff
-//        audioRecording()
         requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
                 if (isGranted) {
@@ -164,12 +148,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun stopGatherAudioPeriodically() {
         Timber.i("Stopping repeating task to gather audio data!")
         repTaskHandler.removeCallbacks(gatherAudioPeriodically)
-    }
-
-    //TODO delete this, it is just to test how to open an url with the app
-    fun openChatBot(uri: String) {
-        val chatBotIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-        startActivity(chatBotIntent)
     }
 
     /**
@@ -213,18 +191,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     /**
-     * Creates a [List] with all strings that represent a location.
-     * */
-    private fun locationList(): List<String> {
-        return mutableListOf(
-            getString(R.string.location_dialog_option_home),
-            getString(R.string.location_dialog_option_work),
-            getString(R.string.location_dialog_option_outside),
-            getString(R.string.location_dialog_option_else)
-        )
-    }
-
-    /**
      * Checks permission for recording audio with the microphone.
      * If permission is already granted, start the [AmbientAudioRecorder].
      * Else, start the [ActivityResultLauncher] to ask for recording permission
@@ -237,13 +203,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             val ambientAudioRecorder = AmbientAudioRecorder()
             val recordedAudio =
                 ambientAudioRecorder.getAverageAmbientAudio(Constants.AUDIO_SENSOR_MEASURING_DURATION)
-            when (sharedViewModel.questionnaireName.value) {
+            when (sharedViewModel.currentQuestionnaireName) {
                 Constants.HSP_SCALE_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(
                     AmbientAudioSensorData(
                         Date().time,
                         recordedAudio.toFloat()
                     )
-                )  //TODO multiple data (like it is now) or just one average value
+                )
                 Constants.DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(
                     AmbientAudioSensorData(
                         Date().time,
@@ -275,7 +241,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     /**
      * Calls methods to add all needed Observers.
      * */
-    private fun addAllObservers(){
+    private fun addAllObservers() {
         addGatheringSensorDataObserver()
         addShowResetPasswordSuccessionToast()
     }
@@ -366,6 +332,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    /**
+     * This function saves the given temperature as [AmbientTempSensorData] in an List to later on
+     * send it in an [AnswerSheet].
+     *
+     * @param measuredTemp is the temperature measured by the sensor
+     * @param eventTime is the time, the temperature was measured at
+     * */
     private fun saveTempSensorData(measuredTemp: Float, eventTime: Long) {
         Timber.i("Event on ambient temperature sensor: $measuredTemp °C")
         lastTempSensorMeasurement = eventTime
@@ -373,12 +346,19 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Date().time,
             measuredTemp
         )
-        when (sharedViewModel.questionnaireName.value) {
+        when (sharedViewModel.currentQuestionnaireName) {
             Constants.HSP_SCALE_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(tempData)
             Constants.DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(tempData)
         }
     }
 
+    /**
+     * This function saves the given temperature as [AmbientLightSensorData] in an List to later on
+     * send it in an [AnswerSheet].
+     *
+     * @param measuredLight is the light measured by the sensor
+     * @param eventTime is the time, the light was measured at
+     * */
     private fun saveLightSensorData(measuredLight: Float, eventTime: Long) {
         Timber.i("Event on light sensor: $measuredLight lux")
         lastLightSensorMeasurement = eventTime
@@ -386,7 +366,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Date().time,
             measuredLight
         )
-        when (sharedViewModel.questionnaireName.value) {
+        when (sharedViewModel.currentQuestionnaireName) {
             Constants.HSP_SCALE_QUESTIONNAIRE -> sharedViewModel.sensorDataHSP.add(lightData)
             Constants.DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.sensorDataDWHS.add(lightData)
         }
@@ -398,7 +378,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        questionDatabase.close()
+        database.close()
         stopGatherAudioPeriodically()
     }
 }

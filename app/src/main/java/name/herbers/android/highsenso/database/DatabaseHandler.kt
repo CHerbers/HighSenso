@@ -15,7 +15,7 @@ import timber.log.Timber
  * The [DatabaseHandler] is responsible for all communication with [QuestionDatabaseDao].
  * Every interaction with the database is via this Class. Therefore one DatabaseHandler is
  * provided in every [ViewModel] of this App that has to get or set database data.
- * @property questionDatabase the [QuestionDatabaseDao] with the database manipulation logic/queries
+ * @property database the [HighSensoDatabaseDao] with the database manipulation logic/queries
  * @property dispatchers a [DispatcherProvider] for the coroutines
  *
  * @project HighSenso
@@ -23,7 +23,6 @@ import timber.log.Timber
  * @since 1.0
  * */
 class DatabaseHandler(
-    val questionDatabase: QuestionDatabaseDao,
     val database: HighSensoDatabaseDao?,
     private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) {
@@ -31,64 +30,17 @@ class DatabaseHandler(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(dispatchers.main() + viewModelJob)
 
-    var questions: List<Question> = listOf()
-
     var questionnaires: List<Questionnaire> = listOf()
     var answerSheets: List<AnswerSheet> = listOf()
 
     init {
         Timber.i("StartViewModel created!")
-        initQuestions()
         loadDataFromDatabase()
     }
 
     /**
-     * Sets the [questions] within a launched [CoroutineScope] by calling [getQuestionsFromDatabase].
-     * */
-    private fun initQuestions() {
-        uiScope.launch {
-            questions = getQuestionsFromDatabase()
-        }
-        Timber.i("questions initialized")
-    }
-
-    /**
-     * Calls a SELECT function from [QuestionDatabaseDao] to get all questions
-     * from the database.
-     * @return a [List] of all [Question]s from the database
-     * */
-    private suspend fun getQuestionsFromDatabase(): List<Question> {
-        return withContext(dispatchers.io()) {
-            val questionsList: List<Question> = questionDatabase.getAllQuestions()
-            questionsList
-        }
-    }
-
-    /**
-     * Launches a [CoroutineScope] and calls [update] within that scope to initiate an database
-     * update with the given param.
-     * @param question a [Question] the database should be updated with
-     * */
-    fun updateDatabase(question: Question) {
-        uiScope.launch {
-            update(question)
-        }
-    }
-
-    /**
-     * Calls the [QuestionDatabaseDao]'s UPDATE function in order to update a question in the
-     * database with a given [Question].
-     * @param question the [Question] the database will be updated with
-     * */
-    private suspend fun update(question: Question) {
-        withContext(dispatchers.io()) {
-            questionDatabase.update(question)
-            Timber.i("Updated Question: $question")
-        }
-    }
-
-    /**
-     * Sets the [questions] within a launched [CoroutineScope] by calling [getQuestionsFromDatabase].
+     * Sets the [Questionnaire]s within a launched [CoroutineScope] by calling [getQuestionnairesFromDatabase].
+     * Sets the [AnswerSheet]s within a launched [CoroutineScope] by calling [getAnswerSheetsFromDatabase].
      * */
     private fun loadDataFromDatabase() {
         uiScope.launch {

@@ -91,7 +91,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             url,
             { response ->
                 Timber.i(RECEIVED_RESPONSE + "registrationRequest: $response")
-                sharedViewModel.registerResponseReceived(response)
+                sharedViewModel.registerResponseReceived()
             },
             { error ->
                 Timber.i(RECEIVED_ERROR + "registrationRequest: $error")
@@ -175,7 +175,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
 //        RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
 //    }
 
-    fun sendAnswerSheet(token: String, answerSheet: AnswerSheet) {
+    fun sendAnswerSheet(token: String, answerSheet: AnswerSheet, sharedViewModel: SharedViewModel) {
         val url =
             Constants.SERVER_URL + Constants.QUESTIONNAIRES_URI + answerSheet.id + Constants.ANSWER_SHEETS_URI + Constants.TOKEN_URI + token //TODO check URL
         val request = RequestData(Data("questionnaires", answerSheet))
@@ -184,6 +184,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             url,
             { response ->
                 Timber.i(RECEIVED_RESPONSE + "sendAnswerSheet (POST): $response")
+                sharedViewModel.setLocationPreferences()
             },
             { error ->
                 Timber.i(RECEIVED_ERROR + "sendAnswerSheet: $error")

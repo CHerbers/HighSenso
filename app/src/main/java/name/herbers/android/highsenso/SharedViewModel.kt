@@ -2,6 +2,7 @@ package name.herbers.android.highsenso
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +13,6 @@ import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.*
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.database.DatabaseHelper
-import name.herbers.android.highsenso.database.UserProfile
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -21,11 +21,9 @@ import java.util.*
 /**
  * This [AndroidViewModel] belongs to the [MainActivity] and can therefore be accessed by
  * every Fragment of this App under this activity.
- * It is used to provide a [DatabaseHandler] and [UserProfile] to the Fragments and their
+ * It is used to provide a [DatabaseHandler] to the Fragments and their
  * corresponding ViewModels.
  * The [databaseHandler] is used to handle every database access/manipulation.
- * The [userProfile] stores user data that is not permanently stored on the device while the App
- * is alive.
  *
  * @project HighSenso
  * @author Christoph Herbers
@@ -33,7 +31,6 @@ import java.util.*
  * */
 class SharedViewModel(
     val databaseHandler: DatabaseHandler,
-    val userProfile: UserProfile,
     var questionnaires: List<Questionnaire>?,
     var answerSheets: List<AnswerSheet>?,
     private val preferences: SharedPreferences,
@@ -46,6 +43,8 @@ class SharedViewModel(
 
     val sensorDataHSP: MutableList<SensorData> = mutableListOf()
     val sensorDataDWHS: MutableList<SensorData> = mutableListOf()
+    var currentLocation = 9
+    var currentQuestionnaireName = ""
 
     val registerDialogBackupMap = initRegisterDialogBackupMap()
     private val appRes = application.resources
@@ -66,10 +65,6 @@ class SharedViewModel(
     private val _gatherSensorData = MutableLiveData(false)
     val gatherSensorData: LiveData<Boolean>
         get() = _gatherSensorData
-
-    private val _questionnaireName = MutableLiveData("") //TODO LiveData needed?
-    val questionnaireName: LiveData<String>
-        get() = _questionnaireName
 
     private val _locationDialogDismiss = MutableLiveData(false)
     val locationDialogDismiss: LiveData<Boolean>
@@ -125,7 +120,6 @@ class SharedViewModel(
 
     init {
         Timber.i("SharedViewModel created!")
-        //TODO delete
         if (Constants.OFFLINE_MODE) setUpQuestionnairesAndAnswerSheets()
     }
 
@@ -252,7 +246,7 @@ class SharedViewModel(
         communicationHandler.sendResetPasswordRequest(email, this)
     }
 
-    fun registerResponseReceived(response: String) {
+    fun registerResponseReceived() {
         _registerResponse.value = 1
         callMailSentDialog()
     }
@@ -431,7 +425,7 @@ class SharedViewModel(
                 communicationHandler.sendLoginRequest(username, password, this, answerSheets)
         }
         answerSheets.forEach { answerSheet ->
-            communicationHandler.sendAnswerSheet(token, answerSheet)
+            communicationHandler.sendAnswerSheet(token, answerSheet, this)
         }
     }
 
@@ -481,7 +475,7 @@ class SharedViewModel(
             count++
             val bodyJSON = gson.toJson(answerSheet)
             Timber.i(bodyJSON)
-            val path = "answersheet$count.json"
+            val path = Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/answersheets/anwersheet$count.json"
 
             try {
                 File(path).printWriter().use { out ->
@@ -493,12 +487,37 @@ class SharedViewModel(
         }
     }
 
+    fun locationQuestionAvailable(): Boolean {
+        var available = false
+        if (questionnaires.isNullOrEmpty()) return available
+        questionnaires!!.forEach { questionnaire ->
+            questionnaire.questions.forEach { question ->
+                if (question is Question && question.label == Constants.LOCATION_QUESTION_LABEL)
+                    available = true
+            }
+        }
+        return available
+    }
+
     fun loadQuestionnairesFromDeviceDatabase() {
         if (questionnaires.isNullOrEmpty()) questionnaires = databaseHandler.questionnaires
     }
 
     fun loadAnswerSheetsFromDeviceDatabase() {
         if (answerSheets.isNullOrEmpty()) answerSheets = databaseHandler.answerSheets
+    }
+
+    fun setLocationPreferences() {
+        val locationKey = when(currentLocation){
+            1 -> R.string.location_option_home_key
+            2 -> R.string.location_option_work_key
+            3 -> R.string.location_option_outside_key
+            else -> return
+        }
+        preferences.edit().putBoolean(
+            appRes.getString(locationKey),
+            true
+        ).apply()
     }
 
     override fun onCleared() {

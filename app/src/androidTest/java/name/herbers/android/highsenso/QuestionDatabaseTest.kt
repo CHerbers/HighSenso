@@ -3,9 +3,6 @@ package name.herbers.android.highsenso
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import name.herbers.android.highsenso.database.Question
-import name.herbers.android.highsenso.database.QuestionDatabase
-import name.herbers.android.highsenso.database.QuestionDatabaseDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before

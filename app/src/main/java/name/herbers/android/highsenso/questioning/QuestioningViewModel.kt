@@ -3,12 +3,16 @@ package name.herbers.android.highsenso.questioning
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.Answer
+import name.herbers.android.highsenso.data.Headlines
+import name.herbers.android.highsenso.data.Question
 import name.herbers.android.highsenso.database.DatabaseHandler
-import name.herbers.android.highsenso.database.Question
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.start.StartFragment
 import timber.log.Timber
+import java.util.*
 
 /**
  * [ViewModel] for the [QuestioningFragment].
@@ -22,22 +26,38 @@ import timber.log.Timber
  * @since 1.0
  * */
 class QuestioningViewModel(
-    private val databaseHandler: DatabaseHandler,
-    startingQuestionPos: Int = 0
+    private val sharedViewModel: SharedViewModel,
+    startingQuestionPos: Int = 0,
+    questionnairePos: Int = 0
 ) : ViewModel() {
 
-    private var questions: List<Question> = databaseHandler.questions
-    lateinit var currentQuestion: Question
+    private var questionnaires = sharedViewModel.questionnaires
+    private var questionsList: List<List<Question>> =
+        getQuestionsList()
+    private lateinit var currentQuestion: Question
+    private var currentPosQuestionnaire = questionnairePos
+    private var currentPosQuestion = startingQuestionPos
+
+    private val questionnaireIndexOffset = (questionnaires?.size ?: 0) - questionsList.size
 
     /* current question number / total questions, observed by associated TextView */
     private val _questionCount = MutableLiveData<String>()
     val questionCount: LiveData<String>
         get() = _questionCount
 
+    private val _headline = MutableLiveData<String>()
+    val headline: LiveData<String>
+        get() = _headline
+
     /* current question content (actual question), observed by the associated TextView */
     private val _currentQuestionContent = MutableLiveData<String>()
     val currentQuestionContent: LiveData<String>
         get() = _currentQuestionContent
+
+    /* current question rating, observed to change checked status of radioButtons */
+    private val _questionRating = MutableLiveData("")
+    val questionRating: LiveData<String>
+        get() = _questionRating
 
     /* observed by QuestioningFragment, if true: navigation to StartFragment */
     private val _navBackToStartFrag = MutableLiveData(false)
@@ -59,14 +79,8 @@ class QuestioningViewModel(
     val isLastQuestion: LiveData<Boolean>
         get() = _isLastQuestion
 
-    companion object {
-        private const val HSP_QUESTIONNAIRE = "HSPScala"
-        private const val DEAL_WITH_HS_QUESTIONNAIRE = "DealWithHS"
-    }
-
     init {
-        //load questions from database
-        updateLiveData(startingQuestionPos)
+        updateLiveData()
         Timber.i("QuestioningViewModel created!")
     }
 
@@ -75,13 +89,29 @@ class QuestioningViewModel(
      * gets changed to the next one or a fragment change to the [StartFragment] is initiated
      * */
     fun handleBackButtonClick() {
-        //check if this is the first question (also triggers if id is smh. smaller than 1)
-        if (currentQuestion.id <= 1) {
-            //initiate change to start fragment
-            _navBackToStartFrag.value = true
-        } else {
-            //load previous question
-            updateLiveData(currentQuestion.id - 2)
+        _isLastQuestion.value = false
+        when (currentPosQuestionnaire <= 0) {
+            true -> {
+                if (currentPosQuestion <= 0) {
+                    _navBackToStartFrag.value = true
+                } else {
+                    currentPosQuestion--
+                    sharedViewModel.currentQuestionnaireName =
+                        questionnaires?.get(currentPosQuestionnaire + questionnaireIndexOffset)?.name
+                            ?: ""
+                    updateLiveData()
+                }
+            }
+            false -> {
+                if (currentPosQuestion <= 0) {
+                    currentPosQuestionnaire--
+                    currentPosQuestion = questionsList[currentPosQuestionnaire].size - 1
+                    updateLiveData()
+                } else {
+                    currentPosQuestion--
+                    updateLiveData()
+                }
+            }
         }
     }
 
@@ -90,64 +120,114 @@ class QuestioningViewModel(
      * gets changed to the previous one or a fragment change to the [ResultFragment] is initiated
      * @param newRating the new rating the update function is called with
      * */
-    fun handleNextButtonClick(newRating: Int, sharedViewModel: SharedViewModel) {
-
-//        when(sharedViewModel.questionnaireName){
-//            HSP_QUESTIONNAIRE -> sharedViewModel.currentAnswersHSP.add(Answer( "",Date().time, )) //TODO label and object - not "add", but "set" at specific position
-//            DEAL_WITH_HS_QUESTIONNAIRE -> sharedViewModel.currentAnswersDWHS.add(Answer())
-//        }
-        updateRatingFromSeekBar(newRating == 1)
-        _navBackToStartFrag.value = false
-        //check if this is the last question
-
-        if (currentQuestion.id == questions.size) {
-            //initiate change to result fragment
-            _isFinished.value = true
-        } else {
-            //initiate next button text change
-            _isLastQuestion.value = currentQuestion.id == questions.size - 1
-            //load next question
-            updateLiveData(currentQuestion.id)
+    fun handleNextButtonClick(newRating: Int) {
+        val map =
+            sharedViewModel.currentAnswers[questionnaires?.get(currentPosQuestionnaire + questionnaireIndexOffset)?.name]
+        if (map != null) {
+            map[currentQuestion.label] =
+                Answer(newRating.toString(), currentQuestion.label, Date().time)
         }
+
+        _navBackToStartFrag.value = false
+
+        if (questionsList.size == currentPosQuestionnaire + 1) {
+            if (questionsList[currentPosQuestionnaire].size == currentPosQuestion + 1) {
+                _isFinished.value = true
+            } else {
+                _isLastQuestion.value =
+                    questionsList[currentPosQuestionnaire].size == currentPosQuestion + 2
+            }
+            currentPosQuestion++
+        } else {
+            if (questionsList[currentPosQuestionnaire].size == currentPosQuestion + 1) {
+                currentPosQuestionnaire++
+                sharedViewModel.currentQuestionnaireName =
+                    questionnaires?.get(currentPosQuestionnaire + questionnaireIndexOffset)?.name
+                        ?: ""
+                currentPosQuestion = 0
+            } else {
+                currentPosQuestion++
+            }
+        }
+
+        updateLiveData()
     }
 
     /**
      * This method changes the [currentQuestion] and updates all question-related [LiveData] to
      * the corresponding data of the current question. This LiveData is observed by UI elements.
      * A change of the seekBar is triggered to update it on the changed LiveData.
-     * @param nextQuestionIndex the index of the question that becomes [currentQuestion]
      * */
-    private fun updateLiveData(nextQuestionIndex: Int) {
+    private fun updateLiveData() {
         //catches if fun is called with out of bound index (should never happen)
-        if (nextQuestionIndex >= questions.size || nextQuestionIndex < 0) {
+        if (questionsList.size <= currentPosQuestionnaire || questionsList[currentPosQuestionnaire].size <= currentPosQuestion) {
             Timber.e(
-                "updateLiveData is called with invalid index! " +
-                        "Index will be changed index of last question!"
+                "Question index is somehow invalid! " +
+                        "Index will be changed to index of last question!"
             )
-            updateLiveData(questions.size - 1)
+            currentPosQuestionnaire = questionsList.size - 1
+            currentPosQuestion = questionsList[currentPosQuestionnaire].size - 1
             return
         }
-        currentQuestion = questions[nextQuestionIndex]
+        currentQuestion = questionsList[currentPosQuestionnaire][currentPosQuestion]
 
         //LiveData
-        _questionCount.value = "${currentQuestion.id} / ${questions.size}"
-        _currentQuestionContent.value = currentQuestion.question
-        Timber.i("Current Question: $currentQuestion")
+        _questionCount.value =
+            "${currentPosQuestion + 1 + sumOfQuestions(true)} / ${sumOfQuestions(false)}"
+        _currentQuestionContent.value = currentQuestion.translations[0].question
+
+        val sizeDiff = (questionnaires?.size ?: 0) - questionsList.size
+        val element =
+            sharedViewModel.questionnaires?.get(currentPosQuestionnaire + sizeDiff)?.questions?.get(
+                0
+            )
+        if (element != null && element.elementtype == Constants.ELEMENT_TYPE_HEADLINE) {
+            _headline.value = (element as Headlines).translations[0].headline
+        }
+
+        _questionRating.value = ""
+        val map =
+            sharedViewModel.currentAnswers[questionnaires?.get(currentPosQuestionnaire + sizeDiff)?.name]
+        if (map != null) {
+            val answer = map[currentQuestion.label]
+            if (answer != null) {
+                _questionRating.value = answer.value
+            }
+        }
     }
 
-    /**
-     * This method updates the rating of the [currentQuestion] and updates the corresponding
-     * database entry.
-     * @param rating the new rating
-     * */
-    private fun updateRatingFromSeekBar(rating: Boolean) {
-        currentQuestion.rating = rating
-        databaseHandler.updateDatabase(currentQuestion)
+    private fun sumOfQuestions(toExclude: Boolean): Int {
+        var sum = 0
+        for (i in questionsList.indices) {
+            if (toExclude && i >= currentPosQuestionnaire) {
+                return sum
+            }
+            sum += questionsList[i].size
+        }
+        return sum
     }
 
-    fun navigateToResultFragment(){
+    fun navigateToResultFragment() {
         _navToResultFrag.value = true
         _navToResultFrag.value = false
+    }
+
+    private fun getQuestionsList(): List<List<Question>> {
+        val questionsOuterList =
+            mutableListOf<MutableList<Question>>()
+        questionnaires?.forEach { questionnaire ->
+            if (questionnaire.name != Constants.BASELINE_QUESTIONNAIRE) {
+                val questionsInnerList =
+                    mutableListOf<Question>()
+                questionnaire.questions.forEach { element ->
+                    if (element.elementtype == Constants.ELEMENT_TYPE_QUESTION)
+                        if ((element as Question).label != Constants.LOCATION_QUESTION_LABEL)
+                            questionsInnerList.add(element)
+                }
+                questionsOuterList.add(questionsInnerList)
+            }
+        }
+        return questionsOuterList
     }
 
     override fun onCleared() {

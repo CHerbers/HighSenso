@@ -7,9 +7,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import name.herbers.android.highsenso.CoroutineTestRule
 import name.herbers.android.highsenso.database.DatabaseHandler
-import name.herbers.android.highsenso.database.Question
-import name.herbers.android.highsenso.database.QuestionDatabase
-import name.herbers.android.highsenso.database.QuestionDatabaseDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

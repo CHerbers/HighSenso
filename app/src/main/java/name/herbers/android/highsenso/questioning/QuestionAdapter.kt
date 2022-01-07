@@ -12,7 +12,10 @@ import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.Question
-import name.herbers.android.highsenso.databinding.*
+import name.herbers.android.highsenso.databinding.ItemViewDatePickerBinding
+import name.herbers.android.highsenso.databinding.ItemViewEditTextNumberBinding
+import name.herbers.android.highsenso.databinding.ItemViewEditTextStringBinding
+import name.herbers.android.highsenso.databinding.ItemViewSpinnerBinding
 import java.util.*
 
 /**
@@ -46,10 +49,10 @@ class QuestionAdapter(
         val givenAnswers = getGivenAnswers()
 
         when (holder) {
-            is SpinnerViewHolder -> holder.bind(holder, item, viewModel)
-            is EditTextStringViewHolder -> holder.bind(holder, item, viewModel, givenAnswers)
-            is DatePickerViewHolder -> holder.bind(holder, item, viewModel, givenAnswers)
-            is EditTextNumberViewHolder -> holder.bind(holder, item, viewModel, givenAnswers)
+            is SpinnerViewHolder -> holder.bind(item, viewModel)
+            is EditTextStringViewHolder -> holder.bind(item, viewModel, givenAnswers)
+            is DatePickerViewHolder -> holder.bind(item, givenAnswers)
+            is EditTextNumberViewHolder -> holder.bind(item, viewModel, givenAnswers)
         }
     }
 
@@ -86,7 +89,6 @@ class QuestionAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            holder: RecyclerView.ViewHolder,
             item: Question,
             viewModel: BaselineQuestioningViewModel
         ) {
@@ -129,7 +131,6 @@ class QuestionAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            holder: RecyclerView.ViewHolder,
             item: Question,
             viewModel: BaselineQuestioningViewModel,
             givenAnswers: MutableMap<String, Answer>,
@@ -160,7 +161,6 @@ class QuestionAdapter(
     class EditTextNumberViewHolder(val binding: ItemViewEditTextNumberBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            holder: RecyclerView.ViewHolder,
             item: Question,
             viewModel: BaselineQuestioningViewModel,
             givenAnswers: MutableMap<String, Answer>,
@@ -193,9 +193,7 @@ class QuestionAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            holder: RecyclerView.ViewHolder,
             item: Question,
-            viewModel: BaselineQuestioningViewModel,
             givenAnswers: MutableMap<String, Answer>,
         ) {
             binding.question = item
@@ -223,7 +221,7 @@ class QuestionAdapter(
     }
 
     /**
-     * This is a [TextWatcher] used by the [EditText]s in the [ViewHolder]s of this [QuestionAdapter].
+     * This is a [TextWatcher] used by the [EditText]s in the [RecyclerView.ViewHolder]s of this [QuestionAdapter].
      *
      * This Listener shows an error message if the input was an invalid one, else saves the input in
      * the given [MutableMap].
@@ -237,9 +235,9 @@ class QuestionAdapter(
      * */
     class EditTextChangeListener(
         val viewModel: BaselineQuestioningViewModel,
-        val givenAnswers: MutableMap<String, Answer>,
+        private val givenAnswers: MutableMap<String, Answer>,
         val editText: EditText,
-        val contentType: String,
+        private val contentType: String,
         val question: Question
     ) : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

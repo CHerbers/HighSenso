@@ -70,7 +70,7 @@
         ob der aktuelle Standort einen Anfluss auf das Ergebnis hat.
     </string>
     <string name="location_dialog_option_home">Zuhause</string>
-    <string name="location_dialog_option_work">Auf Arbeit</string>
+    <string name="location_dialog_option_work">Bei der Arbeit</string>
     <string name="location_dialog_option_outside">Draußen/Unterwegs</string>
     <string name="location_dialog_option_else">Anderes/Keine Angabe</string>
 

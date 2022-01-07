@@ -5,16 +5,20 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.google.android.material.slider.Slider
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
-import name.herbers.android.highsenso.database.Question
+import name.herbers.android.highsenso.data.Questionnaire
 import name.herbers.android.highsenso.databinding.FragmentQuestioningBinding
 import name.herbers.android.highsenso.dialogs.EndQuestioningDialog
 import name.herbers.android.highsenso.result.ResultFragment
@@ -53,9 +57,12 @@ class QuestioningFragment : Fragment() {
         val databaseHandler = sharedViewModel.databaseHandler
 
         //checks if this Fragment was called from PersonalQuestioningFragment
-        val startingQuestionPos =
-            if (sharedViewModel.backFromResult) databaseHandler.questions.size - 1
-            else 0
+        var startingQuestionPos = 0
+        var startingQuestionnairePos = 0
+        if (sharedViewModel.backFromResult) {
+            startingQuestionPos = databaseHandler.questionnaires.last().questions.size - 1
+            startingQuestionnairePos = sumOfQuestionnaires(databaseHandler.questionnaires) - 1
+        }
 
         //reset backFromPersonalQuestioning
         sharedViewModel.backFromResult = false
@@ -63,7 +70,11 @@ class QuestioningFragment : Fragment() {
 
         //init QuestioningViewModel
         val viewModelFactory =
-            QuestioningViewModelFactory(databaseHandler, startingQuestionPos)
+            QuestioningViewModelFactory(
+                sharedViewModel,
+                startingQuestionPos,
+                startingQuestionnairePos
+            )
         viewModel = ViewModelProvider(this, viewModelFactory).get(QuestioningViewModel::class.java)
         binding.questioningViewModel = viewModel
         binding.lifecycleOwner = this
@@ -81,10 +92,9 @@ class QuestioningFragment : Fragment() {
         addLiveDataObservers(sharedViewModel)
 
         //set Listeners
-        setListeners(sharedViewModel)
+        setListeners()
 
         enableAnswerButton(false)
-        //TODO if question is already rated -> check specific radioButton -> enableAnswerButton(true)
 
         Timber.i("QuestionFragment created!")
         return binding.root
@@ -107,8 +117,11 @@ class QuestioningFragment : Fragment() {
 
     /**
      * Calls functions that add Observers to the LiveData.
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding functionality for the added observers
      * */
     private fun addLiveDataObservers(sharedViewModel: SharedViewModel) {
+        addQuestionRatingObserver()
         addBackToStartObserver(sharedViewModel)
         addIsFinishedObserver()
         addNavToResultFragmentObserver(sharedViewModel)
@@ -116,9 +129,34 @@ class QuestioningFragment : Fragment() {
     }
 
     /**
-     * Observed isFirstQuestion is true if the shown question is the first question.
-     * If isFirstQuestion is false after backButton is clicked, the Fragment changes
+     * Observed [QuestioningViewModel.questionRating] changes if the question changes.
+     * Depending on the rating the [LiveData] is changed to, ether one of the [RadioButton]s gets
+     * checked or all checks get cleared.
+     * */
+    private fun addQuestionRatingObserver() {
+        viewModel.questionRating.observe(viewLifecycleOwner, { rating ->
+            val radioGroup = binding.questioningRadioGroup
+            val nextButton = binding.questionNextButton
+            when (rating) {
+                "0" -> {
+                    radioGroup.check(binding.questioningNegativeRadioButton.id)
+                    nextButton.isEnabled = true
+                }
+                "1" -> {
+                    radioGroup.check(binding.questioningPositiveRadioButton.id)
+                    nextButton.isEnabled = true
+                }
+                else -> radioGroup.clearCheck()
+            }
+        })
+    }
+
+    /**
+     * Observed [QuestioningViewModel.navBackToStartFrag] is true if the shown question is the first
+     * question. If it is false after backButton is clicked, the Fragment changes
      * to [StartFragment].
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding functionality for this observer
      * */
     private fun addBackToStartObserver(sharedViewModel: SharedViewModel) {
         viewModel.navBackToStartFrag.observe(viewLifecycleOwner, { isFirstQuestion ->
@@ -131,8 +169,22 @@ class QuestioningFragment : Fragment() {
     }
 
     /**
-     * Observed isFinished becomes true after the nextButton is clicked while the last question
-     * was shown.
+     * Counts the sum of given [Questionnaire]s that are not [Constants.BASELINE_QUESTIONNAIRE].
+     *
+     * @param questionnaires the [List] of [Questionnaire]s that shall be counted
+     * @return the number of relevant [Questionnaire]s
+     * */
+    private fun sumOfQuestionnaires(questionnaires: List<Questionnaire>): Int {
+        var sum = 0
+        questionnaires.forEach { questionnaire ->
+            if (questionnaire.name != Constants.BASELINE_QUESTIONNAIRE) sum++
+        }
+        return sum
+    }
+
+    /**
+     * Observed [QuestioningViewModel.isFinished] becomes true after the nextButton is clicked
+     * while the last question was shown.
      * If isFinished is true, the [EndQuestioningDialog] is shown.
      * */
     private fun addIsFinishedObserver() {
@@ -150,6 +202,8 @@ class QuestioningFragment : Fragment() {
      * Observed NavBackToResultFragment becomes true after the [EndQuestioningDialog] was answered
      * positive.
      * If NavBackToResultFragment is true, Fragment changes to [ResultFragment]
+     *
+     * @param sharedViewModel is the [SharedViewModel] holding functionality for this observer
      * */
     private fun addNavToResultFragmentObserver(sharedViewModel: SharedViewModel) {
         viewModel.navToResultFrag.observe(viewLifecycleOwner, { toNav ->
@@ -179,8 +233,8 @@ class QuestioningFragment : Fragment() {
     /**
      * Calls functions that add Listeners to the backButton, nextButton and seekBar.
      * */
-    private fun setListeners(sharedViewModel: SharedViewModel) {
-        addAnswerButtonListener(sharedViewModel)
+    private fun setListeners() {
+        addAnswerButtonListener()
         addRadioButtonListener(binding.questioningPositiveRadioButton)
         addRadioButtonListener(binding.questioningNegativeRadioButton)
     }
@@ -189,19 +243,23 @@ class QuestioningFragment : Fragment() {
      * Adds a Click Listener to the nextButton, which progresses to next [Question] or
      * to [ResultFragment].
      * */
-    private fun addAnswerButtonListener(sharedViewModel: SharedViewModel) {
+    private fun addAnswerButtonListener() {
         binding.questionNextButton.setOnClickListener {
             Timber.i("NextButton was clicked!")
-            viewModel.handleNextButtonClick(
-                if (binding.questioningPositiveRadioButton.isChecked) 1 else 0,
-                sharedViewModel
-            )
             //reset checked status on both radioButtons
-            binding.questioningRadioGroup.clearCheck()
             enableAnswerButton(false)
+            viewModel.handleNextButtonClick(
+                if (binding.questioningPositiveRadioButton.isChecked) 1 else 0
+            )
         }
     }
 
+    /**
+     * This function enables or disables the next button and changes its background color, depending
+     * on the given input.
+     *
+     * @param toEnable enables [Button] if true, disables it otherwise
+     * */
     private fun enableAnswerButton(toEnable: Boolean) {
         binding.questionNextButton.isEnabled = toEnable
         val backgroundColor =
@@ -210,6 +268,12 @@ class QuestioningFragment : Fragment() {
         binding.questionNextButton.setBackgroundColor(requireContext().getColor(backgroundColor))
     }
 
+    /**
+     * Sets a [Slider.OnChangeListener] to a [RadioButton].
+     * If the RadioButton gets checked, a function to enable the answerButton is called.
+     *
+     * @param radioButton the [RadioButton] the listener is set on
+     * */
     private fun addRadioButtonListener(radioButton: RadioButton) {
         radioButton.setOnCheckedChangeListener { _, isChecked ->
             Timber.i("RadioButton was clicked!")
