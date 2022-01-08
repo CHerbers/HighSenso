@@ -3,71 +3,15 @@ package name.herbers.android.highsenso.database
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.Client
-import name.herbers.android.highsenso.data.Element
-import name.herbers.android.highsenso.data.SensorData
 
 
 /**
- * Converter to convert [Element]s for [HighSensoDatabase].
+ * Converter to convert fields for [HighSensoDatabase].
  *
  *@project HighSenso
  *@author Herbers
  */
-class ElementsConverter {
-    @TypeConverter
-    fun toQuestionList(json: String): List<Element> {
-        val type = object : TypeToken<List<Element>>() {}.type
-        return Gson().fromJson(json, type)
-    }
-
-    @TypeConverter
-    fun toJson(questions: List<Element>): String {
-        val type = object : TypeToken<List<Element>>() {}.type
-        return Gson().toJson(questions, type)
-    }
-}
-
-/**
- * Converter to convert [Answer]s for [HighSensoDatabase].
- *
- *@project HighSenso
- *@author Herbers
- */
-class AnswerConverter {
-    private val type = object : TypeToken<List<Answer>>() {}.type
-
-    @TypeConverter
-    fun toAnswer(json: String): List<Answer> {
-        return Gson().fromJson(json, type)
-    }
-
-    @TypeConverter
-    fun toJson(answers: List<Answer>): String {
-        return Gson().toJson(answers, type)
-    }
-}
-
-/**
- * Converter to convert [SensorData]s for [HighSensoDatabase].
- *
- *@project HighSenso
- *@author Herbers
- */
-class SensorDataConverter {
-    private val type = object : TypeToken<List<SensorData>>() {}.type
-
-    @TypeConverter
-    fun toSensorData(json: String): List<SensorData> {
-        return Gson().fromJson(json, type)
-    }
-
-    @TypeConverter
-    fun toJson(sensorData: List<SensorData>): String {
-        return Gson().toJson(sensorData, type)
-    }
-}
 
 /**
  * Converter to convert [Client]s for [HighSensoDatabase].

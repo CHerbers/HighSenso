@@ -151,7 +151,7 @@ class StartFragment : Fragment() {
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
-                if (sharedViewModel.questionnaires.isNullOrEmpty()) { //TODO fix
+                if (sharedViewModel.questionnaires.isNullOrEmpty()) {
                     /* this is true if no questionnaires could be loaded to this point.
                     * Therefore questioning cannot be started and a message is shown instead */
                     NoQuestionnairesAvailableDialog().show(

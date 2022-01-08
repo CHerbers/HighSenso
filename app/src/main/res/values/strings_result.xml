@@ -129,7 +129,10 @@
     </string>
     <!--    message if user seems to be uncomfortable at their workplace-->
     <string name="workplace_message">
-        Unwohl am Arbeitsplatz
+         Die Arbeit spielt eine wichtige Rolle in den Leben der meisten Menschen. Umso wichtiger,
+        dass man sich dort so wohl wie möglich fühlt. Versuche Dir öfter einmal kurze Pausen zu
+        nehmen und dich bestenfalls an ruhigen Orten etwas von Reizen zu erholen. Kopfhörer, Ohrspöpsel
+        oder schon die Wahl des Sitzplatzes kann unangenehme Lautstärke reduzieren.
     </string>
     <!--    list of links to hsp related web sites-->
     <string name="list_of_hsp_links">

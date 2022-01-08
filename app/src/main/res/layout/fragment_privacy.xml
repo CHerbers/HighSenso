@@ -32,7 +32,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/standard_textView_layout_margin"
-                android:text="@string/privacy_dialog_sensor_data_setting_checkBox" />
+                android:text="@string/privacy_fragment_sensor_data_setting_checkBox"
+                android:textSize="@dimen/privacy_fragment_check_box_textSize" />
         </LinearLayout>
 
         <ScrollView

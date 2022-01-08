@@ -8,7 +8,8 @@ package name.herbers.android.highsenso
 object Constants {
 
     const val OFFLINE_MODE = true
-    const val FIRST_START = false
+    const val FIRST_START = true
+
     /* Questionnaire */
     const val BASELINE_QUESTIONNAIRE = "Baseline"
     const val BASELINE_QUESTIONNAIRE_ID = 1
@@ -31,8 +32,7 @@ object Constants {
     const val QUESTION_LABEL_WORKSPACE_STIMULUS = "workspace_stimulus"
 
     /* Communication */
-    const val TOKEN_DURABILITY_TIME =
-        10000L //TODO adjust durability to actual token durability
+    const val TOKEN_DURABILITY_TIME = 10000L //TODO adjust durability to actual token durability
 
     /* Data */
     const val ELEMENTS = "elements"
@@ -45,14 +45,16 @@ object Constants {
     const val QUESTION_TYPE_KNOB = "Knob"
     const val QUESTION_TYPE_TEXT_STRING = "TextString"
 
+    const val QUESTION_NO_ANSWER_DEFAULT = 9
+
 
     /* Sensor */
     const val AUDIO_SENSOR_MEASURING_DURATION = 8
     const val SENSOR_MEASURING_INTERVAL_NANOS =
         5000000000L    //Interval between two sensor measurements in nanoseconds
 
-    /* URI */
-    const val SERVER_URL = "https://www.google.com" //TODO insert right URL
+    /* URI */ //TODO insert right URIs
+    const val SERVER_URL = "https://www.google.com"
     const val QUESTIONNAIRES_URI = "studies/1/questionnaires/"
     const val ANSWER_SHEETS_URI = "/answersheets"
     const val TOKEN_URI = "?token="

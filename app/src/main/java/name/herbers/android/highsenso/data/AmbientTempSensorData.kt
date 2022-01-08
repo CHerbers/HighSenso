@@ -8,7 +8,7 @@ package name.herbers.android.highsenso.data
  *@author Herbers
  */
 data class AmbientTempSensorData(
-    override val collectedAt: Long,
+    override val collected_at: Long,
     val degreesCelsius: Float,
     override val name: String = "ambientTemperatureSensorData"
 ): SensorData()

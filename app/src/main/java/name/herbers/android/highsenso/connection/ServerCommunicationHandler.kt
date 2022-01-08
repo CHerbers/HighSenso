@@ -28,32 +28,20 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     /* data string fields */
     //general
     private val nameField = context.getString(R.string.name_field)
-    private val valueField = context.getString(R.string.value_field)
     private val collectedAtField = context.getString(R.string.collected_at_field)
-    private val labelField = context.getString(R.string.label_field)
     private val idField = context.getString(R.string.id_field)
 
     //question
-    private val requiredField = context.getString(R.string.required_field)
-    private val variableField = context.getString(R.string.variable_field)
     private val localeField = context.getString(R.string.locale_field)
     private val answerField = context.getString(R.string.answers_field)
     private val sensorDataField = context.getString(R.string.sensor_data_field)
     private val clientField = context.getString(R.string.client_field)
-    private val questionTypeField = context.getString(R.string.question_type_field)
     private val questionField = context.getString(R.string.questions_field)
 
     //sensorData
     private val ambientAudioSDField = context.getString(R.string.ambient_audio_sd_field)
     private val ambientTempSDField = context.getString(R.string.ambient_temp_sd_field)
     private val ambientLightSDField = context.getString(R.string.ambient_light_sd_field)
-    private val amplitudeField = context.getString(R.string.amplitude_field)
-    private val luxField = context.getString(R.string.lux_field)
-    private val degreesField = context.getString(R.string.degrees_field)
-
-    //client
-    private val deviceField = context.getString(R.string.degrees_field)
-    private val osField = context.getString(R.string.os_field)
 
     /* header fields */
     private val contentTypeHeader = context.getString(R.string.content_type_header)
@@ -62,11 +50,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     private val acceptLanguageDE = context.getString(R.string.accept_language_de)
 
     companion object {
-        // URL constants
-        private const val QUESTIONNAIRES_URL = "studies/1/questionnaires/"
-        private const val ANSWER_SHEETS_URL = "/answersheets"
-        private const val TOKEN_URL = "?token="
-
         //Timber logging messages constants
         private const val RECEIVED_RESPONSE = "Received response for "
         private const val RECEIVED_ERROR = "Received error for "
@@ -146,34 +129,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
     }
 
-//    fun sendLoginRequestForAnswerSheets(username: String, password: String, sharedViewModel: SharedViewModel) {
-//        val url = serverURL
-//        val loginRequest = LoginRequest(username, password)
-//        val request = RequestData(Data("users", loginRequest))
-//        val stringRequest: StringRequest = object : StringRequest(
-//            Method.POST,
-//            url,
-//            { response ->
-//                Timber.i(RECEIVED_RESPONSE + "loginRequest: $response")
-//                sharedViewModel.sendAnswerSheets(response, username, password)
-//            },
-//            { error ->
-//                Timber.i(RECEIVED_ERROR + "loginRequest: $error")
-//            }) {
-//            override fun getBody(): ByteArray {
-//                val bodyJSON = gson.toJson(request)
-//                Timber.i("Login request sent: $bodyJSON")
-//                return bodyJSON.toString().toByteArray()
-//            }
-//
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                return addHeader(contentHeader = true, languageHeader = true)
-//            }
-//        }
-//        RequestSingleton.getInstance(context).addToRequestQueue(stringRequest)
-//    }
-
     fun sendAnswerSheet(token: String, answerSheet: AnswerSheet, sharedViewModel: SharedViewModel) {
         val url =
             Constants.SERVER_URL + Constants.QUESTIONNAIRES_URI + answerSheet.id + Constants.ANSWER_SHEETS_URI + Constants.TOKEN_URI + token //TODO check URL
@@ -183,6 +138,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             url,
             { response ->
                 Timber.i(RECEIVED_RESPONSE + "sendAnswerSheet (POST): $response")
+                getAllAnswerSheets(token, sharedViewModel)
                 sharedViewModel.setLocationPreferences()
             },
             { error ->
@@ -262,81 +218,9 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
         RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
     }
 
-    //TODO test his gson stuff
-//    fun getAllQuestionnaires(token: String, sharedViewModel: SharedViewModel) {
-//        val url = serverURL //TODO url
-//        val questionnaires = mutableListOf<Questionnaire>()
-//        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
-//            Method.GET,
-//            url,
-//            null,
-//            { response ->
-//                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
-//                try {
-//                    val dataJSON: JSONObject = response.getJSONObject("data")
-//                    val attributes = dataJSON.getJSONArray("attributes")
-//                    for (i in 0 until attributes.length()) {
-//                        questionnaires.add(
-//                            gson.fromJson(
-//                                attributes[i].toString(),
-//                                Questionnaire::class.java
-//                            )
-//                        )
-//                    }
-//                    sharedViewModel.updateQuestionnaires(questionnaires)
-//                    Timber.i(SUCCESSFULLY_PARSED)
-//                } catch (e: JSONException) {
-//                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
-//                }
-//            },
-//            { error ->
-//                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
-//            }) {
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                return addHeader(contentHeader = false, languageHeader = true)
-//            }
-//        }
-//        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
-//    }
-//
-//    //TODO test this gson stuff too
-//    fun getAllQuestionnairesALT2(token: String, sharedViewModel: SharedViewModel) {
-//        val url = serverURL //TODO url
-//        val questionnaires: List<Questionnaire>
-//        val jsonObjectRequest: StringRequest = object : StringRequest(
-//            Method.GET,
-//            url,
-//            { response ->
-//                Timber.i(RECEIVED_RESPONSE + "getAllQuestionnaires: $response")
-//                try {
-//                    val data = gson.fromJson(response, Data::class.java)
-//                    if (data.attributes is List<*>) {
-//                        if (data.attributes is Questionnaire) {
-//                            sharedViewModel.updateQuestionnaires(data.attributes as List<Questionnaire>)
-//                        }
-//                    }
-////                    val dataJSON: JSONObject = response.getJSONObject("data")
-////                    sharedViewModel.questionnaires =
-////                        getQuestionnaireListFromJSONArray(dataJSON.getJSONArray("attributes"))
-//                    Timber.i(SUCCESSFULLY_PARSED)
-//                } catch (e: JSONException) {
-//                    Timber.i(JSON_EXCEPTION + "Questionnaires! \n" + e.printStackTrace())
-//                }
-//            },
-//            { error ->
-//                Timber.i(RECEIVED_ERROR + "getAllQuestionnaires: $error")
-//            }) {
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                return addHeader(contentHeader = false, languageHeader = true)
-//            }
-//        }
-//        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
-//    }
-
     fun getAllAnswerSheets(token: String, sharedViewModel: SharedViewModel) {
-        val url = Constants.SERVER_URL + Constants.QUESTIONNAIRES_URI + Constants.TOKEN_URI + token //TODO check URL
+        val url =
+            Constants.SERVER_URL + Constants.QUESTIONNAIRES_URI + Constants.TOKEN_URI + token //TODO check URL
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             url,
@@ -345,17 +229,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
                 Timber.i(RECEIVED_RESPONSE + "getAllAnswerSheets: $response")
                 try {
                     val dataJSON: JSONObject = response.getJSONObject("data")
-//                    val answerSheets = mutableListOf<AnswerSheet>()
-//                    val attributes = dataJSON.getJSONArray("attributes")
-//                    for (i in 0 until attributes.length()) {
-//                        answerSheets.add(
-//                            gson.fromJson(
-//                                attributes[i].toString(),
-//                                AnswerSheet::class.java
-//                            )
-//                        )
-//                    }
-//                    sharedViewModel.updateAnswerSheets(answerSheets)
                     sharedViewModel.updateAnswerSheets(
                         getAnswerSheetListFromJSONArray(dataJSON.getJSONArray("attributes"))
                     )
@@ -377,7 +250,7 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
     }
 
     fun sendLogoutRequest(token: String) {
-        val url = serverURL + "" + TOKEN_URL + token //TODO complete URL
+        val url = serverURL + "" + Constants.TOKEN_URI + token //TODO complete URL
         val stringRequest: StringRequest = object : StringRequest(
             Method.DELETE,
             url,
@@ -444,12 +317,18 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             val answerSheet = array.getJSONObject(i)
             answerSheetList.add(
                 AnswerSheet(
-                    answerSheet.getInt("id"),
+                    answerSheet.getInt(idField),
                     answerSheet.getLong(collectedAtField),
                     getAnswersListFromJSONArray(answerSheet.getJSONArray(answerField)),
-                    getSensorDataListFromJSONArray(answerSheet.getJSONArray(sensorDataField)),
-//                    getClientFromJSONObject(answerSheet.getJSONObject(clientField)),
-                    gson.fromJson(answerSheet.getJSONObject(clientField).toString(), Client::class.java),
+                    try {
+                        getSensorDataListFromJSONArray(answerSheet.getJSONArray(sensorDataField))
+                    } catch (e: JSONException) {
+                        null
+                    },
+                    gson.fromJson(
+                        answerSheet.getJSONObject(clientField).toString(),
+                        Client::class.java
+                    ),
                     answerSheet.getString(localeField)
                 )
             )
@@ -464,11 +343,6 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             val answer = array.getJSONObject(i)
             answerList.add(
                 gson.fromJson(answer.toString(), Answer::class.java)
-//                Answer(
-//                    answer.getString(valueField),
-//                    answer.getString(labelField),
-//                    answer.getLong(collectedAtField)
-//                )
             )
         }
         return answerList
@@ -482,35 +356,15 @@ class ServerCommunicationHandler(private val serverURL: String, val context: Con
             when (sensorData.getString(nameField)) {
                 ambientAudioSDField -> sensorDataList.add(
                     gson.fromJson(sensorData.toString(), AmbientAudioSensorData::class.java)
-//                    AmbientAudioSensorData(
-//                        sensorData.getLong(collectedAtField),
-//                        sensorData.getDouble(amplitudeField).toFloat()
-//                    )
                 )
                 ambientLightSDField -> sensorDataList.add(
                     gson.fromJson(sensorData.toString(), AmbientLightSensorData::class.java)
-//                    AmbientLightSensorData(
-//                        sensorData.getLong(collectedAtField),
-//                        sensorData.getDouble(luxField).toFloat()
-//                    )
                 )
                 ambientTempSDField -> sensorDataList.add(
                     gson.fromJson(sensorData.toString(), AmbientTempSensorData::class.java)
-//                    AmbientTempSensorData(
-//                        sensorData.getLong(collectedAtField),
-//                        sensorData.getDouble(degreesField).toFloat()
-//                    )
                 )
             }
         }
         return sensorDataList
     }
-
-//    private fun getClientFromJSONObject(jsonObject: JSONObject): Client {
-//        return Client(
-//            jsonObject.getString(nameField),
-//            jsonObject.getString(deviceField),
-//            jsonObject.getString(osField)
-//        )
-//    }
 }

@@ -5,13 +5,22 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.Question
 
 /**
+ * This holds [BindingAdapter]s used by elements of the [BaselineQuestioningFragment]s
+ * [QuestionAdapter].
  *
  *@project HighSenso
  *@author Herbers
  */
+
+/**
+ * This is the [BindingAdapter] for all [TextView]s that represent question titles.
+ *
+ * @param question the [Question] that holds the shown question title
+ * */
 @BindingAdapter("questionTitle")
 fun TextView.setQuestionTitle(question: Question?) {
     question?.let {
@@ -19,6 +28,11 @@ fun TextView.setQuestionTitle(question: Question?) {
     }
 }
 
+/**
+ * This is the [BindingAdapter] for all [Spinner]s
+ *
+ * @param question the [Question] which [Answer]s will fill the [Spinner]
+ * */
 @BindingAdapter("spinnerContent")
 fun Spinner.setUpContent(question: Question?) {
     question?.let {

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
@@ -74,7 +75,7 @@ class LoginDialogFragment(
         })
 
         sharedViewModel.loginResponse.observe(this, { success ->
-            if (success){
+            if (success) {
                 Toast.makeText(
                     context,
                     successfulLogin,
@@ -121,6 +122,9 @@ class LoginDialogFragment(
 
         binding.loginDialogLoginButton.setOnClickListener {
             Timber.i("loginButton was clicked!")
+
+            if (Constants.OFFLINE_MODE) sharedViewModel.loginResponseReceived("", "", "", null)
+
             val username = binding.loginDialogUsernameEditText.text.toString()
             val password = binding.loginDialogPasswordEditText.text.toString()
             if ((loginViewModel.inputUsernameValidation(username) ||

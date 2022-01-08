@@ -46,21 +46,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.135" />
 
-
-        <TextView
-            android:id="@+id/questionContent_textView"
-            style="@style/questioning_textView"
-            android:layout_marginStart="@dimen/standard_textView_layout_margin"
-            android:layout_marginTop="@dimen/start_textView_spacing"
-            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
-            android:padding="@dimen/question_textView_layout_padding"
-            android:text="@{questioningViewModel.currentQuestionContent}"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ScrollView
+            android:id="@+id/questioning_scroll_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/questioning_radioGroup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/result_hsp_info_textView"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/questionContent_textView"
+                    style="@style/questioning_textView"
+                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
+                    android:layout_marginTop="@dimen/start_textView_spacing"
+                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
+                    android:padding="@dimen/question_textView_layout_padding"
+                    android:text="@{questioningViewModel.currentQuestionContent}" />
+            </LinearLayout>
+        </ScrollView>
 
         <RadioGroup
             android:id="@+id/questioning_radioGroup"
@@ -77,7 +87,7 @@
             <RadioButton
                 android:id="@+id/questioning_positive_radioButton"
                 style="@style/questioning_fragment_radioButtons"
-                android:layout_width="160dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layoutDirection="rtl"
@@ -87,7 +97,7 @@
             <RadioButton
                 android:id="@+id/questioning_negative_radioButton"
                 style="@style/questioning_fragment_radioButtons"
-                android:layout_width="160dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/decline_button"

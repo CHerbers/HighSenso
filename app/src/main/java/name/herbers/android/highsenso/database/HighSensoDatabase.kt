@@ -29,13 +29,12 @@ import java.io.File
  * @author Christoph Herbers
  * @since 1.0
  * */
-@Database(entities = [Questionnaire::class, AnswerSheet::class], version = 5, exportSchema = false)
-@TypeConverters(
-    ElementsConverter::class,
-    AnswerConverter::class,
-    SensorDataConverter::class,
-    ClientConverter::class
+@Database(
+    entities = [DatabaseQuestionnaire::class, DatabaseAnswerSheet::class],
+    version = 9,
+    exportSchema = false
 )
+@TypeConverters(ClientConverter::class)
 abstract class HighSensoDatabase : RoomDatabase() {
 
     abstract val highSensoDatabaseDao: HighSensoDatabaseDao

@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val serverCommunicationHandler =
             ServerCommunicationHandler(Constants.SERVER_URL, this)
 
-        //init sharedViewModel
+        /* init sharedViewModel */
         val sharedViewModelFactory =
             SharedViewModelFactory(
                 databaseHandler,
@@ -107,11 +107,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 )
             }
             else -> {
-                sharedViewModel.changeLoginStatus(Constants.OFFLINE_MODE)
+                sharedViewModel.changeLoginStatus(false)
+//                sharedViewModel.changeLoginStatus(Constants.OFFLINE_MODE)
             }
         }
 
-        //init ActivityResultLauncher for permission stuff
+        /* init ActivityResultLauncher for permission stuff */
         requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
                 if (isGranted) {
@@ -129,6 +130,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Timber.i("onCreate called!")
     }
 
+    /* Runnable for collection audio data periodically */
     private val gatherAudioPeriodically = object : Runnable {
         override fun run() {
             audioRecording()
@@ -137,11 +139,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    /**
+     * Starts the [Runnable] to periodically collect audi data.
+     * */
     private fun startGatherAudioPeriodically() {
         Timber.i("Starting repeating task to gather audio data!")
         gatherAudioPeriodically.run()
     }
 
+    /**
+     * Stops the collection of audio data.
+     * */
     private fun stopGatherAudioPeriodically() {
         Timber.i("Stopping repeating task to gather audio data!")
         repTaskHandler.removeCallbacks(gatherAudioPeriodically)
@@ -168,7 +176,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun audioRecording() {
         val permissionToRecord =
             ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
-        if (permissionToRecord == PackageManager.PERMISSION_GRANTED) {
+        if (permissionToRecord == PackageManager.PERMISSION_GRANTED && checkGatherSensorDataKey()) {
             Timber.i("Permission to record audio granted! Recorder will be started!")
             val ambientAudioRecorder = AmbientAudioRecorder()
             val recordedAudio =
@@ -188,7 +196,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 )
             }
         } else {
-            if (askPermission) {
+            if (askPermission && checkGatherSensorDataKey()) {
                 requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
                 askPermission = false
             }
@@ -268,6 +276,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    /* resumes gathering sensor data */
     override fun onResume() {
         super.onResume()
         if (sharedViewModel.gatherSensorData.value == true) startGatherAudioPeriodically()
@@ -275,6 +284,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Timber.i("onResume called!")
     }
 
+    /* stops gathering sensor data */
     override fun onPause() {
         super.onPause()
         stopGatherAudioPeriodically()
@@ -282,7 +292,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Timber.i("onPause called!")
     }
 
+    /**
+     * Returns the value of the  gather sensor data [SharedPreferences] key.
+     *
+     * @return the value of the gather sensor data [SharedPreferences] key
+     * */
+    private fun checkGatherSensorDataKey(): Boolean {
+        return preferences.getBoolean(
+            getString(R.string.privacy_setting_gather_sensor_data_key),
+            false
+        )
+    }
+
+    /* if gathering sensor data is allowed and an event occurs, the data gets saved to be sent in an AnswerSheet later on */
     override fun onSensorChanged(event: SensorEvent?) {
+        //check if gather sensor data key is true
+        if (!checkGatherSensorDataKey()) return
         //null check
         val eventTime = event?.timestamp ?: return
         when (event.sensor) {

@@ -4,7 +4,7 @@
     <string name="ambient_audio_sd_field">ambientAudioSensorData</string>
     <string name="ambient_temp_sd_field">ambientTemperatureSensorData</string>
     <string name="ambient_light_sd_field">ambientLightSensorData</string>
-    <string name="collected_at_field">collectedAt</string>
+    <string name="collected_at_field">collected_at</string>
     <string name="name_field">name</string>
     <string name="amplitude_field">amplitude</string>
     <string name="lux_field">lux</string>
@@ -15,7 +15,7 @@
     <string name="label_field">label</string>
     <string name="locale_field">locale</string>
     <string name="answers_field">answers</string>
-    <string name="sensor_data_field">sensorData</string>
+    <string name="sensor_data_field">sensor_data</string>
     <string name="client_field">client</string>
     <string name="question_type_field">questiontype</string>
     <string name="min_field">min</string>

@@ -8,7 +8,7 @@ package name.herbers.android.highsenso.data
  *@author Herbers
  */
 data class AmbientAudioSensorData(
-    override val collectedAt: Long,
+    override val collected_at: Long,
     val amplitude: Float,
     override val name: String = "ambientAudioSensorData"
 ): SensorData()

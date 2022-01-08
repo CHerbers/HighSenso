@@ -5,11 +5,10 @@
 
     ">]>
 <resources>
-
     <!--    menu content-->
     <!--    about fragment-->
     <string name="about_text">
-        Die HighSenso App wurde 2021 im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
+        Die HighSenso App wurde 2022 im Rahmen einer Bachelorarbeit an der Universität Ulm erstellt.
     </string>
     <string name="about_source">
         Die Fragen und Auswertung wurden aufgrund wissenschaftlicher Erkenntnisse formuliert.
@@ -70,7 +69,7 @@
         (2) die durchschnittliche Umgebungshelligkeit und
         (3) die durchschnittliche Umgebungslautstärke.
         Diese Daten werden benötigt, um den Umwelteinflüsse auf die Beantwortung von Fragebögen zu
-        berücktichtigen.
+        berücksichtigen.
         \n
         \n
         <b>3. Kontaktmöglichkeit</b>
@@ -83,7 +82,7 @@
         <b>4. Rechte der betroffenen Person</b>
         \n
         \n
-        (1) Es besteht jederzeit das Recht gegebe Datenschutzerklärungen zur Datenerhebung und
+        (1) Es besteht jederzeit das Recht gegebene Datenschutzerklärungen zur Datenerhebung und
         Datenverarbeitung zu widerrufen.
         \n
         (2) Es besteht das Recht
@@ -106,7 +105,7 @@
         Die Fragen und Auswertung wurden aufgrund wissenschaftlicher Erkenntnisse formuliert.
         \n
         \n
-        Die HighSenso App kann und möchte keine medizinische oder thereapeuthische Behandlung
+        Die HighSenso App kann und möchte keine medizinische oder therapeutische Behandlung
         ersetzen! Fühlst Du Dich unwohl mit Aspekten deiner Hochsensibilität oder auch unabhängig
         von einer möglichen Hochsensibilität, raten wir Dir zu einem Gespräch mit eine*r Therapeut*in!
     </string>
@@ -154,22 +153,12 @@
         Diese persönlichen Angaben werden in der Auswertung berücksichtigt und helfen uns bei der
         weiteren Forschung.
     </string>
-    <string name="gender">Geschlecht:</string>
-    <string name="age">Alter:</string>
-    <string name="age_editText_default">Wie Alt bist Du?</string>
-    <string name="marital_Status">Familienstand:</string>
-    <string name="children">Kinder:</string>
-    <string name="children_editText_default">Wie viele Kinder hast Du?</string>
-    <string name="educationalQualification">Höchster Bildungsabschluss:</string>
-    <string name="professionType">Berufsverhältnis:</string>
-    <string name="profession">Beruf:</string>
-    <string name="profession_editText_default">Welchen Beruf übst Du aus?</string>
 
     <!--    result fragment content-->
     <string name="result_title">Ergebnis</string>
     <string name="result_disclaimer">
         Diese App soll eine Hilfestellung für hochsensible Personen darstellen.
-        Sie ersetzt in keiner Weise eine medizinische oder therapeuthische Behandlung!
+        Sie ersetzt in keiner Weise eine medizinische oder therapeutische Behandlung!
         \n
         Solltest Du unter Aspekten Deiner Hochsensibilität leiden, bitten wir Dich, Dir ärztlichen
         oder psychologischen Rat zu suchen!

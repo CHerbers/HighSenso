@@ -10,5 +10,5 @@ package name.herbers.android.highsenso.data
 data class Answer(
     val value: String,
     val label: String? = null,
-    val collectedAt: Long? = null
+    val collected_at: Long? = null
 )

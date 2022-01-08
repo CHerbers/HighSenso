@@ -12,6 +12,8 @@ import name.herbers.android.highsenso.dispatcher.DispatcherProvider
 import timber.log.Timber
 
 /**
+ * This class records audio data via the devices microphone.
+ * It provides functions to get the average amplitude of recordings for a given time period.
  *
  *@project HighSenso
  *@author Herbers
@@ -29,7 +31,14 @@ class AmbientAudioRecorder(private val dispatchers: DispatcherProvider = Default
         Timber.i("AmbientAudioRecorder initialized!")
     }
 
-    fun getAverageAmbientAudio(recordTime: Int): Double{
+    /**
+     * Starts the asynchronous function that collects the audio data.
+     *
+     * @param recordTime the duration of audio recording
+     *
+     * @return the average amplitude of the recorded audio, or 0.0 in case of an error
+     * */
+    fun getAverageAmbientAudio(recordTime: Int): Double {
         Timber.i("getAverageAmbientAudio called!")
         var audio = 0.0
         uiScope.launch {
@@ -38,8 +47,15 @@ class AmbientAudioRecorder(private val dispatchers: DispatcherProvider = Default
         return audio
     }
 
-    private suspend fun startRecording(recordTime: Int): Double{
-        return withContext(dispatchers.io()){
+    /**
+     * Suspend function to record audio asynchronous.
+     *
+     * @param recordTime the duration of audio recording
+     *
+     * @return the average amplitude of the recorded audio, or 0.0 in case of an error
+     * */
+    private suspend fun startRecording(recordTime: Int): Double {
+        return withContext(dispatchers.io()) {
             recordingAmbientAudio(recordTime)
         }
     }
@@ -48,7 +64,9 @@ class AmbientAudioRecorder(private val dispatchers: DispatcherProvider = Default
      * This method records teh ambient audio and calculates the average amplitude based on the recorded
      * values.
      *
-     * @return the average ambient Audio recorded, or 0.0 in case of an error
+     * @param recordTime the time of a single recording
+     *
+     * @return the average ambient audio recorded, or 0.0 in case of an error
      * */
     private fun recordingAmbientAudio(recordTime: Int): Double {
         var averageAmbientAudio = 0.0
@@ -81,7 +99,6 @@ class AmbientAudioRecorder(private val dispatchers: DispatcherProvider = Default
             var numberOfValidRecords = 0
             for (recorded in recordedAudio) {
                 if (recorded > 0) {
-//                    Timber.i("Recorded Audio: $recorded.")
                     sumOfRecords += recorded
                     numberOfValidRecords++
                 }

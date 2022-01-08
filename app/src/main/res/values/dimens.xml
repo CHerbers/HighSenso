@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!--    general text   -->
-    <dimen name="title_textSize">32sp</dimen>
+    <dimen name="title_textSize">28sp</dimen>
     <dimen name="standard_textSize">16sp</dimen>
     <dimen name="editText_textSize">20sp</dimen>
     <dimen name="editText_height">32sp</dimen>
@@ -20,6 +20,7 @@
 <!--    privacy dialog-->
     <dimen name="privacy_dialog_layout_margin">8dp</dimen>
     <dimen name="privacy_dialog_spacing">12dp</dimen>
+    <dimen name="privacy_fragment_check_box_textSize">12sp</dimen>
 
 <!--    register/login dialog-->
     <dimen name="register_dialog_editView_margin">12dp</dimen>
@@ -51,7 +52,7 @@
     <dimen name="chip_width">160dp</dimen>
     <dimen name="chip_height">64dp</dimen>
 
-<!--    private questioning Fragment-->
+<!--    baseline questioning Fragment-->
     <dimen name="personal_questioning_item_intern_spacing">8dp</dimen>
     <dimen name="personal_questioning_item_external_spacing">16dp</dimen>
 

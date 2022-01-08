@@ -100,7 +100,8 @@ class ResultViewModel(
         Timber.i("Total rating sum: $ratingSum!")
 
         /* General check if user is a HSP and generating message */
-        _resultGeneralHspContent.value = buildGeneralResultString(ratingSum)
+        _resultGeneralHspContent.value =
+            buildGeneralResultString(if (ratingSum == -1) 0 else ratingSum)
 
         /* checks the influence questions (besides suffering and workplace) and triggers actions to
         * show their specific messages onscreen */

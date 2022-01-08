@@ -4,10 +4,11 @@ import android.content.Context
 import com.google.gson.Gson
 import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.data.*
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.IOException
-import java.util.*
 
 /**
  * This class exist to work around the non existence of a webserver.
@@ -73,69 +74,44 @@ class OfflineHelper {
         return listOf()
     }
 
+    fun getAnswerSheets(context: Context): List<AnswerSheet> {
 
-    fun getAnswerSheets(): List<AnswerSheet> {
-        return listOf(getBaselineAnswerSheet())
-    }
+        val answerSheetList = mutableListOf<AnswerSheet>()
+        val jsonObjectList = mutableListOf<JSONObject>()
 
-    private fun getBaselineAnswerSheet(): AnswerSheet {
-        val client = Client(
-            android.os.Build.MODEL,
-            android.os.Build.DEVICE,
-            android.os.Build.VERSION.RELEASE
-        )
-        return AnswerSheet(
-            1,
-            Date().time,
-            listOf(
-                Answer(
-                    "1.1.2022",
-                    "birthdate",
-                    Date().time
-                ),
-                Answer(
-                    "0",
-                    "sex",
-                    Date().time
-                ),
-                Answer(
-                    "AFG",
-                    "country",
-                    Date().time
-                ),
-                Answer(
-                    "1",
-                    "family_status",
-                    Date().time
-                ),
-                Answer(
-                    "3",
-                    "children",
-                    Date().time
-                ),
-                Answer(
-                    "0",
-                    "education",
-                    Date().time
-                ),
-                Answer(
-                    "2",
-                    "employment_relationship",
-                    Date().time
-                ),
-                Answer(
-                    "Student",
-                    "profession",
-                    Date().time
+        for (i in 1..100) {
+            val path = "answersheets/answersheet$i.json"
+            try {
+                jsonObjectList.add(
+                    JSONObject(
+                        context.assets.open(path).bufferedReader().use { it.readText() })
                 )
-            ),
-            listOf(
-                AmbientLightSensorData(Date().time, 1F),
-                AmbientAudioSensorData(Date().time, 0.4f),
-                AmbientTempSensorData(Date().time, 17F)
-            ),
-            client
-        )
+            } catch (e: IOException) {
+                Timber.i("Exception while trying to create AnswerSheets list from assets! $e")
+                break
+            }
+        }
+
+        jsonObjectList.forEach { answerSheet ->
+            answerSheetList.add(
+                AnswerSheet(
+                    answerSheet.getInt("id"),
+                    answerSheet.getLong("collected_at"),
+                    getAnswersListFromJSONArray(answerSheet.getJSONArray("answers")),
+                    try {
+                        getSensorDataListFromJSONArray(answerSheet.getJSONArray("sensor_data"))
+                    } catch (e: JSONException) {
+                        null
+                    },
+                    gson.fromJson(
+                        answerSheet.getJSONObject("client").toString(),
+                        Client::class.java
+                    ),
+                    answerSheet.getString("locale")
+                )
+            )
+        }
+        return answerSheetList
     }
 
     /**
@@ -146,7 +122,10 @@ class OfflineHelper {
      * @return a [List] of [Element]s parsed from the given [JSONObject]
      * */
     private fun getQuestionListFromJsonObject(jsonObject: JSONObject): List<Element> {
-        val array = jsonObject.getJSONArray(Constants.ELEMENTS)
+        return getQuestionListFromJsonArray(jsonObject.getJSONArray(Constants.ELEMENTS))
+    }
+
+    fun getQuestionListFromJsonArray(array: JSONArray): List<Element> {
         val elementList = mutableListOf<Element>()
 
         for (i in 0 until array.length()) {
@@ -162,5 +141,37 @@ class OfflineHelper {
             }
         }
         return elementList
+    }
+
+    fun getAnswersListFromJSONArray(array: JSONArray): List<Answer> {
+        val answerList = mutableListOf<Answer>()
+
+        for (i in 0 until array.length()) {
+            val answer = array.getJSONObject(i)
+            answerList.add(
+                gson.fromJson(answer.toString(), Answer::class.java)
+            )
+        }
+        return answerList
+    }
+
+    fun getSensorDataListFromJSONArray(array: JSONArray): List<SensorData> {
+        val sensorDataList = mutableListOf<SensorData>()
+
+        for (i in 0 until array.length()) {
+            val sensorData = array.getJSONObject(i)
+            when (sensorData.getString("name")) {
+                "ambientAudioSensorData" -> sensorDataList.add(
+                    gson.fromJson(sensorData.toString(), AmbientAudioSensorData::class.java)
+                )
+                "ambientLightSensorData" -> sensorDataList.add(
+                    gson.fromJson(sensorData.toString(), AmbientLightSensorData::class.java)
+                )
+                "ambientTempSensorData" -> sensorDataList.add(
+                    gson.fromJson(sensorData.toString(), AmbientTempSensorData::class.java)
+                )
+            }
+        }
+        return sensorDataList
     }
 }

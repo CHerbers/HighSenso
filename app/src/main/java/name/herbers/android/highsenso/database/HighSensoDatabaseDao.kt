@@ -1,12 +1,10 @@
 package name.herbers.android.highsenso.database
 
 import androidx.room.*
-import name.herbers.android.highsenso.data.AnswerSheet
-import name.herbers.android.highsenso.data.Questionnaire
 
 /**
  * Data access interface* for [HighSensoDatabase].
- * Holds insert, update and query functions.
+ * Holds insert, update and query functions for database manipulation.
  *
  * @project HighSenso
  * @author Christoph Herbers
@@ -16,42 +14,53 @@ import name.herbers.android.highsenso.data.Questionnaire
 interface HighSensoDatabaseDao {
 
     /**
-     * Inserts a [Questionnaire] in [HighSensoDatabase]. If a Questionnaire with the specific *id*
-     * (*PrimaryKey*) already exists, the old Question will be replaced with the new one.
+     * Inserts a [DatabaseQuestionnaire] into the [HighSensoDatabase]. If a Questionnaire with the specific
+     * *id* (*PrimaryKey*) already exists, the old Questionnaire will be replaced with the new one.
      *
-     * This function does only exist for different *test cases*! Within the app this function will
-     * never be used!
-     * @param questionnaire the [Questionnaire] that shall be inserted into the [HighSensoDatabase]
+     * @param questionnaire the [DatabaseQuestionnaire] that shall be inserted into the [HighSensoDatabase]
      * */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(questionnaire: Questionnaire)
+    fun insert(questionnaire: DatabaseQuestionnaire)
 
     /**
-     * Updates a [Questionnaire] in [HighSensoDatabase].
-     * @param questionnaire the [Questionnaire] that is to be updated
+     * Inserts an [DatabaseAnswerSheet] into the [HighSensoDatabase]. If a AnswerSheet with the specific
+     * *id* (*PrimaryKey*) already exists, the old AnswerSheet will be replaced with the new one.
+     *
+     * @param answerSheet the [DatabaseAnswerSheet] that shall be inserted into the [HighSensoDatabase]
+     * */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(answerSheet: DatabaseAnswerSheet)
+
+    /**
+     * Updates a [DatabaseQuestionnaire] in [HighSensoDatabase].
+     *
+     * @param questionnaire the [DatabaseQuestionnaire] that is to be updated
      * */
     @Update
-    fun update(questionnaire: Questionnaire)
+    fun update(questionnaire: DatabaseQuestionnaire)
 
     /**
-     * Updates a [AnswerSheet] in [HighSensoDatabase].
-     * @param answerSheet the [AnswerSheet] that is to be updated
+     * Updates a [DatabaseAnswerSheet] in [HighSensoDatabase].
+     *
+     * @param answerSheet the [DatabaseAnswerSheet] that is to be updated
      * */
     @Update
-    fun update(answerSheet: AnswerSheet)
+    fun update(answerSheet: DatabaseAnswerSheet)
 
     /**
-     * Selects every [Questionnaire] in the [HighSensoDatabase].
-     * @return a [List] of all [Questionnaire]s from the [HighSensoDatabase]
+     * Selects every [DatabaseQuestionnaire] in the [HighSensoDatabase].
+     *
+     * @return a [List] of all [DatabaseQuestionnaire]s from the [HighSensoDatabase]
      * */
     @Query("SELECT * FROM questionnaires_table")
-    fun getAllQuestionnaires(): List<Questionnaire>
+    fun getAllQuestionnaires(): List<DatabaseQuestionnaire>
 
     /**
-     * Selects every [AnswerSheet] in the [HighSensoDatabase].
-     * @return a [List] of all [AnswerSheet]s from the [HighSensoDatabase]
+     * Selects every [DatabaseAnswerSheet] in the [HighSensoDatabase].
+     *
+     * @return a [List] of all [DatabaseAnswerSheet]s from the [HighSensoDatabase]
      * */
     @Query("SELECT * FROM answer_sheets_table")
-    fun getAllPastAnswerSheets(): List<AnswerSheet>
+    fun getAllPastAnswerSheets(): List<DatabaseAnswerSheet>
 
 }

@@ -43,20 +43,18 @@
     <string name="privacy_dialog_message">
         HighSenso ist ein Projekt im Rahmen der <b>Erforschung von Hochsensibilität</b>.
         \n
-        Deshalb sendet die App <b>annonymisierte Daten ohne Personenbezug</b>, die ausschließlich zu
-        <b>Forschungszwecken</b> weiterverwendet werden
-        (genaueres zur Forschung findest Du unter dem Menüpunkt <b>\'Über HighSenso\'</b>).
-        \n\n
-        Außerdem sammelt HighSenso <b>Sensordaten</b> während der Nutzung und sendet diese ebenfalls.
+        Deshalb sammelt HighSenso <b>Sensordaten (Umgebungstemperatur, -helligkeit und -lautstärke)</b>
+        während der Nutzung und sendet diese an einen zentralen Server.
         \n
-        Eine genaue Auflistung der erhobenen Sensordaten findest Du unter dem Menüpunkt <b>\'Privatsphäre\'</b>.
-        Dort kannst Du auch die Privatsphäreeinstellungen jederzeit anpassen.
-    </string>
-    <string name="privacy_dialog_questioning_setting_checkBox">
-        Ich stimme der annonymisierten Übersendung meines Ergebnisses zu
-    </string>
+        Du kannst unter dem Menüpunkt <b>\'Datenschutz\'</b> jederzeit deine Einstellungen anpassen
+        und nachlesen, wofür die Daten verwendet werden.
+        </string>
     <string name="privacy_dialog_sensor_data_setting_checkBox">
-        Ich stimme dem Sammeln und zentralen Speichern von Sensordaten (Umgebungstemperatur, Umgebungshelligkeit) zu
+        Ich stimme dem Sammeln und zentralen Speichern von oben genannten Sensordaten zu
+    </string>
+    <string name="privacy_fragment_sensor_data_setting_checkBox">
+        Ich stimme dem Sammeln und zentralen Speichern von folgenden Sensordaten zu:
+        Umgebungstemperatur, -helligkeit und -lautstärke
     </string>
 
     <!--    location dialog-->

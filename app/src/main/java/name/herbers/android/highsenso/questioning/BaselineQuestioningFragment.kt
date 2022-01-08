@@ -15,16 +15,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.RecyclerView
 import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.data.Headlines
 import name.herbers.android.highsenso.data.Question
+import name.herbers.android.highsenso.data.Questionnaire
 import name.herbers.android.highsenso.databinding.FragmentBaselineQuestioningBinding
 import name.herbers.android.highsenso.dialogs.LocationDialogFragment
 import timber.log.Timber
 
 /**
+ * This [Fragment] is shown if a baseline [Questionnaire] exists in the loaded Questionnaires.
+ * It uses a [RecyclerView.Adapter] to show needed [View]s.
  *
  *@project HighSenso
  *@author Herbers
@@ -40,7 +44,7 @@ class BaselineQuestioningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        //init the DataBinding and QuestioningViewModel
+        /* init the DataBinding and ViewModels */
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_baseline_questioning,
@@ -58,7 +62,7 @@ class BaselineQuestioningFragment : Fragment() {
 
         val preferences = (activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
 
-        //set title
+        /* set title and menu */
         val actionBar = (activity as AppCompatActivity).supportActionBar
         if (actionBar != null) {
             actionBar.title =
@@ -66,7 +70,8 @@ class BaselineQuestioningFragment : Fragment() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
-        val adapter = QuestionAdapter(sharedViewModel, viewModel)
+
+        /* Init Questions */
         val baselineQuestions = mutableListOf<Question>()
         val baselineQuestionnaireElements =
             sharedViewModel.getQuestionnaireByQuestionnaireName(Constants.BASELINE_QUESTIONNAIRE)?.questions
@@ -79,12 +84,15 @@ class BaselineQuestioningFragment : Fragment() {
                     ((element as Headlines).translations[0].headline)
             }
         }
+
+        /* QuestionAdapter */
+        val adapter = QuestionAdapter(sharedViewModel, viewModel)
         adapter.data = baselineQuestions
         binding.baselineRecyclerView.adapter = adapter
 
         setLocationDialogObserver(sharedViewModel)
 
-        //next button
+        /* next button */
         setNextButtonListener(sharedViewModel, preferences)
 
         Timber.i("BaselineQuestionFragment created!")
@@ -92,7 +100,13 @@ class BaselineQuestioningFragment : Fragment() {
     }
 
     /**
+     *  This function sets a [View.OnClickListener] to the next button.
+     *  If clicked and all input given is valid, the navigation to the [QuestioningFragment] gets
+     *  triggered.
+     *  If the input is not valid a [Toast] with an error message is shown.
      *
+     *  @param sharedViewModel the [SharedViewModel] that hold logic for this listener
+     *  @param preferences the [SharedPreferences] needed by called functions
      * */
     private fun setNextButtonListener(
         sharedViewModel: SharedViewModel,

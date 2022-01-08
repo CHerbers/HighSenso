@@ -8,6 +8,7 @@ import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.data.Answer
 import name.herbers.android.highsenso.data.Headlines
 import name.herbers.android.highsenso.data.Question
+import name.herbers.android.highsenso.data.Questionnaire
 import name.herbers.android.highsenso.database.DatabaseHandler
 import name.herbers.android.highsenso.result.ResultFragment
 import name.herbers.android.highsenso.start.StartFragment
@@ -173,7 +174,7 @@ class QuestioningViewModel(
 
         //LiveData
         _questionCount.value =
-            "${currentPosQuestion + 1 + sumOfQuestions(true)} / ${sumOfQuestions(false)}"
+            "${currentPosQuestion + 1 + numberOfQuestions(true)} / ${numberOfQuestions(false)}"
         _currentQuestionContent.value = currentQuestion.translations[0].question
 
         val sizeDiff = (questionnaires?.size ?: 0) - questionsList.size
@@ -196,7 +197,16 @@ class QuestioningViewModel(
         }
     }
 
-    private fun sumOfQuestions(toExclude: Boolean): Int {
+    /**
+     * Calculates the total number of [Question] in [questionsList].
+     * Or the number of Questions up to the current Question if [toExclude] is true.
+     *
+     * @param toExclude excludes all upcoming [Question]s
+     *
+     * @return total number of [Question], or total number of Questions up to the current Question
+     * if [toExclude] is true
+     * */
+    private fun numberOfQuestions(toExclude: Boolean): Int {
         var sum = 0
         for (i in questionsList.indices) {
             if (toExclude && i >= currentPosQuestionnaire) {
@@ -207,11 +217,21 @@ class QuestioningViewModel(
         return sum
     }
 
+    /**
+     * Change observed [navToResultFrag] to true.
+     * This triggers the navigation to the [ResultFragment].
+     * */
     fun navigateToResultFragment() {
         _navToResultFrag.value = true
         _navToResultFrag.value = false
     }
 
+    /**
+     * Creates a [List] of a List of [Question]s.
+     * Questions of the inner List are from the same [Questionnaire].
+     *
+     * @return a [List] of a [List] of all [Question]s excluding the baseline [Questionnaire]
+     * */
     private fun getQuestionsList(): List<List<Question>> {
         val questionsOuterList =
             mutableListOf<MutableList<Question>>()

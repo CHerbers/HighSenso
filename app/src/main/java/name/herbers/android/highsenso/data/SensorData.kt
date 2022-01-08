@@ -10,5 +10,5 @@ package name.herbers.android.highsenso.data
  */
 abstract class SensorData{
     abstract val name: String
-    abstract val collectedAt: Long
+    abstract val collected_at: Long
 }
