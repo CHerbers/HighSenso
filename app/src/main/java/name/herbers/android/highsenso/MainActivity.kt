@@ -42,10 +42,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var database: HighSensoDatabase
 
-    //launcher to ask for mic permission
+    //Launcher to ask for mic permission
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
-    //handler for repeating tasks (gathering of sensor data)
+    //Handler for repeating tasks (gathering of sensor data)
     private lateinit var repTaskHandler: Handler
 
     private lateinit var mSensorManager: SensorManager
@@ -67,9 +67,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         /* HTTP Connection */
         val serverCommunicationHandler =
-            ServerCommunicationHandler(Constants.SERVER_URL, this)
+            ServerCommunicationHandler(this)
 
-        /* init sharedViewModel */
+        /* Init sharedViewModel */
         val sharedViewModelFactory =
             SharedViewModelFactory(
                 databaseHandler,
@@ -108,11 +108,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
             else -> {
                 sharedViewModel.changeLoginStatus(false)
-//                sharedViewModel.changeLoginStatus(Constants.OFFLINE_MODE)
             }
         }
 
-        /* init ActivityResultLauncher for permission stuff */
+        /* Init ActivityResultLauncher for permission stuff */
         requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
                 if (isGranted) {
@@ -304,7 +303,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         )
     }
 
-    /* if gathering sensor data is allowed and an event occurs, the data gets saved to be sent in an AnswerSheet later on */
+    /* If gathering sensor data is allowed and an event occurs, the data gets saved to be sent in an AnswerSheet later on */
     override fun onSensorChanged(event: SensorEvent?) {
         //check if gather sensor data key is true
         if (!checkGatherSensorDataKey()) return

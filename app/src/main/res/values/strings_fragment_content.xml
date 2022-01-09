@@ -2,7 +2,6 @@
     [<!ENTITY imprint "
     Christoph Herbers (christoph.herbers@uni-ulm.de)
     \n
-
     ">]>
 <resources>
     <!--    menu content-->
@@ -41,9 +40,12 @@
         \n
         Für eine erfolgreiche Registrierung musst Du den Datenschutzbestimmungen zustimmen.
         \n
-        Die Zustimmung zur Erhebung von Sensordaten erfolgt gesondert vom Betriebssystem selber und
-        kann in den Geräteeinstellungen jederzeit geändert werden. Diese Zustimmung ist optional zur
-        Benutzung der App.
+        Die Zustimmung zur Erhebung von Sensordaten kannst Du in diesen Einstellungen erteilen oder
+        wiederrufen. Zusätzlich wird die Erlaubnis zur Erhebung der Umgebungslautstärke mithilfe des
+        im Gerät verbauten Mikrofons vom Betriebssystem eingeholt undkann in den Geräteeinstellungen
+        jederzeit geändert werden.
+        \n
+        Diese Zustimmung zur Sensordatenerhebung ist optional zur Benutzung der App.
         \n
         \n
         <b>2. Gesammelte Daten</b>
@@ -56,19 +58,23 @@
         App.
         \n
         \n
-        <u>Allgemeine Informationen</u>
+        <u>Geräteinformationen</u>
         \n
-        HighSenso sammelt Metadaten über Dein Gerät. Diese sind (1) der Modellname des Geräts,
+        HighSenso sammelt Metadaten über Dein Gerät. Diese sind (1) der Modellname des Geräts
         sowie (2) das aktuelle OS.
         \n
         \n
         <u>Sensordaten</u>
         \n
         HighSenso sammelt Sensordaten während der Beantwortung von Fragebögen. Diese Daten umfassen
+        \n
         (1) die durchschnittliche Umgebungstemperatur,
+        \n
         (2) die durchschnittliche Umgebungshelligkeit und
+        \n
         (3) die durchschnittliche Umgebungslautstärke.
-        Diese Daten werden benötigt, um den Umwelteinflüsse auf die Beantwortung von Fragebögen zu
+        \n
+        Diese Daten werden benötigt, um den Einfluss der Umgebung auf die Beantwortung von Fragebögen zu
         berücksichtigen.
         \n
         \n
@@ -79,13 +85,14 @@
         \n &imprint;
         \n
         \n
-        <b>4. Rechte der betroffenen Person</b>
+        <b>4. Zusätzliche Rechte der betroffenen Person</b>
         \n
         \n
         (1) Es besteht jederzeit das Recht gegebene Datenschutzerklärungen zur Datenerhebung und
         Datenverarbeitung zu widerrufen.
         \n
-        (2) Es besteht das Recht
+        (2) Es besteht das Recht auf Einsicht sowie Löschung der gespeicherten Daten. Hierfür
+        kontaktieren Du bitte die Kontaktperson.
     </string>
 
     <!--    start fragment content-->

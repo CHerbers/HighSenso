@@ -90,11 +90,11 @@ class ResultViewModel(
      * */
     private fun calculateResult() {
         /* Calculate the HSP-Scala-Score */
-        var currentRatingSum = -1
+        var currentRatingSum = 0
         sharedViewModel.currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE]?.forEach { (_, answer) ->
             currentRatingSum += answer.value.toInt()
         }
-        if (currentRatingSum > -1) currentRatingSum++
+//        if (currentRatingSum > -1) currentRatingSum++
         Timber.i("Current rating: $currentRatingSum")
         val ratingSum = getAverageSumOfOldAnswerSheets(currentRatingSum)
         Timber.i("Total rating sum: $ratingSum!")
@@ -129,7 +129,7 @@ class ResultViewModel(
      * @return -1 if there are no old nor current AnswerSheet(s) for the "HSP-Scale"
      * else the mean of the sum of positive answered items of the old und current AnswerSheet(s)
      * */
-    private fun getAverageSumOfOldAnswerSheets(currentScore: Int = -1): Int {
+    private fun getAverageSumOfOldAnswerSheets(currentScore: Int): Int {
         var sum = 0
         var count = 0
         var noOldAnswerSheets = true
@@ -143,7 +143,19 @@ class ResultViewModel(
             }
         }
         if (noOldAnswerSheets) return currentScore
-        return if (currentScore == -1) sum.div(count) else (sum + currentScore).div(count + 1)
+        //check if there are current answers for the HSP Scale
+        return if (currentHspScaleAnswersAvailable()) sum.div(count)
+        else (sum + currentScore).div(count + 1)
+    }
+
+    /**
+     * This function returns if there are current [Answer]s for the HSP-Scale-Questionnaire
+     * available.
+     *
+     * @return true if there are answers available, false otherwise
+     * */
+    private fun currentHspScaleAnswersAvailable(): Boolean{
+        return sharedViewModel.currentAnswers[Constants.HSP_SCALE_QUESTIONNAIRE].isNullOrEmpty()
     }
 
     /**
@@ -233,10 +245,12 @@ class ResultViewModel(
     fun buildGeneralResultString(rating: Int): String {
         var resultString: String
         val isNegative = rating < HSP_POSITIVE_LIMIT
-        var iteration = 1
+        var iteration = if (currentHspScaleAnswersAvailable()) 0 else 1
         val answerSheets = sharedViewModel.answerSheets
-        if (answerSheets != null) {
-            iteration += answerSheets.size
+        answerSheets?.forEach { answerSheet ->
+            if (answerSheet.id == Constants.HSP_SCALE_QUESTIONNAIRE_ID){
+                iteration++
+            }
         }
 
         val probabilityArray = appRes.getStringArray(R.array.general_HSP_result_probability_array)

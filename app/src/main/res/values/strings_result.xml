@@ -18,7 +18,8 @@
     <string name="general_HSP_part_2_iteration">
         Du hat den Fragebogen nun %1$d Mal beantwortet.
         In diesem Ergebnis sind auch Deine vergangenen Fragebögen berücksichtigt.
-        Ab Fünf Wiederholungen gilt ein psychologischer Fragebogen im Allgemeinen als aussagekräftig.
+       Du solltest diesen Fragebogen etwa fünf Mal wiederholen um ein aussagekräftiges Ergebnis zu
+        erhalten. Am besten Du machst dies in unterschiedlichen Umgebungen und Stimmungen.
     </string>
     <string name="negative_HSP_message">
         \n
@@ -115,7 +116,9 @@
     </string>
     <!--    message if users emotions linger-->
     <string name="lingering_emotions_message">
-
+        Wie in vielen Anderen Situationen, kann Ruhe, oder allgemein etwas Zeit für Dich selber, dabei
+        helfen, mit lange nachklingenden Emotionen umzugehen. Nimm die Gefühle an und reflektiere die
+        Gedanken die sie bei Dir auslösen.
     </string>
     <!--    message if user is detected to be suffering-->
     <string name="detected_suffering_positive_hsp_message">

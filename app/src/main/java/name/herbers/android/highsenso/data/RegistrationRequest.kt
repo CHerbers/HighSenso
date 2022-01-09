@@ -11,6 +11,5 @@ data class RegistrationRequest(
     val email: String,
     val password: String,
     val password_confirmation: String,
-    val username: String,
-    val settings: Settings
+    val username: String
 )

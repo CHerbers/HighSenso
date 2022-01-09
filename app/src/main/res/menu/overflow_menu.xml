@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/profile_destination"
-        android:title="@string/profile_title"/>
-    <item
         android:id="@+id/privacy_destination"
         android:title="@string/privacy_menu_item_title"/>
     <item

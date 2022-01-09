@@ -31,7 +31,7 @@ class DatabaseHandler(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(dispatchers.main() + viewModelJob)
 
-    private val offlineHelper = OfflineHelper()
+    private val jsonParser = HighSensoJsonParser()
     var questionnaires: List<Questionnaire> = listOf()
     var answerSheets: List<AnswerSheet> = listOf()
 
@@ -59,12 +59,12 @@ class DatabaseHandler(
      *
      * @return a [List] of converted [Questionnaire]s
      * */
-    private fun getRealQuestionnaires(databaseQuestionnaires: List<DatabaseQuestionnaire>): List<Questionnaire> {
+    fun getRealQuestionnaires(databaseQuestionnaires: List<DatabaseQuestionnaire>): List<Questionnaire> {
         val returnQuestionnaire = mutableListOf<Questionnaire>()
 
         databaseQuestionnaires.forEach { databaseQuestionnaire ->
             val questions =
-                offlineHelper.getQuestionListFromJsonArray(JSONArray(databaseQuestionnaire.questions))
+                jsonParser.getQuestionListFromJsonArray(JSONArray(databaseQuestionnaire.questions))
             returnQuestionnaire.add(
                 Questionnaire(
                     databaseQuestionnaire.id,
@@ -83,14 +83,14 @@ class DatabaseHandler(
      *
      * @return a [List] of converted [AnswerSheet]s
      * */
-    private fun getRealAnswerSheets(databaseAnswerSheets: List<DatabaseAnswerSheet>): List<AnswerSheet> {
+    fun getRealAnswerSheets(databaseAnswerSheets: List<DatabaseAnswerSheet>): List<AnswerSheet> {
         val returnAnswerSheet = mutableListOf<AnswerSheet>()
 
         databaseAnswerSheets.forEach { databaseAnswerSheet ->
             val answers =
-                offlineHelper.getAnswersListFromJSONArray(JSONArray(databaseAnswerSheet.answers))
+                jsonParser.getAnswersListFromJSONArray(JSONArray(databaseAnswerSheet.answers))
             val sensorData =
-                offlineHelper.getSensorDataListFromJSONArray(JSONArray(databaseAnswerSheet.sensorData))
+                jsonParser.getSensorDataListFromJSONArray(JSONArray(databaseAnswerSheet.sensorData))
             returnAnswerSheet.add(
                 AnswerSheet(
                     databaseAnswerSheet.id,

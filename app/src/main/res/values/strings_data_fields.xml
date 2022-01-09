@@ -4,32 +4,9 @@
     <string name="ambient_audio_sd_field">ambientAudioSensorData</string>
     <string name="ambient_temp_sd_field">ambientTemperatureSensorData</string>
     <string name="ambient_light_sd_field">ambientLightSensorData</string>
-    <string name="collected_at_field">collected_at</string>
-    <string name="name_field">name</string>
     <string name="amplitude_field">amplitude</string>
     <string name="lux_field">lux</string>
     <string name="degrees_field">degreesCelsius</string>
     <string name="device_field">device</string>
     <string name="os_field">os</string>
-    <string name="value_field">value</string>
-    <string name="label_field">label</string>
-    <string name="locale_field">locale</string>
-    <string name="answers_field">answers</string>
-    <string name="sensor_data_field">sensor_data</string>
-    <string name="client_field">client</string>
-    <string name="question_type_field">questiontype</string>
-    <string name="min_field">min</string>
-    <string name="max_field">max</string>
-    <string name="step_field">step</string>
-    <string name="required_field">required</string>
-    <string name="variable_field">variable</string>
-    <string name="id_field">id</string>
-    <string name="questions_field">questions</string>
-
-    <!--    header-->
-    <string name="content_type_header">Content-Type</string>
-    <string name="content_type_application">application/json</string>
-    <string name="accept_language_header">Accept-Language</string>
-    <string name="accept_language_de">de</string>
-
 </resources>

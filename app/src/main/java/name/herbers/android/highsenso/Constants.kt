@@ -33,6 +33,18 @@ object Constants {
 
     /* Communication */
     const val TOKEN_DURABILITY_TIME = 10000L //TODO adjust durability to actual token durability
+    const val HEADER_CONTENT_TYPE = "Content-Type"
+    const val HEADER_ACCEPT_LANGUAGE = "Accept-Language"
+    const val CONTENT_TYPE_APPLICATION = "application/json"
+    const val ACCEPTED_LANGUAGE_DE = "de"
+    const val HEADER_ROLE = "Role"
+    const val ROLE_TYPE_USER = "user"
+
+    /* URI */ //TODO insert right URIs
+    const val SERVER_URL = "https://www.google.com"
+    const val QUESTIONNAIRES_URI = "studies/1/questionnaires/"
+    const val ANSWER_SHEETS_URI = "/answersheets/"
+    const val TOKEN_URI = "?token="
 
     /* Data */
     const val ELEMENTS = "elements"
@@ -45,17 +57,19 @@ object Constants {
     const val QUESTION_TYPE_KNOB = "Knob"
     const val QUESTION_TYPE_TEXT_STRING = "TextString"
 
-    const val QUESTION_NO_ANSWER_DEFAULT = 9
+    const val FIELD_ID = "id"
+    const val  FIELD_NAME = "name"
+    const val FIELD_COLLECTED_AT = "collected_at"
+    const val FIELD_QUESTIONS = "questions"
+    const val FIELD_ANSWERS = "answers"
+    const val FIELD_SENSOR_DATA = "sensor_data"
+    const val FIELD_CLIENT = "client"
+    const val FIELD_LOCALE = "locale"
 
+    const val QUESTION_NO_ANSWER_DEFAULT = 9
 
     /* Sensor */
     const val AUDIO_SENSOR_MEASURING_DURATION = 8
     const val SENSOR_MEASURING_INTERVAL_NANOS =
         5000000000L    //Interval between two sensor measurements in nanoseconds
-
-    /* URI */ //TODO insert right URIs
-    const val SERVER_URL = "https://www.google.com"
-    const val QUESTIONNAIRES_URI = "studies/1/questionnaires/"
-    const val ANSWER_SHEETS_URI = "/answersheets"
-    const val TOKEN_URI = "?token="
 }

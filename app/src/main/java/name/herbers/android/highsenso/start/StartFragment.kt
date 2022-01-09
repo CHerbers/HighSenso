@@ -50,7 +50,6 @@ class StartFragment : Fragment() {
     private lateinit var binding: FragmentStartBinding
     private lateinit var preferences: SharedPreferences
     private val loginViewModel = LoginViewModel()
-    private var profileMenuItem: MenuItem? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,18 +100,12 @@ class StartFragment : Fragment() {
         Timber.i("Overflow menu created!")
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
-        profileMenuItem = menu.findItem(R.id.profile_destination)
     }
 
     /* handle navigation on item selection */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.i("Menu Item \"${item.title}\" was selected!")
         return when (item.itemId) {
-            //user profile
-            R.id.profile_destination -> NavigationUI.onNavDestinationSelected(
-                item,
-                requireView().findNavController()
-            )
             //navigate to AboutFragment
             R.id.about_destination -> NavigationUI.onNavDestinationSelected(
                 item,
@@ -247,14 +240,12 @@ class StartFragment : Fragment() {
                 binding.startFragmentRegisterButton.visibility = View.INVISIBLE
                 binding.startTitleTextView.text =
                     getString(R.string.start_welcome_username_text)
-                profileMenuItem?.isVisible = true
             } else {
                 binding.startFragmentLoginButton.text =
                     getString(R.string.start_fragment_login_button)
                 binding.startFragmentRegisterButton.visibility = View.VISIBLE
                 binding.startTitleTextView.text =
                     getString(R.string.start_welcome_text)
-                profileMenuItem?.isVisible = false
             }
         })
     }

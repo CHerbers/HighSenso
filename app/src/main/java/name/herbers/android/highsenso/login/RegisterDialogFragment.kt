@@ -17,7 +17,6 @@ import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
 import name.herbers.android.highsenso.connection.ServerCommunicationHandler
 import name.herbers.android.highsenso.data.RegistrationRequest
-import name.herbers.android.highsenso.data.Settings
 import name.herbers.android.highsenso.databinding.DialogRegisterBinding
 import name.herbers.android.highsenso.menu.PrivacyFragment
 import timber.log.Timber
@@ -158,8 +157,7 @@ class RegisterDialogFragment(
                         binding.registerDialogUsernameEditTextLayout.editText?.text.toString(),
                         binding.registerDialogMailEditTextLayout.editText?.text.toString(),
                         binding.registerDialogPasswordEditTextLayout.editText?.text.toString(),
-                        binding.registerDialogPasswordRepeatEditTextLayout.editText?.text.toString(),
-                        Settings("de")
+                        binding.registerDialogPasswordRepeatEditTextLayout.editText?.text.toString()
                     )
                 )
                 elementsAreEnabled(false)

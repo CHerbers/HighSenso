@@ -17,6 +17,7 @@
     </style>
 
     <style name="title_textView" parent="general_textView">
+        <item name="android:textSize">@dimen/title_textSize</item>
     </style>
 
     <style name="general_button" parent="standard_text">

@@ -54,22 +54,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/result_hsp_info_textView"
+            android:layout_marginStart="@dimen/standard_textView_layout_margin"
+            android:layout_marginTop="@dimen/start_textView_spacing"
+            android:layout_marginEnd="@dimen/standard_textView_layout_margin"
+            android:layout_marginBottom="@dimen/standard_textView_layout_margin"
             app:layout_constraintVertical_bias="0">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/questionContent_textView"
                     style="@style/questioning_textView"
-                    android:layout_marginStart="@dimen/standard_textView_layout_margin"
-                    android:layout_marginTop="@dimen/start_textView_spacing"
-                    android:layout_marginEnd="@dimen/standard_textView_layout_margin"
-                    android:layout_marginBottom="@dimen/standard_textView_layout_margin"
                     android:padding="@dimen/question_textView_layout_padding"
                     android:text="@{questioningViewModel.currentQuestionContent}" />
-            </LinearLayout>
         </ScrollView>
 
         <RadioGroup

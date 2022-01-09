@@ -66,6 +66,7 @@ class SharedViewModel(
     /* Response messages */
     private val resetPasswordLinkSendMessage = appRes.getString(R.string.reset_dialog_toast_message)
 
+    /* Observed LiveData */
     private val _gatherSensorData = MutableLiveData(false)
     val gatherSensorData: LiveData<Boolean>
         get() = _gatherSensorData
@@ -241,7 +242,7 @@ class SharedViewModel(
 
     /**
      * Handles the click of logout button of the [StartFragment].
-     * Triggers the sending of a [LogoutRequest] in the [ServerCommunicationHandler] if logged in.
+     * Triggers the sending of a logout request in the [ServerCommunicationHandler] if logged in.
      * Deletes the token from the [SharedPreferences].
      * */
     fun handleLogoutButtonClick() {
@@ -344,21 +345,19 @@ class SharedViewModel(
      * [ServerCommunicationHandler] functions are called to get all available [Questionnaire]s and
      * [AnswerSheet]s.
      *
-     * @param response the received response
+     * @param token the received token
      * @param username the username that was part of the [LoginRequest]
      * @param password the password that was part of the [LoginRequest]
      * @param answerSheets the [AnswerSheet]s that need to be sent after the successful login,
      * null if no AnswerSheets needed to be sent before the [LoginRequest]
      * */
     fun loginResponseReceived(
-        response: String,
+        token: String,
         username: String,
         password: String,
         answerSheets: List<AnswerSheet>?
     ) {
-        val token = "" //TODO extract token String
-
-        if (!Constants.OFFLINE_MODE) {
+        if (!Constants.OFFLINE_MODE) {  //this is needed to not edit preferences in offline mode
             /* Adjust preferences for token, token_expiration, username and password */
             preferences.edit().putString(
                 appRes.getString(R.string.login_data_token),
@@ -509,7 +508,6 @@ class SharedViewModel(
      * */
     fun sendAnswerSheets(answerSheets: List<AnswerSheet>) {
         val token = preferences.getString(appRes.getString(R.string.login_data_token), "")
-//        answerSheetsToJsonFile(answerSheets) //TODO delete
         if (token == null || token == "") {
             Timber.i("This should never be possible! Mon Dieu!")
             return
@@ -609,31 +607,6 @@ class SharedViewModel(
         initCurrentAnswers()
     }
 
-//    /**
-//     * This function saves a given [List] of [AnswerSheet]s to a file.
-//     * Converts them to JSON before.
-//     *
-//     * @param answerSheets the [List] of [AnswerSheet]s that is to parse and save
-//     * */
-//    private fun answerSheetsToJsonFile(answerSheets: List<AnswerSheet>) {
-//        var count = 0
-//        answerSheets.forEach { answerSheet ->
-//            count++
-//            val bodyJSON = gson.toJson(answerSheet)
-//            Timber.i(bodyJSON)
-//            val path =
-//                Environment.getDataDirectory().path + "/data/name.herbers.android.highsenso/files/answersheet$count.json"
-//
-//            try {
-//                File(path).printWriter().use { out ->
-//                    out.println(bodyJSON)
-//                }
-//            } catch (e: IOException) {
-//                Timber.e("IOException!" + e.printStackTrace())
-//            }
-//        }
-//    }
-
     /**
      * This function tells weather a [Question] after the users location is available in one of the
      * [Questionnaire]s or not.
@@ -694,14 +667,14 @@ class SharedViewModel(
     }
 
     /**
-     * This function gets [Questionnaire]s and [AnswerSheet]s from the [OfflineHelper].
+     * This function gets [Questionnaire]s and [AnswerSheet]s from the [HighSensoJsonParser].
      * They get loaded from .json files from the assets folder.
      * The only use is to have Questionnaires and AnswerSheets without connecting with the server.
      * This is only needed as long as the server is not online.
      * */
     private fun setUpQuestionnairesAndAnswerSheetsFromJsonFiles() {
-        val offlineHelper = OfflineHelper()
-        questionnaires = offlineHelper.getQuestionnaires(application.applicationContext)
+        val jsonParser = HighSensoJsonParser()
+        questionnaires = jsonParser.getQuestionnaires(application.applicationContext)
         questionnaires?.forEach { questionnaire ->
             databaseHandler.insertQuestionnaire(
                 DatabaseQuestionnaire(
@@ -711,7 +684,7 @@ class SharedViewModel(
                 )
             )
         }
-        answerSheets = offlineHelper.getAnswerSheets(application.applicationContext)
+        answerSheets = jsonParser.getAnswerSheets(application.applicationContext)
         initCurrentAnswers()
     }
 
