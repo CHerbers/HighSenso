@@ -122,8 +122,9 @@ class LoginDialogFragment(
 
         binding.loginDialogLoginButton.setOnClickListener {
             Timber.i("loginButton was clicked!")
-
-            if (Constants.OFFLINE_MODE) sharedViewModel.loginResponseReceived("", "", "", null)
+            if (Constants.OFFLINE_MODE) {
+                sharedViewModel.loginResponseReceived("", "", "", null)
+            }
 
             val username = binding.loginDialogUsernameEditText.text.toString()
             val password = binding.loginDialogPasswordEditText.text.toString()

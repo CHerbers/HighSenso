@@ -16,8 +16,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import name.herbers.android.highsenso.Constants
 import name.herbers.android.highsenso.R
 import name.herbers.android.highsenso.SharedViewModel
+import name.herbers.android.highsenso.data.AnswerSheet
 import name.herbers.android.highsenso.databinding.FragmentStartBinding
 import name.herbers.android.highsenso.dialogs.*
 import name.herbers.android.highsenso.login.LoginDialogFragment
@@ -27,6 +29,7 @@ import name.herbers.android.highsenso.menu.AboutFragment
 import name.herbers.android.highsenso.menu.PrivacyFragment
 import name.herbers.android.highsenso.menu.PrivacyViewModel
 import name.herbers.android.highsenso.menu.PrivacyViewModelFactory
+import name.herbers.android.highsenso.questioning.BaselineQuestioningFragment
 import name.herbers.android.highsenso.questioning.QuestioningFragment
 import timber.log.Timber
 
@@ -144,32 +147,58 @@ class StartFragment : Fragment() {
         binding.startButton.setOnClickListener { view: View ->
             Timber.i("startButton was clicked!")
             if (sharedViewModel.isLoggedIn.value == true) {
+                /* this is true if no questionnaires could be loaded to this point.
+                * Therefore questioning cannot be started and a message is shown instead */
                 if (sharedViewModel.questionnaires.isNullOrEmpty()) {
-                    /* this is true if no questionnaires could be loaded to this point.
-                    * Therefore questioning cannot be started and a message is shown instead */
-                    NoQuestionnairesAvailableDialog().show(
-                        childFragmentManager,
-                        NoQuestionnairesAvailableDialog.TAG
-                    )
-                } else {
-                    if (startViewModel.baselineAnswerSheetAvailable(sharedViewModel.answerSheets)) {
-                        if (sharedViewModel.locationQuestionAvailable()) {
-                            LocationDialogFragment(preferences, sharedViewModel).show(
-                                childFragmentManager,
-                                "LocationDialog"
-                            )
-                        } else {
-                            Navigation.findNavController(view)
-                                .navigate(R.id.action_startFragment_to_questioningFragment)
+                    sharedViewModel.loadQuestionnairesFromDeviceDatabase()
+                    if (sharedViewModel.questionnaires.isNullOrEmpty()) {
+                        if (Constants.OFFLINE_MODE) {
+                            sharedViewModel.setUpQuestionnairesAndAnswerSheetsFromJsonFiles()
+                            if (!sharedViewModel.questionnaires.isNullOrEmpty()) {
+                                Timber.i("Questioning starts with Questionnaires loaded from JSON!")
+                                startQuestioning(sharedViewModel, view)
+                                return@setOnClickListener
+                            }
                         }
+                        NoQuestionnairesAvailableDialog().show(
+                            childFragmentManager,
+                            NoQuestionnairesAvailableDialog.TAG
+                        )
                     } else {
-                        Navigation.findNavController(view)
-                            .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
+                        Timber.i("Questioning starts with Questionnaires loaded from database!")
+                        sharedViewModel.loadAnswerSheetsFromDeviceDatabase()
+                        startQuestioning(sharedViewModel, view)
                     }
+                } else {
+                    startQuestioning(sharedViewModel, view)
                 }
             } else {
                 showLoginDialog(sharedViewModel)
             }
+        }
+    }
+
+    /**
+     * This function navigates to the questioning. Depending on available Questionnaires it either
+     * starts the [BaselineQuestioningFragment], the [QuestioningFragment] or the [LocationDialogFragment].
+     *
+     * @param sharedViewModel the [SharedViewModel] holding logic and needed [AnswerSheet]s
+     * @param view the current [View]
+     * */
+    private fun startQuestioning(sharedViewModel: SharedViewModel, view: View) {
+        if (startViewModel.baselineAnswerSheetAvailable(sharedViewModel.answerSheets)) {
+            if (sharedViewModel.locationQuestionAvailable()) {
+                LocationDialogFragment(preferences, sharedViewModel).show(
+                    childFragmentManager,
+                    "LocationDialog"
+                )
+            } else {
+                Navigation.findNavController(view)
+                    .navigate(R.id.action_startFragment_to_questioningFragment)
+            }
+        } else {
+            Navigation.findNavController(view)
+                .navigate(R.id.action_start_destination_to_personalQuestioning_destination)
         }
     }
 

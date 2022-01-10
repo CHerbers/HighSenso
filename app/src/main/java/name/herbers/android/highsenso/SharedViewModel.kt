@@ -125,7 +125,7 @@ class SharedViewModel(
 
     init {
         Timber.i("SharedViewModel created!")
-        if (Constants.OFFLINE_MODE && Constants.FIRST_START) setUpQuestionnairesAndAnswerSheetsFromJsonFiles()      //this is to enable offline usage/testing
+//        if (Constants.OFFLINE_MODE && Constants.FIRST_START) setUpQuestionnairesAndAnswerSheetsFromJsonFiles()      //this is to enable offline usage/testing
     }
 
     /**
@@ -392,7 +392,6 @@ class SharedViewModel(
             //send current answerSheets
             sendAnswerSheets(answerSheets)
         }
-
     }
 
     /**
@@ -632,7 +631,10 @@ class SharedViewModel(
      * error.
      * */
     fun loadQuestionnairesFromDeviceDatabase() {
-        if (questionnaires.isNullOrEmpty()) questionnaires = databaseHandler.questionnaires
+        if (questionnaires.isNullOrEmpty()) {
+            Timber.i("Using Questionnaires from database!")
+            questionnaires = databaseHandler.questionnaires
+        }
         initCurrentAnswers()
     }
 
@@ -643,7 +645,10 @@ class SharedViewModel(
      * error.
      * */
     fun loadAnswerSheetsFromDeviceDatabase() {
-        if (answerSheets.isNullOrEmpty()) answerSheets = databaseHandler.answerSheets
+        if (answerSheets.isNullOrEmpty()) {
+            Timber.i("Using AnswerSheets from database!")
+            answerSheets = databaseHandler.answerSheets
+        }
     }
 
     /**
@@ -672,7 +677,8 @@ class SharedViewModel(
      * The only use is to have Questionnaires and AnswerSheets without connecting with the server.
      * This is only needed as long as the server is not online.
      * */
-    private fun setUpQuestionnairesAndAnswerSheetsFromJsonFiles() {
+    fun setUpQuestionnairesAndAnswerSheetsFromJsonFiles() {
+        Timber.i("Loading Questionnaires ans AnswerSheets from JSON!")
         val jsonParser = HighSensoJsonParser()
         questionnaires = jsonParser.getQuestionnaires(application.applicationContext)
         questionnaires?.forEach { questionnaire ->

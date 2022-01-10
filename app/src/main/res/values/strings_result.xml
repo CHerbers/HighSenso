@@ -28,10 +28,11 @@
         verstehen zu lernen.
         \n
         Eine kurze Erklärung darüber, was Hochsensibilität ist, hast Du bereits auf der <b>Startseite</b>
-        gesehen. Wenn Du dich mehr dafür interessierst, kannst Du Dir folgende Links zum Thema
-        Hochsensibilität ansehen:
+        gesehen. Wenn Du dich mehr dafür interessierst, kannst Du Dir am Ende der Seite Links zum Thema
+        Hochsensibilität ansehen.
     </string>
     <string name="positive_HSP_message">
+        \n
         \n
         Hochsensibel zu sein kann eine Reihe von Vor- aber auch Nachteilen mit sich bringen.
         \n
@@ -116,7 +117,7 @@
     </string>
     <!--    message if users emotions linger-->
     <string name="lingering_emotions_message">
-        Wie in vielen Anderen Situationen, kann Ruhe, oder allgemein etwas Zeit für Dich selber, dabei
+        Wie in vielen anderen Situationen, kann Ruhe, oder allgemein etwas Zeit für Dich selber, dabei
         helfen, mit lange nachklingenden Emotionen umzugehen. Nimm die Gefühle an und reflektiere die
         Gedanken die sie bei Dir auslösen.
     </string>

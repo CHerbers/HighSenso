@@ -270,10 +270,10 @@ class ResultViewModel(
             R.string.general_HSP_part_1_score,
             rating
         )
+        resultString += appRes.getString(R.string.general_HSP_part_2_iteration, iteration)
         resultString +=
             if (isNegative) appRes.getString(R.string.negative_HSP_message)
             else appRes.getString(R.string.positive_HSP_message)
-        resultString += appRes.getString(R.string.general_HSP_part_2_iteration, iteration)
         return resultString
     }
 

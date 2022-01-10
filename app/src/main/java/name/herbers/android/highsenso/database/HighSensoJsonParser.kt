@@ -83,8 +83,8 @@ class HighSensoJsonParser {
      * @return a [List] of [AnswerSheet]s read from .json files, or an empty list if reading or
      * parsing fails
      * */
-    fun getAnswerSheets(context: Context): List<AnswerSheet> {
-
+    fun getAnswerSheets(context: Context): List<AnswerSheet>? {
+        if (!Constants.TEST_USE_DUMMY_ANSWER_SHEETS) return null
         val answerSheetList = mutableListOf<AnswerSheet>()
         val jsonObjectList = mutableListOf<JSONObject>()
 

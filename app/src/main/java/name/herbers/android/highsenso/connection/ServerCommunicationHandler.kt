@@ -357,7 +357,7 @@ class ServerCommunicationHandler(val context: Context) {
         url += when (requestType) {
             REQUEST_TYPE_REGISTRATION -> ""
             REQUEST_TYPE_LOGIN -> ""
-            REQUEST_TYPE_LOGOUT -> "" + tokenString
+            REQUEST_TYPE_LOGOUT -> tokenString
             REQUEST_TYPE_SEND_ANSWER_SHEET -> Constants.QUESTIONNAIRES_URI + answerSheetId + Constants.ANSWER_SHEETS_URI + tokenString
             REQUEST_TYPE_RESET_PASSWORD -> ""
             REQUEST_TYPE_GET_QUESTIONNAIRES -> tokenString

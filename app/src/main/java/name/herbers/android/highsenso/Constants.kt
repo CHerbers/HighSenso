@@ -1,14 +1,58 @@
 package name.herbers.android.highsenso
 
+import name.herbers.android.highsenso.Constants.OFFLINE_MODE
+import name.herbers.android.highsenso.data.AnswerSheet
+import name.herbers.android.highsenso.data.Questionnaire
+
 /**
+ * Holds constants for the whole application.
+ *
+ * *IMPORTANT*:
+ *
+ * The constant [OFFLINE_MODE] is managed here. This constant enables or disables the
+ * use of this app without a running server. More information about this constant is commented at
+ * its declaration in this class.
  *
  *@project HighSenso
  *@author Herbers
  */
 object Constants {
 
+    /**
+     * This constant manages the offline usage of the HighSenso App!
+     *
+     * If OFFLINE_MODE is false, this app can only properly be used with a running server!
+     * This is especially because there is no way to log in without a server.
+     *
+     * If OFFLINE_MODE is true, the user is free to use all features of the app!
+     *
+     * It is not necessary to type in login data in the login dialog,
+     * just press "login" and the app can be used as if properly logged in.
+     *
+     * [Questionnaire]s are either loaded from the on device database
+     * (if ever loaded from the server before)
+     * or read from .json-files in the "assets/questionnaires" folder.
+     *
+     * In offline mode [AnswerSheet]s are not saved after finishing the questioning
+     * (the app will still try to send them to the server)!
+     *
+     * This is to eliminate possible inconsistency between server data and local data.
+     * The result of the current questioning will still be shown.
+     * */
     const val OFFLINE_MODE = true
-    const val FIRST_START = true
+    /**
+     * This constant is only for testing.
+     *
+     * It simulates a first start of the app after installation.
+     * */
+    const val TEST_FIRST_START = false
+    /**
+     * This constant is only for testing.
+     *
+     * If it is true, three dummy [AnswerSheet]s can be loaded from .json files in the
+     * assets folder.
+     * */
+    const val TEST_USE_DUMMY_ANSWER_SHEETS = false
 
     /* Questionnaire */
     const val BASELINE_QUESTIONNAIRE = "Baseline"

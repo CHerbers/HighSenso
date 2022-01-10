@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
 
         val application = requireNotNull(this).application
-        if (Constants.FIRST_START) resetFirstCallPreferencesKey()           //development only
+        if (Constants.TEST_FIRST_START) resetFirstCallPreferencesKey()           //development only
         database = HighSensoDatabase.getInstance(application)
         val databaseHandler = DatabaseHandler(database.highSensoDatabaseDao)
 
